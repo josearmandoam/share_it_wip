@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Proyect_Meme_Clean</string>
+    <string name="loginApiEntry">log in</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Password forgotted</string>
+    <string name="logo_text">Share it!</string>
+    <string name="errorUsername">Wrong username/password</string>
+    <string name="errorPassword">Wrong password</string>
+    <string name="noInternetAvailable">No internet available, please check your connection</string>
+    <string name="error">An error ocurred</string>
+    <string name="loginCorrect">Logged</string>
+    <string name="text_separator">|</string>
+    <string name="default_font">casual</string>
+    <string name="personal_info">Personal Information</string>
+    <string name="name">Name</string>
+    <string name="lastName">Last name</string>
+    <string name="email">Email</string>
+    <string name="repitPassword">Repit password</string>
+    <string name="navigation_info">Navigation information</string>
+    <string name="security_info">Security information</string>
+    <string name="question">Question</string>
+    <string name="answer1">Answer</string>
+    <string name="answer2">Optional answer</string>
+    <string name="birthday">Birthday</string>
+    <string name="take_from_camera">Take it from camera</string>
+    <string name="take_from_gallery">Take it form gallery</string>
+</resources>
