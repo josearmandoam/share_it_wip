@@ -1,7 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,15 +21,17 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerAvatarCompone
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.AvatarsRecyclerAdapter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.AddPhotoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsAddPhoto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.InjectView;
+import butterknife.BindColor;
+import butterknife.BindDrawable;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -38,27 +39,39 @@ import butterknife.OnClick;
  */
 
 public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigator, AbsAddPhoto.View {
-    @InjectView(R.id.add_photo_camera)
+    @BindView(R.id.add_photo_camera)
     ImageButton camera;
-    @InjectView(R.id.add_photo_avatar)
+    @BindView(R.id.add_photo_avatar)
     ImageButton avatar;
-    @InjectView(R.id.add_photo_separator2)
+    @BindView(R.id.add_photo_separator2)
     ImageView cameraIndicator;
-    @InjectView(R.id.add_photo_separator1)
+    @BindView(R.id.add_photo_separator1)
     ImageView avatarIndicator;
-    @InjectView(R.id.add_photo_layout_camera)
+    @BindView(R.id.add_photo_layout_camera)
     RelativeLayout layoutCamera;
-    @InjectView(R.id.add_photo_layout_avatar)
+    @BindView(R.id.add_photo_layout_avatar)
     SwipeRefreshLayout layoutAvatar;
-    @InjectView(R.id.add_photo_listAvatar)
+    @BindView(R.id.add_photo_listAvatar)
     RecyclerView recyclerView;
-    @InjectView(R.id.add_photo_fromcamera)
+    @BindView(R.id.add_photo_fromcamera)
     TextView fromCamera;
-    @InjectView(R.id.add_photo_fromgallery)
+    @BindView(R.id.add_photo_fromgallery)
     TextView fromGallery;
-    @InjectView(R.id.add_photo_pbr)
+    @BindView(R.id.add_photo_pbr)
     ProgressBar pbr;
 
+    @BindColor(R.color.color_login)
+    int ppColor;
+    @BindColor(R.color.light_gray)
+    int ssColor;
+    @BindDrawable(R.drawable.camera_dark)
+    Drawable camera_dark;
+    @BindDrawable(R.drawable.camera_light)
+    Drawable camera_light;
+    @BindDrawable(R.drawable.avatar_dark)
+    Drawable avatar_dark;
+    @BindDrawable(R.drawable.avatar_light)
+    Drawable avatar_light;
 
     @OnClick(R.id.add_photo_fromcamera)
     public void onFromCamaraClicked(View view) {
@@ -90,7 +103,7 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
     AvatarsRecyclerAdapter.OnAvatarClicked onAvatarClicked = new AvatarsRecyclerAdapter.OnAvatarClicked() {
         @Override
         public void onAvatarClicked(Avatar avatar) {
-            presenter.onAvatarClicked();
+            presenter.onAvatarClicked(avatar);
         }
     };
 
@@ -160,6 +173,15 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
     }
 
     @Override
+    public void showAvatarClicked(Avatar avatar) {
+        openAvatarDialog(avatar);
+    }
+
+    private void openAvatarDialog(Avatar avatar) {
+        ConfirmAvatarDialog c = new ConfirmAvatarDialog(this, avatar);
+    }
+
+    @Override
     public void navigateToCamera() {
 
     }
@@ -169,27 +191,22 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
 
     }
 
-    @Override
-    public void navigateToSignup() {
-        onBackPressed();
-    }
-
     private void cameraUp() {
         layoutAvatar.setVisibility(View.GONE);
         layoutCamera.setVisibility(View.VISIBLE);
-        camera.setImageDrawable(getResources().getDrawable(R.drawable.camera_dark));
-        avatar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_light));
-        cameraIndicator.setBackgroundColor(getResources().getColor(R.color.color_login));
-        avatarIndicator.setBackgroundColor(getResources().getColor(R.color.light_gray));
+        camera.setImageDrawable(camera_dark);
+        avatar.setImageDrawable(avatar_light);
+        cameraIndicator.setBackgroundColor(ppColor);
+        avatarIndicator.setBackgroundColor(ssColor);
     }
 
     private void avatarUp() {
         layoutCamera.setVisibility(View.GONE);
         layoutAvatar.setVisibility(View.VISIBLE);
-        camera.setImageDrawable(getResources().getDrawable(R.drawable.camera_light));
-        avatar.setImageDrawable(getResources().getDrawable(R.drawable.avatar_dark));
-        cameraIndicator.setBackgroundColor(getResources().getColor(R.color.light_gray));
-        avatarIndicator.setBackgroundColor(getResources().getColor(R.color.color_login));
+        camera.setImageDrawable(camera_light);
+        avatar.setImageDrawable(avatar_dark);
+        cameraIndicator.setBackgroundColor(ssColor);
+        avatarIndicator.setBackgroundColor(ppColor);
     }
 
     private AvatarComponent component() {

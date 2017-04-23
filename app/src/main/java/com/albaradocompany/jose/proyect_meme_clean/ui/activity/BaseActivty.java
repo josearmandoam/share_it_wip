@@ -17,7 +17,7 @@ public abstract class BaseActivty extends AppCompatActivity {
 
         setContentView(getLayoutId());
 
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         if (hideToolbar()) {
             getSupportActionBar().hide();

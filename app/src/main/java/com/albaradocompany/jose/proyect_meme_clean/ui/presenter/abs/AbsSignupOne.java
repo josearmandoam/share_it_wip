@@ -16,7 +16,11 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onDatePickerClicked();
 
-    public abstract void onAddPhotoClicked();
+    public abstract void onAddImageClicked();
+
+    public abstract void onAddPhotoClosed();
+
+    public abstract void onImageClicked();
 
 
     public interface View {
@@ -25,8 +29,11 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
         void showMenu();
 
+        void loadUserImage();
+
         void showDatePicker();
 
+        void showImage();
     }
 
     public interface Navigator {

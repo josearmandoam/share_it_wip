@@ -14,6 +14,8 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
 
     public abstract void onConfirmClicked();
 
+    public abstract void onImageClicked();
+
     public interface View {
 
         void hideSignupThree();
@@ -24,6 +26,9 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
 
         void hideLoading();
 
+        void loadUserImage();
+
+        void showImage();
     }
 
     public interface Navigator {

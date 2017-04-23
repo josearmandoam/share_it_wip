@@ -13,12 +13,12 @@ import java.util.List;
 public class LoginApiResponse {
     List<LoginApiEntry> login;
 
-    public List<Login> parseLogins(){
+    public List<Login> parseLogins() {
         List<Login> list = new ArrayList<Login>();
-        if(login == null)
+        if (login == null)
             return list;
 
-        for(LoginApiEntry e : login) {
+        for (LoginApiEntry e : login) {
             list.add(e.parseLogin());
         }
 

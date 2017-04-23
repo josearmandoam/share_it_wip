@@ -14,12 +14,17 @@ public abstract class AbsSignupTwo extends Presenter<AbsSignupTwo.View, AbsSignu
 
     public abstract void onNextPagePressed();
 
+    public abstract void onImageClicked();
+
     public interface View {
 
         void hideSignupTwo();
 
         void showMenu();
 
+        void loadUserImage();
+
+        void showImage();
     }
 
     public interface Navigator {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
@@ -13,8 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -33,8 +34,10 @@ public class AvatarsRecyclerAdapter extends RecyclerView.Adapter<AvatarsRecycler
     }
 
     class ListAvatarAdapter extends RecyclerView.ViewHolder {
-        @InjectView(R.id.row_avatar)
+        @BindView(R.id.row_avatar)
         ImageView photo;
+        @BindView(R.id.row_container)
+        RelativeLayout container;
 
         @OnClick(R.id.row_avatar)
         public void onImageClicked(View view) {
@@ -43,7 +46,7 @@ public class AvatarsRecyclerAdapter extends RecyclerView.Adapter<AvatarsRecycler
 
         ListAvatarAdapter(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

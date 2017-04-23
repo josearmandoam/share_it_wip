@@ -18,10 +18,12 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.LoginApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
 
-import butterknife.InjectView;
+import butterknife.BindString;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivty implements AbsUserLogin.View, AbsUserLogin.Navigator {
@@ -32,17 +34,21 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     AbsUserLogin presenter;
     LoginInteractor loginInteractor;
 
-    @InjectView(R.id.login_username)
+    @BindView(R.id.login_username)
     EditText username;
-    @InjectView(R.id.login_password)
+    @BindView(R.id.login_password)
     EditText password;
-    @InjectView(R.id.login_pbr)
+    @BindView(R.id.login_pbr)
     ProgressBar progressBar;
-    @InjectView(R.id.login_b_signin)
+    @BindView(R.id.login_b_signin)
     Button bSignin;
+
+    @BindString(R.string.default_font)
+    String text_font;
+
     @OnClick(R.id.login_b_signup)
-        public void onSignupClicked(View view){
-            presenter.onSignupClicked();
+    public void onSignupClicked(View view) {
+        presenter.onSignupClicked();
     }
 
     SharedPreferences sharedPreferences;
@@ -57,8 +63,13 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializePresenter();
-        sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        removeSingupInformation();
+    }
 
+    private void removeSingupInformation() {
+        sharedPreferences = getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear().apply();
     }
 
     private void initializePresenter() {
@@ -135,31 +146,28 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     public void navigateToSignupPage() {
         openSignupActivity(this);
     }
+
     public static void openSignupActivity(Context ctx) {
         Intent intent = new Intent(ctx, SignupOneActivity.class);
         ctx.startActivity(intent);
     }
-    private void userLoggedIn(){
+
+    private void userLoggedIn() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(IS_LOGIN, "true");
         editor.commit();
     }
+
     private void showSnackBar(String message, int color) {
         final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(color);
         View view = snackbar.getView();
 
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create("casual", Typeface.BOLD);
+        Typeface font = Typeface.create(text_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         snackbar.show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
     }
 }

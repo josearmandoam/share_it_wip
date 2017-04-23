@@ -17,12 +17,12 @@ public class SignupThreePresenter extends AbsSignupThree {
 
     @Override
     public void initialize() {
-
+        view.loadUserImage();
     }
 
     @Override
     public void resume() {
-
+        view.loadUserImage();
     }
 
     @Override
@@ -48,6 +48,11 @@ public class SignupThreePresenter extends AbsSignupThree {
     @Override
     public void onConfirmClicked() {
         view.showLoading();
+    }
+
+    @Override
+    public void onImageClicked() {
+        view.showImage();
     }
 
 }

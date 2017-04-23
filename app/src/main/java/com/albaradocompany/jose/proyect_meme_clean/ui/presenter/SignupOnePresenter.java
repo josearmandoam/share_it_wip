@@ -17,12 +17,12 @@ public class SignupOnePresenter extends AbsSignupOne {
 
     @Override
     public void initialize() {
-
+        view.loadUserImage();
     }
 
     @Override
     public void resume() {
-
+        view.loadUserImage();
     }
 
     @Override
@@ -56,8 +56,18 @@ public class SignupOnePresenter extends AbsSignupOne {
     }
 
     @Override
-    public void onAddPhotoClicked() {
+    public void onAddImageClicked() {
         navigator.navigateAddPhoto();
+    }
+
+    @Override
+    public void onAddPhotoClosed() {
+        view.loadUserImage();
+    }
+
+    @Override
+    public void onImageClicked() {
+        view.showImage();
     }
 
 }

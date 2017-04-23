@@ -17,11 +17,12 @@ public class SignupTwoPresenter extends AbsSignupTwo {
 
     @Override
     public void initialize() {
-
+        view.loadUserImage();
     }
 
     @Override
     public void resume() {
+        view.loadUserImage();
 
     }
 
@@ -48,6 +49,11 @@ public class SignupTwoPresenter extends AbsSignupTwo {
     @Override
     public void onNextPagePressed() {
         navigator.navigatePageThree();
+    }
+
+    @Override
+    public void onImageClicked() {
+        view.showImage();
     }
 
 }

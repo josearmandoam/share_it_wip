@@ -1,7 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor.imp;
 
 
-
 import com.albaradocompany.jose.proyect_meme_clean.interactor.Executor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.Interactor;
 

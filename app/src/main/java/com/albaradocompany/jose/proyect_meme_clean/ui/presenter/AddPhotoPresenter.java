@@ -81,7 +81,7 @@ public class AddPhotoPresenter extends AbsAddPhoto {
     }
 
     @Override
-    public void onAvatarClicked() {
-        navigator.navigateToSignup();
+    public void onAvatarClicked(Avatar avatar) {
+        view.showAvatarClicked(avatar);
     }
 }

@@ -20,7 +20,7 @@ public class LoginApiEntry {
 
     public Login parseLogin() {
         Login obj = new Login();
-        obj.setId(idUser);
+        obj.setIdUser(idUser);
         obj.setUsername(username);
         obj.setPassword(password);
         obj.setPreguntaSeguridad(preguntaSeguridad);

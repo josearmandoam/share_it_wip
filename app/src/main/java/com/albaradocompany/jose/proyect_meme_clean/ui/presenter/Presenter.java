@@ -18,7 +18,11 @@ public abstract class Presenter<T1, T2> {
 
     protected T2 navigator;
 
-    public void setView(T1 view){this.view=view;}
+    public void setView(T1 view) {
+        this.view = view;
+    }
 
-    public void setNavigator(T2 navigator){this.navigator=navigator;}
+    public void setNavigator(T2 navigator) {
+        this.navigator = navigator;
+    }
 }

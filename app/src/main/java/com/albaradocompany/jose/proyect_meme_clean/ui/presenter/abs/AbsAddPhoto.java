@@ -18,7 +18,7 @@ public abstract class AbsAddPhoto extends Presenter<AbsAddPhoto.View, AbsAddPhot
 
     public abstract void onTakeFromGalleryClicked();
 
-    public abstract void onAvatarClicked();
+    public abstract void onAvatarClicked(Avatar avatar);
 
     public interface View {
         void showCameraLayout();
@@ -34,13 +34,13 @@ public abstract class AbsAddPhoto extends Presenter<AbsAddPhoto.View, AbsAddPhot
         void showNoInternetAvailable();
 
         void showError(Exception e);
+
+        void showAvatarClicked(Avatar avatar);
     }
 
     public interface Navigator {
         void navigateToCamera();
 
         void navigateToGallery();
-
-        void navigateToSignup(); //when user click any avatar back to signup
     }
 }

@@ -5,7 +5,7 @@ package com.albaradocompany.jose.proyect_meme_clean.global.model;
  */
 
 public class Login {
-    private long id;
+    private long idUser;
     private String username;
     private String password;
     private String preguntaSeguridad;
@@ -16,9 +16,9 @@ public class Login {
     private String nombre;
     private String apellidos;
 
-    public Login(long id, String username, String password, String preguntaSeguridad,
+    public Login(long idUser, String username, String password, String preguntaSeguridad,
                  String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento, String nombre, String apellidos) {
-        this.id = id;
+        this.idUser = idUser;
         this.username = username;
         this.password = password;
         this.preguntaSeguridad = preguntaSeguridad;
@@ -31,7 +31,7 @@ public class Login {
     }
 
     public Login() {
-        id=0;
+        idUser = 0;
         username = "";
         password = "";
         preguntaSeguridad = "";
@@ -43,12 +43,12 @@ public class Login {
         apellidos = "";
     }
 
-    public long getId() {
-        return id;
+    public long getIdUser() {
+        return idUser;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setIdUser(long idUser) {
+        this.idUser = idUser;
     }
 
     public String getUsername() {

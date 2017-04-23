@@ -39,7 +39,7 @@ public class LoginApiImp implements GetLogin, Callback<LoginApiResponse> {
         if (listener != null) {
             this.listener = listener;
         }
-        LoginService response= RetrofitClient.getClient(BuildConfig.BASE_URL_LOGIN).create(LoginService.class);
+        LoginService response = RetrofitClient.getClient(BuildConfig.BASE_URL_LOGIN).create(LoginService.class);
         response.getLoginResponsePOST(username).enqueue(this);
     }
 

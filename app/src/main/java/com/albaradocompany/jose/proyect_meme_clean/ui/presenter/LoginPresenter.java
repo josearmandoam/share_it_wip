@@ -41,7 +41,7 @@ public class LoginPresenter extends AbsUserLogin {
                         view.showErrorLoginPassword();
                         view.showButtonSignin();
                     }
-                }else{
+                } else {
                     view.hideLoading();
                     view.showErrorUserNotFound();
                     view.showButtonSignin();
