@@ -1,6 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.model.LoginApiEntry;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.model.LoginApiEntry;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetLogin;
 

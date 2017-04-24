@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -15,7 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegistrationResponseImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.RegistrationResponseInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformation;
@@ -39,11 +45,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     ImageButton bPageone;
     @BindView(R.id.signup_three_button_pagetwo)
     ImageButton bPagetwo;
-    @BindView(R.id.signup_three_et_name)
+    @BindView(R.id.signup_three_et_question)
     EditText question;
-    @BindView(R.id.signup_three_et_email)
+    @BindView(R.id.signup_three_et_answer)
     EditText answer1;
-    @BindView(R.id.signup_three_et_lastName)
+    @BindView(R.id.signup_three_et_answer2)
     EditText answer2;
     @BindView(R.id.signup_three_image)
     ImageView image;
@@ -55,10 +61,19 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     String text_font;
     @BindString(R.string.error_answer)
     String answerErrorMessage;
+    @BindString(R.string.noInternetAvailable)
+    String noInternet;
+    @BindString(R.string.error)
+    String error;
+    @BindString(R.string.account_created)
+    String acountCreated;
+    @BindString(R.string.error_registration)
+    String error_registration;
 
-    AbsSignupThree presenter;
+    private AbsSignupThree presenter;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private RegistrationResponseInteractor interactor;
 
     @OnClick(R.id.signup_three_button_back)
     public void onBackpressed(View view) {
@@ -69,7 +84,9 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void onConfirmClicked(View view) {
         if (checkFields()) {
             saveSignthreeData();
-            presenter.onConfirmClicked();
+            Login user = getUser();
+            interactor = new RegistrationResponseInteractor(new RegistrationResponseImp(user), new MainThreadImp(), new ThreadExecutor());
+            presenter.onConfirmClicked(interactor, user);
         }
     }
 
@@ -106,6 +123,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         presenter = new SignupThreePresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
+        presenter.initialize();
     }
 
     @Override
@@ -136,8 +154,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void hideLoading() {
-        pbr.setVisibility(View.VISIBLE);
-        bConfirm.setVisibility(View.GONE);
+        pbr.setVisibility(View.GONE);
+        bConfirm.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -148,6 +166,28 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void showImage() {
         ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 3);
+    }
+
+    @Override
+    public void showNoInternetAvailable() {
+        showSnackBar(noInternet, Color.RED);
+    }
+
+    @Override
+    public void showError(Exception e) {
+        showSnackBar(e.getMessage(), Color.RED);
+    }
+
+    @Override
+    public void showSuccess() {
+        showSnackBar(acountCreated, Color.GREEN);
+    }
+
+    @Override
+    public void showErrorRegistration() {
+        pbr.setVisibility(View.GONE);
+        bConfirm.setVisibility(View.VISIBLE);
+        showSnackBar(error_registration, Color.RED);
     }
 
     @Override
@@ -188,5 +228,46 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
             editor.putString(BuildConfig.USER_ANSWER2, answer2.getText().toString());
         }
         editor.apply();
+    }
+
+    public Login getUser() {
+        Login c = new Login();
+        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        c.setNombre(sharedPreferences.getString(BuildConfig.USER_NAME, ""));
+        c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
+        c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
+        c.setPassword(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
+        c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
+        String photo = sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false");
+        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
+            sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+            String avatar = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
+            if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
+                sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+                c.setImagePath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
+                String avata2 = sharedPreferences.getString(BuildConfig.USER_AVATAR, "");
+                String holda = "asd";
+            } else {
+//                c.setImagePath(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+            }
+        }
+        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        c.setUsername(sharedPreferences.getString(BuildConfig.USER_USERNAME, ""));
+        c.setPassword(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
+        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        c.setPreguntaSeguridad(sharedPreferences.getString(BuildConfig.USER_QUESTION, ""));
+        c.setRespuestaSeguridad(sharedPreferences.getString(BuildConfig.USER_ANSWER1, ""));
+        c.setRespuestaSeguridad2(sharedPreferences.getString(BuildConfig.USER_ANSWER2, ""));
+        return c;
+    }
+
+    @Override
+    public void navigateToLogin() {
+        openLogin(this);
+    }
+
+    public static void openLogin(Context ctx) {
+        Intent intent = new Intent(ctx, LoginActivity.class);
+        ctx.startActivity(intent);
     }
 }

@@ -39,11 +39,11 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     ImageButton bPagetwo;
     @BindView(R.id.signup_two_button_pagethree)
     ImageButton bPagethree;
-    @BindView(R.id.signup_two_et_name)
+    @BindView(R.id.signup_two_et_username)
     EditText username;
-    @BindView(R.id.signup_two_et_email)
+    @BindView(R.id.signup_two_et_password)
     EditText password;
-    @BindView(R.id.signup_two_et_lastName)
+    @BindView(R.id.signup_two_et_password2)
     EditText password2;
     @BindView(R.id.signup_two_image)
     ImageView image;

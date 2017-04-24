@@ -1,4 +1,4 @@
-package com.albaradocompany.jose.proyect_meme_clean.datasource.model;
+package com.albaradocompany.jose.proyect_meme_clean.datasource.api.model;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 

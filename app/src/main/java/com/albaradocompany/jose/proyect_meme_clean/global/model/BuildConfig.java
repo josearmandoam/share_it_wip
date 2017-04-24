@@ -8,8 +8,8 @@ public final class BuildConfig {
 
     public static final String APPLICATION_ID = "ProjectMemeClean";
     public static final boolean DEBUG = true;
-    public static final String BASE_URL_LOGIN = "http://iesayala.ddns.net/joseA/";
-    public static final String BASE_URL_AVATARS = "http://iesayala.ddns.net/joseA/avatar-photos/";
+    public static final String BASE_URL_PHOTOS_AVATAR = "http://iesayala.ddns.net/joseA/avatar-photos/";
+    public static final String BASE_URL_DEFAULT = "http://iesayala.ddns.net/joseA/";
     public static final String IS_SELECTED_AVATAR = "IS_SELECTED_AVATAR";
     public static final String AVATAR_IMAGE_PATH = "AVATAR_IMAGE_PATH";
     public static final String AVATAR_IMAGE_ID = "AVATAR_IMAGE_ID";

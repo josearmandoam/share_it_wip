@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.LoginApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LoginApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -45,6 +45,8 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @BindString(R.string.default_font)
     String text_font;
+    @BindString(R.string.error)
+    String error;
 
     @OnClick(R.id.login_b_signup)
     public void onSignupClicked(View view) {
@@ -63,6 +65,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializePresenter();
+        removeSingupInformation();
         removeSingupInformation();
     }
 
@@ -118,7 +121,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @Override
     public void showError(Exception e) {
-        showSnackBar(e.toString(), Color.RED);
+        showSnackBar(error, Color.RED);
     }
 
     @Override
@@ -169,5 +172,25 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         snackbar.show();
+    }
+    private void cleanLoginSharedPreferences(){
+        sharedPreferences=this.getSharedPreferences(SignupOneActivity.class.getName(),Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences=this.getSharedPreferences(SignupTwoActivity.class.getName(),Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences=this.getSharedPreferences(SignupThreeActivity.class.getName(),Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cleanLoginSharedPreferences();
     }
 }

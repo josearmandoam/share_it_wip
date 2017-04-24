@@ -5,7 +5,7 @@
     android:background="@color/color_login"
     >
     <ImageView
-        android:idUser="@+idUser/splash_logo"
+        android:id="@+id/splash_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/logo"
@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="149dp" />
     <ProgressBar
-        android:idUser="@+idUser/splash_pbr"
+        android:id="@+id/splash_pbr"
         android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/default_margin_x2"

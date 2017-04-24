@@ -1,4 +1,4 @@
-package com.albaradocompany.jose.proyect_meme_clean.datasource.retrofit;
+package com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit;
 
 import android.util.Log;
 

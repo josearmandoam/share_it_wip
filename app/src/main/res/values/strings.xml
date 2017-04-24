@@ -35,7 +35,9 @@
     <string name="error_photo_not_taken">Pick any photo/avatar</string>
     <string name="error_username">Enter your username</string>
     <string name="error_password">Enter your password</string>
-    <string name="error_password2">Enter your password again</string>
+    <string name="error_password2">Repit your password</string>
     <string name="error_password_coincidence">Passwords do not match</string>
     <string name="error_answer">Enter your answer</string>
+    <string name="account_created">Acount created!</string>
+    <string name="error_registration">An error ocurred</string>
 </resources>

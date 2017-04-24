@@ -15,9 +15,10 @@ public class Login {
     private String fechaNacimiento;
     private String nombre;
     private String apellidos;
+    private String imagePath;
 
     public Login(long idUser, String username, String password, String preguntaSeguridad,
-                 String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento, String nombre, String apellidos) {
+                 String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento, String nombre, String apellidos, String imagePath) {
         this.idUser = idUser;
         this.username = username;
         this.password = password;
@@ -28,10 +29,12 @@ public class Login {
         this.fechaNacimiento = fechaNacimiento;
         this.nombre = nombre;
         this.apellidos = apellidos;
+        this.imagePath = imagePath;
     }
 
+
     public Login() {
-        idUser = 0;
+        idUser = 0L;
         username = "";
         password = "";
         preguntaSeguridad = "";
@@ -41,6 +44,8 @@ public class Login {
         fechaNacimiento = "";
         nombre = "";
         apellidos = "";
+        imagePath = "";
+
     }
 
     public long getIdUser() {
@@ -121,5 +126,12 @@ public class Login {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
+    }
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

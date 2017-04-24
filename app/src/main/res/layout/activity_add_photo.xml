@@ -14,59 +14,59 @@
         android:background="@android:color/white"
         android:layout_height="match_parent">
     <ImageButton
-        android:idUser="@+idUser/add_photo_avatar"
+        android:id="@+id/add_photo_avatar"
         android:src="@drawable/avatar_light"
         android:padding="10dp"
         android:background="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+idUser/add_photo_avatar"
-        android:layout_toRightOf="@+idUser/add_photo_view"
+        android:layout_alignTop="@+id/add_photo_avatar"
+        android:layout_toRightOf="@+id/add_photo_view"
         />
 
     <View
-        android:idUser="@+idUser/add_photo_view"
+        android:id="@+id/add_photo_view"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_centerHorizontal="true" />
 
     <ImageButton
-        android:idUser="@+idUser/add_photo_camera"
+        android:id="@+id/add_photo_camera"
         android:src="@drawable/camera_dark"
         android:background="@null"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+idUser/add_photo_view"
+        android:layout_toLeftOf="@+id/add_photo_view"
         />
     <ImageButton
-        android:idUser="@+idUser/add_photo_separator2"
-        android:layout_alignStart="@idUser/add_photo_camera"
-        android:layout_alignEnd="@idUser/add_photo_camera"
-        android:layout_below="@idUser/add_photo_camera"
+        android:id="@+id/add_photo_separator2"
+        android:layout_alignStart="@id/add_photo_camera"
+        android:layout_alignEnd="@id/add_photo_camera"
+        android:layout_below="@id/add_photo_camera"
         android:background="@color/color_login"
         android:layout_width="match_parent"
         android:layout_height="2dp" />
     <ImageButton
-        android:idUser="@+idUser/add_photo_separator1"
-        android:layout_alignStart="@idUser/add_photo_avatar"
-        android:layout_below="@idUser/add_photo_camera"
+        android:id="@+id/add_photo_separator1"
+        android:layout_alignStart="@id/add_photo_avatar"
+        android:layout_below="@id/add_photo_camera"
         android:background="@color/light_gray"
         android:layout_width="match_parent"
         android:layout_height="2dp" />
     <RelativeLayout
-        android:idUser="@+idUser/add_photo_layout_camera"
-        android:layout_below="@idUser/add_photo_separator1"
+        android:id="@+id/add_photo_layout_camera"
+        android:layout_below="@id/add_photo_separator1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:idUser="@+idUser/add_photo_fromcamera"
+            android:id="@+id/add_photo_fromcamera"
             android:drawableStart="@drawable/take_camera"
             android:fontFamily="@string/default_font"
             android:layout_centerInParent="true"
-            android:layout_above="@+idUser/add_photo_view2"
+            android:layout_above="@+id/add_photo_view2"
             android:textSize="@dimen/text_size_title"
             android:gravity="center"
             android:padding="15dp"
@@ -76,14 +76,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <View
-            android:idUser="@+idUser/add_photo_view2"
+            android:id="@+id/add_photo_view2"
             android:layout_centerInParent="true"
             android:layout_margin="10dp"
             android:layout_width="0dp"
             android:layout_height="1dp"/>
 
         <TextView
-            android:idUser="@+idUser/add_photo_fromgallery"
+            android:id="@+id/add_photo_fromgallery"
             android:drawableStart="@drawable/take_gallery"
             android:textAlignment="center"
             android:fontFamily="@string/default_font"
@@ -94,27 +94,27 @@
             android:background="@color/color_login"
             android:textColor="@android:color/white"
             android:text="@string/take_from_gallery"
-            android:layout_alignStart="@idUser/add_photo_fromcamera"
-            android:layout_alignEnd="@idUser/add_photo_fromcamera"
+            android:layout_alignStart="@id/add_photo_fromcamera"
+            android:layout_alignEnd="@id/add_photo_fromcamera"
             android:layout_width="wrap_content"
-            android:layout_below="@idUser/add_photo_view2"
+            android:layout_below="@id/add_photo_view2"
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <android.support.v4.widget.SwipeRefreshLayout
-        android:idUser="@+idUser/add_photo_layout_avatar"
+        android:id="@+id/add_photo_layout_avatar"
         android:layout_width="wrap_content"
         android:visibility="gone"
         android:layout_height="match_parent"
-        android:layout_below="@idUser/add_photo_separator1"
+        android:layout_below="@id/add_photo_separator1"
         >
         <android.support.v7.widget.RecyclerView
-            android:idUser="@+idUser/add_photo_listAvatar"
+            android:id="@+id/add_photo_listAvatar"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
         <ProgressBar
-            android:idUser="@+idUser/add_photo_pbr"
+            android:id="@+id/add_photo_pbr"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

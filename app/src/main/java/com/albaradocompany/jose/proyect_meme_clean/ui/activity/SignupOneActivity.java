@@ -226,7 +226,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         editor.putString(BuildConfig.USER_EMAIL, email.getText().toString());
         editor.putString(BuildConfig.USER_LAST_NAME, lastName.getText().toString());
         if (avatar) {
-            editor.putString(BuildConfig.USER_AVATAR, sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
+            SharedPreferences avatarShared = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+            editor.putString(BuildConfig.USER_AVATAR, avatarShared.getString(BuildConfig.AVATAR_IMAGE_PATH, ""));
         }
         editor.putString(BuildConfig.USER_DATE_BIRTHDAY, sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
         editor.apply();

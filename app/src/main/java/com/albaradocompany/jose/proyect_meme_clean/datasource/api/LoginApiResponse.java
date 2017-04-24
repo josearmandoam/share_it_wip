@@ -1,6 +1,6 @@
-package com.albaradocompany.jose.proyect_meme_clean.datasource;
+package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.model.LoginApiEntry;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.model.LoginApiEntry;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 
 import java.util.ArrayList;

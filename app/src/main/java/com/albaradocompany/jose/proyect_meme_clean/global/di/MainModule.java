@@ -2,7 +2,7 @@ package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import android.app.Application;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.AvatarsApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.AvatarsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;

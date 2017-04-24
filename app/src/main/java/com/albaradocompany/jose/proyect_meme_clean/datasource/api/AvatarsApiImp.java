@@ -1,16 +1,21 @@
-package com.albaradocompany.jose.proyect_meme_clean.datasource;
+package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.retrofit.AvatarService;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.retrofit.RetrofitClient;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.AvatarService;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.LogJsonInterceptor;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetAvatars;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by jose on 22/04/2017.
@@ -27,7 +32,17 @@ public class AvatarsApiImp implements GetAvatars, Callback<AvatarApiResponse> {
         if (listener != null) {
             this.listener = listener;
         }
-        AvatarService avatarService = RetrofitClient.getClient(BuildConfig.BASE_URL_AVATARS).create(AvatarService.class);
+        OkHttpClient.Builder httpclient = new OkHttpClient.Builder();
+        httpclient.addInterceptor(new LogJsonInterceptor());
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL_PHOTOS_AVATAR)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(httpclient.build())
+                .build();
+        AvatarService avatarService = retrofit.create(AvatarService.class);
         avatarService.getAvatars().enqueue(this);
     }
 
