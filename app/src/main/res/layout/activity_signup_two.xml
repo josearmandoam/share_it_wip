@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     android:id="@+id/signup__two_layout_pp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,7 +8,9 @@
     android:layout_height="match_parent"
     android:background="@color/color_login"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/signup_two_title_pp"
         android:layout_marginTop="@dimen/default_margin"
@@ -91,7 +93,8 @@
         android:singleLine="true"
         android:textSize="@dimen/text_size"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:inputType="textPassword" />
     <EditText
         android:id="@+id/signup_two_et_password2"
         android:hint="@string/repitPassword"
@@ -111,7 +114,8 @@
         android:fontFamily="@string/default_font"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:inputType="textEmailAddress" />
+        android:inputType="textPassword"
+        />
     <ImageButton
         android:id="@+id/signup_two_button_next"
         android:layout_marginBottom="10sp"
@@ -168,4 +172,5 @@
         android:background="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

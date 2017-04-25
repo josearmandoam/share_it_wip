@@ -173,17 +173,18 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
         snackbar.show();
     }
-    private void cleanLoginSharedPreferences(){
-        sharedPreferences=this.getSharedPreferences(SignupOneActivity.class.getName(),Context.MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+
+    private void cleanLoginSharedPreferences() {
+        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        sharedPreferences=this.getSharedPreferences(SignupTwoActivity.class.getName(),Context.MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        sharedPreferences=this.getSharedPreferences(SignupThreeActivity.class.getName(),Context.MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }

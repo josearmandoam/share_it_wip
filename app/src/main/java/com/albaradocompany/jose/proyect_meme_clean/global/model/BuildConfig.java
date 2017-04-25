@@ -27,4 +27,6 @@ public final class BuildConfig {
     public static final String USER_QUESTION = "USER_QUESTION";
     public static final String USER_ANSWER1 = "USER_ANSWER1";
     public static final String USER_ANSWER2 = "USER_ANSWER2";
+    public static final String SIGNUP_GENERAL = "SIGNUP_GENERAL";
+    public static final String SIGNUP_GENERAL_QUESTIONS = "SIGNUP_GENERAL_QUESTIONS";
 }

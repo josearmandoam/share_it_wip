@@ -1,6 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.LogJsonInterceptor;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.RegistrationService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
@@ -9,7 +8,6 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationRespon
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,22 +31,19 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
         if (listener != null) {
             this.listener = listener;
         }
-        OkHttpClient.Builder httpclient = new OkHttpClient.Builder();
-        httpclient.addInterceptor(new LogJsonInterceptor());
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL_DEFAULT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpclient.build())
                 .build();
         RegistrationService service = retrofit.create(RegistrationService.class);
-//        Call<RegistrationApiResponse> call=service.getRegistrationResult(user);
-        service.getRegistrationResult(Long.toString(user.getIdUser()), user.getUsername(), user.getPassword(),
+        service.getRegistrationResult(user.getIdUser(), user.getUsername(), user.getPassword(),
                 user.getPreguntaSeguridad(), user.getRespuestaSeguridad(), user.getRespuestaSeguridad2(),
-                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(),user.getImagePath())
+                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(), user.getImagePath())
                 .enqueue(this);
+//        service.getRegistrationResult(user).enqueue(this);
     }
 
     @Override
@@ -61,7 +56,7 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
                 listener.onRegistrationFailed();
             }
         } else {
-            listener.onError(new Exception("An error ocurred"));
+            listener.onError(new Exception("body failed"));
         }
     }
 

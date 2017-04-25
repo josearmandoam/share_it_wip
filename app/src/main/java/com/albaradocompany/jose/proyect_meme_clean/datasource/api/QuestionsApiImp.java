@@ -1,9 +1,10 @@
 package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.AvatarService;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.model.QuestionsApiResponse;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.QuestionsService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetAvatars;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -16,17 +17,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by jose on 22/04/2017.
+ * Created by jose on 25/04/2017.
  */
 
-public class AvatarsApiImp implements GetAvatars, Callback<AvatarApiResponse> {
-    Listener listener = new NullListener();
+public class QuestionsApiImp implements GetQuestions, Callback<QuestionsApiResponse> {
+    GetQuestions.Listener listener = new NullListener();
 
-    public AvatarsApiImp() {
+    public QuestionsApiImp() {
     }
 
     @Override
-    public void getAvatars(Listener listener) {
+    public void getQuestions(Listener listener) {
         if (listener != null) {
             this.listener = listener;
         }
@@ -34,24 +35,24 @@ public class AvatarsApiImp implements GetAvatars, Callback<AvatarApiResponse> {
                 .setLenient()
                 .create();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL_PHOTOS_AVATAR)
+                .baseUrl(BuildConfig.BASE_URL_DEFAULT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        AvatarService avatarService = retrofit.create(AvatarService.class);
-        avatarService.getAvatars().enqueue(this);
+        QuestionsService service = retrofit.create(QuestionsService.class);
+        service.getQuestions().enqueue(this);
     }
 
     @Override
-    public void onResponse(Call<AvatarApiResponse> call, Response<AvatarApiResponse> response) {
+    public void onResponse(Call<QuestionsApiResponse> call, Response<QuestionsApiResponse> response) {
         if (response.isSuccessful()) {
-            listener.onAvatarsReceived(response.body().parseAvatars());
+            listener.onQuestionsReceived(response.body().parseQuestions());
         } else {
             listener.onError(new Exception("An error ocurred"));
         }
     }
 
     @Override
-    public void onFailure(Call<AvatarApiResponse> call, Throwable t) {
+    public void onFailure(Call<QuestionsApiResponse> call, Throwable t) {
         listener.onNoInternetAvailable();
     }
 
@@ -67,7 +68,7 @@ public class AvatarsApiImp implements GetAvatars, Callback<AvatarApiResponse> {
         }
 
         @Override
-        public void onAvatarsReceived(List<Avatar> avatarList) {
+        public void onQuestionsReceived(List<Question> questions) {
 
         }
     }

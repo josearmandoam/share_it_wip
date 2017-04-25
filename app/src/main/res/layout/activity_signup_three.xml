@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/signup__three_layout_pp"
+<FrameLayout
+    android:id="@+id/signup_three_layout_pp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +8,9 @@
     android:layout_height="match_parent"
     android:background="@color/color_login"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <TextView
         android:id="@+id/signup_tree_title_pp"
         android:layout_marginTop="@dimen/default_margin"
@@ -54,17 +56,16 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/signup_three_title_ly"/>
 
-    <EditText
+    <TextView
         android:id="@+id/signup_three_et_question"
         android:textColor="@color/text_color_signup"
         android:hint="@string/question"
         android:layout_alignStart="@+id/signup_three_container_image"
-        android:layout_alignEnd="@+id/signup_three_container_image"
         android:layout_below="@+id/signup_three_image"
         android:background="@android:color/white"
+        android:layout_alignEnd="@+id/signup_three_et_answer"
         android:textColorHint="@color/text_color_signup"
         android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:textSize="@dimen/text_size"
         android:singleLine="true"
@@ -178,4 +179,13 @@
         android:background="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</RelativeLayout>
+    <ImageButton
+        android:id="@+id/signup_three_button_generate_question"
+        android:src="@drawable/refresh"
+        android:background="@null"
+        android:layout_toRightOf="@+id/signup_three_et_question"
+        android:layout_above="@id/signup_three_et_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    </RelativeLayout>
+</FrameLayout>

@@ -97,6 +97,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         sharedPreferences = context.getSharedPreferences(this.getClass().getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear();
+        editor.apply();
         editor.putString(BuildConfig.IS_SELECTED_AVATAR, "true");
         editor.putString(BuildConfig.AVATAR_IMAGE_PATH, avatar.getImagePath());
         editor.putString(BuildConfig.AVATAR_IMAGE_ID, String.valueOf(avatar.getId()));
@@ -105,7 +106,8 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(BuildConfig.IS_SELECTED_PHOTO, "true");
+        editor.putString(BuildConfig.USER_AVATAR, avatar.getImagePath());
         editor.apply();
-        ((AddPhotoActivty) context).finish();
+        ((AddPhotoActivty) context).onBackPressed();
     }
 }

@@ -87,6 +87,13 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         initializePresenter();
     }
 
+    private void checkDataSaved() {
+        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        username.setText(sharedPreferences.getString(BuildConfig.USER_USERNAME, ""));
+        password.setText(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
+        password2.setText(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
+    }
+
     private void checkUserImage() {
         sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -187,6 +194,12 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     public void onResume() {
         super.onResume();
         presenter.resume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        checkDataSaved();
     }
 
     private void showSnackBar(String message, int color) {

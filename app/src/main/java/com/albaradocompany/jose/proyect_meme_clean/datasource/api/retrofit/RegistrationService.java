@@ -27,4 +27,7 @@ public interface RegistrationService {
                                                         @Field("nombre") String nombre,
                                                         @Field("apellidos") String apellidos,
                                                         @Field("imagePath") String imagePath);
+
+    @POST("insertUser.php")
+    Call<RegistrationApiResponse> getRegistrationResult(@Body Login login);
 }

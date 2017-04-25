@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
@@ -17,8 +18,14 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegistrationResponseImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerQuestionsComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.QuestionsComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.QuestionsModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.RegistrationResponseInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -27,7 +34,14 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformation;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
+import javax.inject.Inject;
 
 import butterknife.BindDrawable;
 import butterknife.BindString;
@@ -46,7 +60,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @BindView(R.id.signup_three_button_pagetwo)
     ImageButton bPagetwo;
     @BindView(R.id.signup_three_et_question)
-    EditText question;
+    TextView question;
     @BindView(R.id.signup_three_et_answer)
     EditText answer1;
     @BindView(R.id.signup_three_et_answer2)
@@ -74,6 +88,12 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private RegistrationResponseInteractor interactor;
+    private int cnt;
+    @Inject
+    QuestionsInteractor questionsInteractor;
+    private List<Question> listQuestions;
+    private QuestionsComponent component;
+
 
     @OnClick(R.id.signup_three_button_back)
     public void onBackpressed(View view) {
@@ -90,6 +110,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         }
     }
 
+    @OnClick(R.id.signup_three_button_generate_question)
+    public void onRefreshClicked(View view) {
+        presenter.onRefreshQuestionClicked();
+    }
+
     @OnClick(R.id.signup_three_image)
     public void onImageClicked(View view) {
         presenter.onImageClicked();
@@ -98,7 +123,9 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        component().inject(this);
         initializePrensenter();
+
     }
 
     private void checkUserImage() {
@@ -120,7 +147,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     }
 
     private void initializePrensenter() {
-        presenter = new SignupThreePresenter(this);
+        presenter = new SignupThreePresenter(this, questionsInteractor);
         presenter.setView(this);
         presenter.setNavigator(this);
         presenter.initialize();
@@ -180,7 +207,17 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void showSuccess() {
+        sleepActivity(2000);
         showSnackBar(acountCreated, Color.GREEN);
+    }
+
+    private void sleepActivity(int i) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // Actions to do after 10 seconds
+            }
+        }, i);
     }
 
     @Override
@@ -188,6 +225,45 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         pbr.setVisibility(View.GONE);
         bConfirm.setVisibility(View.VISIBLE);
         showSnackBar(error_registration, Color.RED);
+    }
+
+    @Override
+    public void showQuestions(List<Question> questions) {
+        saveQuestions(questions);
+        checkQuestion();
+    }
+
+    private void saveQuestions(List<Question> questions) {
+        this.listQuestions = questions;
+        sharedPreferences = this.getSharedPreferences(BuildConfig.SIGNUP_GENERAL, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(questions);
+        editor.putString(BuildConfig.SIGNUP_GENERAL_QUESTIONS, json);
+        editor.apply();
+    }
+
+    private void checkQuestion() {
+        question.setText(getQuestion());
+    }
+
+    @Override
+    public void refreshQuestions() {
+        question.setText(getQuestion());
+    }
+
+    private String getQuestion() {
+        String qtn = listQuestions.get(cnt++).getQuestion();
+        if (cnt == listQuestions.size()) {
+            cnt = 0;
+        }
+        return qtn;
+    }
+
+    private int generateRandomNumber() {
+        Random r = new Random();
+        return r.nextInt(listQuestions.size());
+
     }
 
     @Override
@@ -236,19 +312,17 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         c.setNombre(sharedPreferences.getString(BuildConfig.USER_NAME, ""));
         c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
         c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
-        c.setPassword(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
         c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
         String photo = sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false");
+        c.setIdUser(createId());
         if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
             sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-            String avatar = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
             if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
                 sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
                 c.setImagePath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
-                String avata2 = sharedPreferences.getString(BuildConfig.USER_AVATAR, "");
-                String holda = "asd";
             } else {
 //                c.setImagePath(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+                //photo from camera or gallery
             }
         }
         sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
@@ -261,13 +335,51 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         return c;
     }
 
+    private String createId() {
+        Calendar c = Calendar.getInstance();
+        String userId = "user" + Calendar.YEAR + Calendar.MONTH + Calendar.DAY_OF_MONTH + Calendar.HOUR + Calendar.MINUTE + Calendar.SECOND;
+        return userId;
+    }
+
     @Override
     public void navigateToLogin() {
+        this.finish();
+//        ((SignupOneActivity) getApplicationContext()).finish();
+//        ((SignupTwoActivity) getApplicationContext()).finish();
         openLogin(this);
     }
 
     public static void openLogin(Context ctx) {
         Intent intent = new Intent(ctx, LoginActivity.class);
         ctx.startActivity(intent);
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+    }
+
+
+    private void checkDataSaved() {
+        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        answer1.setText(sharedPreferences.getString(BuildConfig.USER_ANSWER1, ""));
+        answer2.setText(sharedPreferences.getString(BuildConfig.USER_ANSWER2, ""));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        checkDataSaved();
+    }
+
+    private QuestionsComponent component() {
+        if (component == null) {
+            component = DaggerQuestionsComponent.builder()
+                    .rootComponent(((App) getApplication()).getComponent())
+                    .questionsModule(new QuestionsModule(getApplicationContext()))
+                    .mainModule(((App) getApplication()).getMainModule())
+                    .build();
+        }
+        return component;
     }
 }

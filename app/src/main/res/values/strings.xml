@@ -39,5 +39,5 @@
     <string name="error_password_coincidence">Passwords do not match</string>
     <string name="error_answer">Enter your answer</string>
     <string name="account_created">Acount created!</string>
-    <string name="error_registration">An error ocurred</string>
+    <string name="error_registration">Registration failed</string>
 </resources>

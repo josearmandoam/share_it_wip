@@ -7,7 +7,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
  */
 
 public class LoginApiEntry {
-    long idUser = 0L;
+    String idUser = "";
     String username = "";
     String password = "";
     String preguntaSeguridad = "";

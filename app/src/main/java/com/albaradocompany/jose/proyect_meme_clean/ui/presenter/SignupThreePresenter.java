@@ -3,9 +3,13 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.RegistrationResponse;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
+
+import java.util.List;
 
 /**
  * Created by jose on 19/04/2017.
@@ -13,14 +17,32 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationRespon
 
 public class SignupThreePresenter extends AbsSignupThree {
     Context context;
+    GetQuestions getQuestions;
 
-    public SignupThreePresenter(Context context) {
+    public SignupThreePresenter(Context context, GetQuestions getQuestions) {
         this.context = context;
+        this.getQuestions = getQuestions;
     }
 
     @Override
     public void initialize() {
         view.loadUserImage();
+        getQuestions.getQuestions(new GetQuestions.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+                view.showNoInternetAvailable();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e);
+            }
+
+            @Override
+            public void onQuestionsReceived(List<Question> questions) {
+                view.showQuestions(questions);
+            }
+        });
     }
 
     @Override
@@ -82,6 +104,11 @@ public class SignupThreePresenter extends AbsSignupThree {
     @Override
     public void onImageClicked() {
         view.showImage();
+    }
+
+    @Override
+    public void onRefreshQuestionClicked() {
+        view.refreshQuestions();
     }
 
 }

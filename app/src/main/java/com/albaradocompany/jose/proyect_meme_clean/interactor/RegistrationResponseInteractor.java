@@ -13,6 +13,7 @@ public class RegistrationResponseInteractor implements Interactor, GetRegistrati
     Executor executor;
 
     GetRegistrationResponse.Listener listener = new NullListener();
+
     public RegistrationResponseInteractor(GetRegistrationResponse getRegistrationResponse, MainThread mainThread, Executor executor) {
         this.getRegistrationResponse = getRegistrationResponse;
         this.mainThread = mainThread;
@@ -51,6 +52,7 @@ public class RegistrationResponseInteractor implements Interactor, GetRegistrati
     public void onRegistrationFailed() {
         listener.onRegistrationFailed();
     }
+
     private class NullListener implements Listener {
         @Override
         public void onNoInternetAvailable() {
