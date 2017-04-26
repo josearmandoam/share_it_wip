@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -20,11 +22,13 @@ import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
-import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformation;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupOnePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupOne;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import butterknife.BindDrawable;
@@ -107,6 +111,25 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializePresenter();
+        createUserID();
+    }
+
+    private String createUserID() {
+        Calendar calendar = Calendar.getInstance();
+        String userID = "user" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
+                + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
+        return userID;
+    }
+
+    private void cargarImagenPerfil(String path) {
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            image.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            image.setImageResource(R.drawable.user_default_image);
+            //e.printStackTrace();
+        }
     }
 
     private void initializePresenter() {
@@ -144,18 +167,20 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     private void checkUserImage() {
         sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        String isAvatarSelected = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
-        if (isAvatarSelected.equals("true")) {
+        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
             String avatarPath = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_PATH, "");
             String avatarId = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_ID, "");
             String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
             Picasso.with(this)
                     .load(avatarPath)
-                    .transform(new RoundedTransformation())
+//                    .transform(new RoundedTransformation())
                     .error(defaultUserImage)
                     .into(image);
         } else {
-            image.setImageDrawable(defaultUserImage);
+            //
+            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+//            image.setImageDrawable(defaultUserImage);
         }
     }
 
@@ -229,6 +254,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
             SharedPreferences avatarShared = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
             editor.putString(BuildConfig.USER_AVATAR, avatarShared.getString(BuildConfig.AVATAR_IMAGE_PATH, ""));
         }
+        editor.putString(BuildConfig.USER_ID, createUserID());
         editor.putString(BuildConfig.USER_DATE_BIRTHDAY, sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
         editor.apply();
     }
@@ -300,6 +326,18 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     private void removeSignInformation() {
         sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();

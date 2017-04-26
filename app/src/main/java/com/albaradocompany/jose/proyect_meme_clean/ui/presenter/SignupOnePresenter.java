@@ -61,11 +61,6 @@ public class SignupOnePresenter extends AbsSignupOne {
     }
 
     @Override
-    public void onAddPhotoClosed() {
-        view.loadUserImage();
-    }
-
-    @Override
     public void onImageClicked() {
         view.showImage();
     }

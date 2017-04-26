@@ -29,4 +29,7 @@ public final class BuildConfig {
     public static final String USER_ANSWER2 = "USER_ANSWER2";
     public static final String SIGNUP_GENERAL = "SIGNUP_GENERAL";
     public static final String SIGNUP_GENERAL_QUESTIONS = "SIGNUP_GENERAL_QUESTIONS";
+    public static final String USER_ID = "USER_ID";
+    public static final int ACTION_CAMERA = 1;
+    public static final int ACTION_GALERY = 2;
 }

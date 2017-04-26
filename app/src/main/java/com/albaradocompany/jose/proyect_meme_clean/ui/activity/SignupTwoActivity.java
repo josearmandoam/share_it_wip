@@ -3,6 +3,8 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -22,6 +24,10 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformat
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupTwoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupTwo;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import butterknife.BindDrawable;
 import butterknife.BindString;
@@ -104,11 +110,12 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
             String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
             Picasso.with(this)
                     .load(avatarPath)
-                    .transform(new RoundedTransformation())
+//                    .transform(new RoundedTransformation())
                     .error(defaultUserImage)
                     .into(image);
         } else {
-            image.setImageDrawable(defaultUserImage);
+            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
         }
     }
 
@@ -213,5 +220,15 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
         snackbar.show();
+    }
+    private void cargarImagenPerfil(String path) {
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            image.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            image.setImageResource(R.drawable.user_default_image);
+            //e.printStackTrace();
+        }
     }
 }

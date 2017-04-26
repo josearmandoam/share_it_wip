@@ -3,6 +3,8 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -37,6 +39,9 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThr
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -138,11 +143,12 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
             String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
             Picasso.with(this)
                     .load(avatarPath)
-                    .transform(new RoundedTransformation())
+//                    .transform(new RoundedTransformation())
                     .error(defaultUserImage)
                     .into(image);
         } else {
-            image.setImageDrawable(defaultUserImage);
+            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
         }
     }
 
@@ -207,19 +213,9 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void showSuccess() {
-        sleepActivity(2000);
         showSnackBar(acountCreated, Color.GREEN);
-    }
 
-    private void sleepActivity(int i) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // Actions to do after 10 seconds
-            }
-        }, i);
     }
-
     @Override
     public void showErrorRegistration() {
         pbr.setVisibility(View.GONE);
@@ -235,12 +231,6 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     private void saveQuestions(List<Question> questions) {
         this.listQuestions = questions;
-        sharedPreferences = this.getSharedPreferences(BuildConfig.SIGNUP_GENERAL, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(questions);
-        editor.putString(BuildConfig.SIGNUP_GENERAL_QUESTIONS, json);
-        editor.apply();
     }
 
     private void checkQuestion() {
@@ -313,8 +303,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
         c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
         c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
-        String photo = sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false");
-        c.setIdUser(createId());
+        c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID,""));
         if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
             sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
             if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
@@ -344,13 +333,12 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void navigateToLogin() {
         this.finish();
-//        ((SignupOneActivity) getApplicationContext()).finish();
-//        ((SignupTwoActivity) getApplicationContext()).finish();
         openLogin(this);
     }
 
     public static void openLogin(Context ctx) {
         Intent intent = new Intent(ctx, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         ctx.startActivity(intent);
     }
 
@@ -381,5 +369,15 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
                     .build();
         }
         return component;
+    }
+    private void cargarImagenPerfil(String path) {
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            image.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            image.setImageResource(R.drawable.user_default_image);
+            //e.printStackTrace();
+        }
     }
 }

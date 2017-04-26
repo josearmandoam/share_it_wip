@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.Display;
@@ -21,6 +23,10 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ShowAvatarPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsShowAvatar;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -119,13 +125,29 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                     .error(defaultImageUser)
                     .into(image);
         } else {
-            image.setImageDrawable(defaultImageUser);
+            sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
         }
+    }
+    private void cargarImagenPerfil(String path) {
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            image.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            image.setImageResource(R.drawable.user_default_image);
+            //e.printStackTrace();
+        }
+
     }
 
     private void deleteUserImage() {
         sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences=context.getSharedPreferences(AddPhotoActivty.class.getName(),Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
         editor.clear();
         editor.apply();
         dialog.dismiss();

@@ -47,7 +47,7 @@
         android:layout_alignStart="@+id/signup_two_container_image"
         android:layout_alignEnd="@+id/signup_two_container_image"
         />
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/signup_two_image"
         android:layout_width="100sp"
         android:layout_height="100sp"

@@ -1,9 +1,16 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,12 +26,21 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerAvatarComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.AvatarsRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.AddPhotoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsAddPhoto;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,7 +66,7 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
     @BindView(R.id.add_photo_layout_camera)
     RelativeLayout layoutCamera;
     @BindView(R.id.add_photo_layout_avatar)
-    SwipeRefreshLayout layoutAvatar;
+    RelativeLayout layoutAvatar;
     @BindView(R.id.add_photo_listAvatar)
     RecyclerView recyclerView;
     @BindView(R.id.add_photo_fromcamera)
@@ -59,6 +75,8 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
     TextView fromGallery;
     @BindView(R.id.add_photo_pbr)
     ProgressBar pbr;
+    @BindView(R.id.add_photo_camera_pbr)
+    ProgressBar pbt_camera;
 
     @BindColor(R.color.color_login)
     int ppColor;
@@ -93,12 +111,24 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
         presenter.onTabAvatarClicked();
     }
 
+    @OnClick(R.id.add_photo_next)
+    public void onNextClicked(View view) {
+        presenter.onTabAvatarClicked();
+    }
+
+    @OnClick(R.id.add_photo_back)
+    public void onBackClicked(View view) {
+        presenter.onTabCameraClicked();
+    }
+
     @Inject
     AvatarInteractor avatarInteractor;
 
     AbsAddPhoto presenter;
     AvatarComponent component;
     AvatarsRecyclerAdapter adapter;
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
 
     AvatarsRecyclerAdapter.OnAvatarClicked onAvatarClicked = new AvatarsRecyclerAdapter.OnAvatarClicked() {
         @Override
@@ -183,12 +213,103 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
 
     @Override
     public void navigateToCamera() {
+        openCamera();
+    }
 
+    public void openCamera() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        this.startActivityForResult(intent, BuildConfig.ACTION_CAMERA);
     }
 
     @Override
     public void navigateToGallery() {
+        openGallery();
+    }
 
+    public void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        this.startActivityForResult(intent, BuildConfig.ACTION_GALERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BuildConfig.ACTION_GALERY) {
+            if (resultCode == RESULT_OK) {
+                Uri fotoGaleria = data.getData();
+                try {
+                    InputStream is = getContentResolver().openInputStream(fotoGaleria);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    Bitmap bm = BitmapFactory.decodeStream(bis);
+                    String photoName = "imagen" + this.getCurrentDateAndTime() + ".jpg";
+                    if (bm != null) {
+                        String dirFotos = guardarImagen(this, bm, photoName);
+                        savePhotoSharedPref(dirFotos);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                AddPhotoActivty.this.finish();
+            }
+        } else {
+            if (requestCode == BuildConfig.ACTION_CAMERA && resultCode == RESULT_OK) {
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                String photoName = "imagen" + this.getCurrentDateAndTime() + ".jpg";
+                if (bm != null) {
+                    String dirFotos = guardarImagen(this, bm, photoName);
+                    savePhotoSharedPref(dirFotos);
+                }
+                AddPhotoActivty.this.finish();
+            }
+        }
+    }
+
+    private String getCurrentDateAndTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-­ss");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
+    public String guardarImagen(Context context, Bitmap b, String name) {
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = new File(context.getFilesDir() + "/user_imagenes");
+        directory.mkdirs();
+        //File directory = cw.getDir("Directorio_imagen", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath = new File(directory, name);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mypath.getAbsolutePath();
+    }
+
+    private void savePhotoSharedPref(String path) {
+        sharedpreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedpreferences.edit();
+        editor.putString(BuildConfig.USER_PHOTO, path);
+        editor.apply();
+        sharedpreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedpreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "false");
+        editor.apply();
+        sharedpreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedpreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "true");
+        editor.apply();
     }
 
     private void cameraUp() {

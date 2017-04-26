@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:textAlignment="center"/>
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/signup_three_button_confirm"
         android:layout_marginBottom="10sp"
         android:src="@drawable/check"

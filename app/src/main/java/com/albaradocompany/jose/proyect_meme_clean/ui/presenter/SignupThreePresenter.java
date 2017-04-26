@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
@@ -88,9 +89,20 @@ public class SignupThreePresenter extends AbsSignupThree {
 
             @Override
             public void onRegistrationSuccess(RegistrationResponse response) {
-                view.hideLoading();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.hideLoading();
+                    }
+                },1000);
                 view.showSuccess();
-                navigator.navigateToLogin();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        navigator.navigateToLogin();
+                      // Actions to do after 10 seconds
+                    }
+                }, 2000);
             }
 
             @Override

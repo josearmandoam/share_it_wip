@@ -18,8 +18,6 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onAddImageClicked();
 
-    public abstract void onAddPhotoClosed();
-
     public abstract void onImageClicked();
 
 
