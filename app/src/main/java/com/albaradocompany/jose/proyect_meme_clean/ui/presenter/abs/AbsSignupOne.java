@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import com.albaradocompany.jose.proyect_meme_clean.interactor.SendImageInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 /**
@@ -20,6 +21,7 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onImageClicked();
 
+    public abstract void onTestClicked(SendImageInteractor sendImageInteractor);
 
     public interface View {
 

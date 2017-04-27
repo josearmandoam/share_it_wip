@@ -40,4 +40,16 @@
     <string name="error_answer">Enter your answer</string>
     <string name="account_created">Acount created!</string>
     <string name="error_registration">Registration failed</string>
+    <string name="password_recover_password">To recover your password insert your email please</string>
+    <string name="enter_email">Enter your email</string>
+    <string name="password_send">Submit</string>
+    <string name="password_request_questions">Answer the question you selected when you created your account</string>
+    <string name="password_first_asnwer">Enter first answer</string>
+    <string name="password_second_asnwer">Enter second answer</string>
+    <string name="update_passwords">Enter your new password to finalize</string>
+    <string name="correct_email">Correct email</string>
+    <string name="correct_answers">Correct answers</string>
+    <string name="failed_asnwers">Incorrect answers</string>
+    <string name="password_changed">Password updated!</string>
+    <string name="password_not_changed">Password not updated</string>
 </resources>

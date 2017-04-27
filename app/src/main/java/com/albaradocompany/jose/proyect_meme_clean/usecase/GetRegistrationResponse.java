@@ -1,6 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.usecase;
 
-import com.albaradocompany.jose.proyect_meme_clean.global.model.RegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 
 /**
  * Created by jose on 24/04/2017.
@@ -14,7 +14,7 @@ public interface GetRegistrationResponse {
 
         void onError(Exception e);
 
-        void onRegistrationSuccess(RegistrationResponse response);
+        void onRegistrationSuccess(GenericResponse response);
 
         void onRegistrationFailed();
     }

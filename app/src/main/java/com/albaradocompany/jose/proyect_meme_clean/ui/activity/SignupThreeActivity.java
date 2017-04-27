@@ -6,10 +6,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
@@ -33,12 +34,11 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
-import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformation;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -216,6 +216,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         showSnackBar(acountCreated, Color.GREEN);
 
     }
+
     @Override
     public void showErrorRegistration() {
         pbr.setVisibility(View.GONE);
@@ -303,14 +304,14 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
         c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
         c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
-        c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID,""));
+        c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID, ""));
         if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
             sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
             if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
                 sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
                 c.setImagePath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
             } else {
-//                c.setImagePath(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+                c.setBlob(compressImage());
                 //photo from camera or gallery
             }
         }
@@ -370,6 +371,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         }
         return component;
     }
+
     private void cargarImagenPerfil(String path) {
         try {
             File f = new File(path);
@@ -379,5 +381,25 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
             image.setImageResource(R.drawable.user_default_image);
             //e.printStackTrace();
         }
+    }
+
+    private byte[] compressImage() {
+        Bitmap bm = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) 400) / width;
+        float scaleHeight = ((float) 450) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap bitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return b;
     }
 }

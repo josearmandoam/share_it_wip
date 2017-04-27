@@ -232,34 +232,58 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BuildConfig.ACTION_GALERY) {
             if (resultCode == RESULT_OK) {
-                Uri fotoGaleria = data.getData();
-                try {
-                    InputStream is = getContentResolver().openInputStream(fotoGaleria);
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    Bitmap bm = BitmapFactory.decodeStream(bis);
-                    String photoName = "imagen" + this.getCurrentDateAndTime() + ".jpg";
-                    if (bm != null) {
-                        String dirFotos = guardarImagen(this, bm, photoName);
-                        savePhotoSharedPref(dirFotos);
+                pbt_camera.setVisibility(View.VISIBLE);
+                layoutCamera.setVisibility(View.GONE);
+                new Thread(new Runnable() {
+                    public void run() {
+                        Uri fotoGaleria = data.getData();
+                        try {
+                            InputStream is = getContentResolver().openInputStream(fotoGaleria);
+                            BufferedInputStream bis = new BufferedInputStream(is);
+                            Bitmap bm = BitmapFactory.decodeStream(bis);
+                            String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
+                            if (bm != null) {
+                                String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
+                                savePhotoSharedPref(dirFotos);
+                            }
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        AddPhotoActivty.this.finish();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                pbt_camera.setVisibility(View.GONE);
+                            }
+                        });
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                AddPhotoActivty.this.finish();
-            }
-        } else {
-            if (requestCode == BuildConfig.ACTION_CAMERA && resultCode == RESULT_OK) {
-                Bitmap bm = (Bitmap) data.getExtras().get("data");
-                String photoName = "imagen" + this.getCurrentDateAndTime() + ".jpg";
-                if (bm != null) {
-                    String dirFotos = guardarImagen(this, bm, photoName);
-                    savePhotoSharedPref(dirFotos);
-                }
-                AddPhotoActivty.this.finish();
+                }).start();
+            } else {
+                pbt_camera.setVisibility(View.VISIBLE);
+                layoutCamera.setVisibility(View.GONE);
+                new Thread(new Runnable() {
+                    public void run() {
+                        if (requestCode == BuildConfig.ACTION_CAMERA && resultCode == RESULT_OK) {
+                            Bitmap bm = (Bitmap) data.getExtras().get("data");
+                            String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
+                            if (bm != null) {
+                                String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
+                                savePhotoSharedPref(dirFotos);
+                            }
+                            AddPhotoActivty.this.finish();
+                        }
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                pbt_camera.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }).start();
+
+
             }
         }
     }

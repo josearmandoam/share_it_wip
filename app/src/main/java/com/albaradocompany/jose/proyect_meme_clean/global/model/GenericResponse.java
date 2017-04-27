@@ -4,11 +4,11 @@ package com.albaradocompany.jose.proyect_meme_clean.global.model;
  * Created by jose on 24/04/2017.
  */
 
-public class RegistrationResponse {
+public class GenericResponse {
     private String code;
     private String response;
 
-    public RegistrationResponse() {
+    public GenericResponse() {
         this.code = "";
         this.response = "";
     }

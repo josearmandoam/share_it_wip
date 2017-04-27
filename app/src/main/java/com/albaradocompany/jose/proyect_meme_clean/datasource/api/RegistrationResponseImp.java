@@ -2,8 +2,8 @@ package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.RegistrationService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.RegistrationResponse;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jose on 24/04/2017.
  */
 
-public class RegistrationResponseImp implements GetRegistrationResponse, Callback<RegistrationApiResponse> {
+public class RegistrationResponseImp implements GetRegistrationResponse, Callback<GenericApiResponse> {
     Login user;
     Listener listener = new NullListener();
 
@@ -41,15 +41,15 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
         RegistrationService service = retrofit.create(RegistrationService.class);
         service.getRegistrationResult(user.getIdUser(), user.getUsername(), user.getPassword(),
                 user.getPreguntaSeguridad(), user.getRespuestaSeguridad(), user.getRespuestaSeguridad2(),
-                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(), user.getImagePath())
+                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(), user.getImagePath(), user.getBlob())
                 .enqueue(this);
 //        service.getRegistrationResult(user).enqueue(this);
     }
 
     @Override
-    public void onResponse(Call<RegistrationApiResponse> call, Response<RegistrationApiResponse> response) {
+    public void onResponse(Call<GenericApiResponse> call, Response<GenericApiResponse> response) {
         if (response.isSuccessful()) {
-            RegistrationResponse registrationResponse = response.body().parseResponse();
+            GenericResponse registrationResponse = response.body().parseResponse();
             if (registrationResponse.getCode().equals("1")) {
                 listener.onRegistrationSuccess(registrationResponse);
             } else {
@@ -61,7 +61,7 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
     }
 
     @Override
-    public void onFailure(Call<RegistrationApiResponse> call, Throwable t) {
+    public void onFailure(Call<GenericApiResponse> call, Throwable t) {
         listener.onNoInternetAvailable();
     }
 
@@ -77,7 +77,7 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
         }
 
         @Override
-        public void onRegistrationSuccess(RegistrationResponse response) {
+        public void onRegistrationSuccess(GenericResponse response) {
 
         }
 

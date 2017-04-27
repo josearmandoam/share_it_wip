@@ -129,6 +129,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
             cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
         }
     }
+
     private void cargarImagenPerfil(String path) {
         try {
             File f = new File(path);
@@ -146,8 +147,8 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-        sharedPreferences=context.getSharedPreferences(AddPhotoActivty.class.getName(),Context.MODE_PRIVATE);
-        editor=sharedPreferences.edit();
+        sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
         dialog.dismiss();

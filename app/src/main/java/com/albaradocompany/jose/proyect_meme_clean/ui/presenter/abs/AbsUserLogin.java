@@ -13,6 +13,7 @@ public abstract class AbsUserLogin extends Presenter<AbsUserLogin.View, AbsUserL
 
     public abstract void onSignupClicked();
 
+    public abstract void onPasswordClicked();
 
     public interface View {
 
@@ -38,5 +39,7 @@ public abstract class AbsUserLogin extends Presenter<AbsUserLogin.View, AbsUserL
         void navigateToHomePage();
 
         void navigateToSignupPage();
+
+        void navigateToPassword();
     }
 }

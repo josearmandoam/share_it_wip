@@ -98,4 +98,9 @@ public class LoginPresenter extends AbsUserLogin {
     public void onSignupClicked() {
         navigator.navigateToSignupPage();
     }
+
+    @Override
+    public void onPasswordClicked() {
+        navigator.navigateToPassword();
+    }
 }

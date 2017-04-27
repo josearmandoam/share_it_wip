@@ -1,6 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
-import com.albaradocompany.jose.proyect_meme_clean.global.model.RegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
 
 /**
@@ -44,7 +44,7 @@ public class RegistrationResponseInteractor implements Interactor, GetRegistrati
     }
 
     @Override
-    public void onRegistrationSuccess(RegistrationResponse response) {
+    public void onRegistrationSuccess(GenericResponse response) {
         listener.onRegistrationSuccess(response);
     }
 
@@ -65,7 +65,7 @@ public class RegistrationResponseInteractor implements Interactor, GetRegistrati
         }
 
         @Override
-        public void onRegistrationSuccess(RegistrationResponse response) {
+        public void onRegistrationSuccess(GenericResponse response) {
 
         }
 

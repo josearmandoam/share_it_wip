@@ -48,17 +48,22 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @BindString(R.string.error)
     String error;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
     @OnClick(R.id.login_b_signup)
     public void onSignupClicked(View view) {
         presenter.onSignupClicked();
     }
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
     @OnClick(R.id.login_b_signin)
     public void onClickLogin(View view) {
         requestLogin();
+    }
+
+    @OnClick(R.id.login_fPassword)
+    public void onPasswordClicled(View view) {
+        presenter.onPasswordClicked();
     }
 
     @Override
@@ -148,6 +153,16 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @Override
     public void navigateToSignupPage() {
         openSignupActivity(this);
+    }
+
+    @Override
+    public void navigateToPassword() {
+        openPassword(this);
+    }
+
+    private void openPassword(Context context) {
+        Intent i = new Intent(context, PasswordActivity.class);
+        context.startActivity(i);
     }
 
     public static void openSignupActivity(Context ctx) {

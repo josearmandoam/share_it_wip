@@ -20,7 +20,6 @@ import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
-import com.albaradocompany.jose.proyect_meme_clean.ui.picasso.RoundedTransformation;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupTwoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupTwo;
 import com.squareup.picasso.Picasso;
@@ -221,6 +220,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
         snackbar.show();
     }
+
     private void cargarImagenPerfil(String path) {
         try {
             File f = new File(path);
