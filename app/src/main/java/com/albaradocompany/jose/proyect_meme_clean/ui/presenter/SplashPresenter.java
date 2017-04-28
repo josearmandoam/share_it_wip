@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
 
@@ -22,6 +23,7 @@ public class SplashPresenter extends AbsSplash {
         if (userLogged) {
             navigator.navigateToMainPage();
         } else {
+            Toast.makeText(context, "LOGGED", Toast.LENGTH_SHORT).show();
             navigator.navigateToLoginActivity();
         }
     }

@@ -67,11 +67,6 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     @Override
-    public void onMenuPressed() {
-        view.showMenu();
-    }
-
-    @Override
     public void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login login) {
         view.showLoading();
         getRegistrationResponse.getRegistrationResponse(new GetRegistrationResponse.Listener() {
@@ -116,6 +111,11 @@ public class SignupThreePresenter extends AbsSignupThree {
     @Override
     public void onRefreshQuestionClicked() {
         view.refreshQuestions();
+    }
+
+    @Override
+    public void onCleanClicked() {
+        view.cleanFields();
     }
 
 }

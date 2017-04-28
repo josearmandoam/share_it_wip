@@ -10,21 +10,22 @@ public abstract class AbsSignupTwo extends Presenter<AbsSignupTwo.View, AbsSignu
 
     public abstract void onBackPressed();
 
-    public abstract void onMenuPressed();
 
     public abstract void onNextPagePressed();
 
     public abstract void onImageClicked();
 
+    public abstract void onCleanPressed();
+
     public interface View {
 
         void hideSignupTwo();
 
-        void showMenu();
-
         void loadUserImage();
 
         void showImage();
+
+        void cleanFields();
     }
 
     public interface Navigator {

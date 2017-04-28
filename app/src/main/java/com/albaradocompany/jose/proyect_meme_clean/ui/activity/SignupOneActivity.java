@@ -19,6 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
@@ -31,6 +36,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 
+import javax.inject.Inject;
+
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -70,12 +78,16 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     String dateErrorMessage;
     @BindString(R.string.error_photo_not_taken)
     String photoErrorMessage;
+    @BindColor(R.color.color_login)
+    int color_login;
 
     AbsSignupOne presenter;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    boolean avatar;
-
+    public static boolean avatar;
+    private SignupComponent component;
+    @Inject
+    UserSharedImp userSharedImp;
 
     @OnClick(R.id.signup_button_back)
     public void onBackpressed(View view) {
@@ -110,6 +122,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        component().inject(this);
         initializePresenter();
         createUserID();
     }
@@ -120,18 +133,6 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
         return userID;
     }
-
-    private void cargarImagenPerfil(String path) {
-        try {
-            File f = new File(path);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            image.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            image.setImageResource(R.drawable.user_default_image);
-            //e.printStackTrace();
-        }
-    }
-
     private void initializePresenter() {
         presenter = new SignupOnePresenter(this);
         presenter.setNavigator(this);
@@ -163,6 +164,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         name.setText("");
         lastName.setText("");
         email.setText("");
+        userSharedImp.deleteSignoneData();
     }
 
     @Override
@@ -171,22 +173,10 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     private void checkUserImage() {
-        sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
-            String avatarPath = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_PATH, "");
-            String avatarId = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_ID, "");
-            String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
-            Picasso.with(this)
-                    .load(avatarPath)
-//                    .transform(new RoundedTransformation())
-                    .error(defaultUserImage)
-                    .into(image);
+        if (userSharedImp.isAvatarTaken()) {
+            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            //
-            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
-//            image.setImageDrawable(defaultUserImage);
+            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
         }
     }
 
@@ -211,30 +201,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         dialog.show();
     }
 
-    private String formatDate(int i2, int i1, int i) {
-        String year = "" + i;
-        String month;
-        String day;
-        if (i1 < 10) {
-            month = "0" + i1;
-        } else {
-            month = "" + i1;
-        }
-        if (i2 < 10) {
-            day = "0" + i2;
-        } else {
-            day = "" + i2;
-        }
-        return day + "/" + month + "/" + year;
-    }
-
     private void saveDate(int i, int i1, int i2) {
-        sharedPreferences = SignupOneActivity.this.getSharedPreferences(SignupOneActivity.class.getName(),
-                Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_DATE, "true");
-        editor.putString(BuildConfig.USER_DATE_BIRTHDAY, formatDate(i2, (i1 + 1), i));
-        editor.apply();
+        userSharedImp.saveDateBirthday(i, i1, i2);
     }
 
     public static void openAddPhotoActivity(Context ctx) {
@@ -251,18 +219,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     private void saveSignoneData() {
-        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_NAME, name.getText().toString());
-        editor.putString(BuildConfig.USER_EMAIL, email.getText().toString());
-        editor.putString(BuildConfig.USER_LAST_NAME, lastName.getText().toString());
-        if (avatar) {
-            SharedPreferences avatarShared = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-            editor.putString(BuildConfig.USER_AVATAR, avatarShared.getString(BuildConfig.AVATAR_IMAGE_PATH, ""));
-        }
-        editor.putString(BuildConfig.USER_ID, createUserID());
-        editor.putString(BuildConfig.USER_DATE_BIRTHDAY, sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
-        editor.apply();
+        userSharedImp.saveSignoneInfo(name.getText().toString(),lastName.getText().toString(), email.getText().toString());
     }
 
     private boolean checkFields() {
@@ -278,40 +235,15 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
             showSnackBar(emailErrorMessage, Color.RED);
             return false;
         }
-        if (!noPhotoTaken()) {
+        if (!userSharedImp.isPhotoTaken()) {
             showSnackBar(photoErrorMessage, Color.RED);
             return false;
         }
-        if (!noDateBirdtdayTaken()) {
+        if (!userSharedImp.isDateBirthDayTaken()) {
             showSnackBar(dateErrorMessage, Color.RED);
             return false;
         }
         return true;
-    }
-
-    private boolean noDateBirdtdayTaken() {
-        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_DATE, "false").equals("true")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean noPhotoTaken() {
-        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
-            SharedPreferences avatarShared = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-            if (avatarShared.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
-                editor = sharedPreferences.edit();
-                editor.putString(BuildConfig.USER_AVATAR, avatarShared.getString(BuildConfig.AVATAR_IMAGE_PATH, ""));
-                editor.apply();
-                avatar = true;
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public static void openPageTwo(Context ctx) {
@@ -331,24 +263,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     private void removeSignInformation() {
-        sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        userSharedImp.removeSignInformation();
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -364,7 +280,18 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         Typeface font = Typeface.create(text_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
+        tv.setTextColor(color_login);
         snackbar.show();
+    }
+
+    private SignupComponent component() {
+        if (component == null) {
+            component = DaggerSignupComponent.builder()
+                    .rootComponent(((App) getApplication()).getComponent())
+                    .signupModule(new SignupModule(getApplicationContext()))
+                    .mainModule(((App) getApplication()).getMainModule())
+                    .build();
+        }
+        return component;
     }
 }

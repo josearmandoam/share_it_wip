@@ -42,11 +42,6 @@ public class SignupTwoPresenter extends AbsSignupTwo {
     }
 
     @Override
-    public void onMenuPressed() {
-        view.showMenu();
-    }
-
-    @Override
     public void onNextPagePressed() {
         navigator.navigatePageThree();
     }
@@ -54,6 +49,11 @@ public class SignupTwoPresenter extends AbsSignupTwo {
     @Override
     public void onImageClicked() {
         view.showImage();
+    }
+
+    @Override
+    public void onCleanPressed() {
+        view.cleanFields();
     }
 
 }

@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LoginApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -22,6 +27,9 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
 
+import javax.inject.Inject;
+
+import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,9 +55,20 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     String text_font;
     @BindString(R.string.error)
     String error;
+    @BindString(R.string.empty_username)
+    String empty_username;
+    @BindString(R.string.empty_pasword)
+    String empty_password;
+    @BindString(R.string.empty_username_password)
+    String empty_username_password;
+    @BindColor(R.color.color_login)
+    int color_login;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    private SignupComponent component;
+    @Inject
+    UserSharedImp userSharedImp;
 
     @OnClick(R.id.login_b_signup)
     public void onSignupClicked(View view) {
@@ -69,9 +88,9 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        component().inject(this);
         initializePresenter();
-        removeSingupInformation();
-        removeSingupInformation();
+//        removeSingupInformation();
     }
 
     private void removeSingupInformation() {
@@ -89,8 +108,26 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     private void requestLogin() {
         loginInteractor = new LoginInteractor(new LoginApiImp(username.getText().toString()),
                 new ThreadExecutor(), new MainThreadImp());
-        presenter.onSigninClicked(loginInteractor, username.getText().toString(),
-                password.getText().toString());
+        if (checkFields()) {
+            presenter.onSigninClicked(loginInteractor, username.getText().toString(),
+                    password.getText().toString());
+        }
+    }
+
+    private boolean checkFields() {
+        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()){
+            showSnackBar(empty_username_password, Color.RED);
+            return false;
+        }
+        if (username.getText().toString().isEmpty()){
+            showSnackBar(empty_username, Color.RED);
+            return false;
+        }
+        if (password.getText().toString().isEmpty()){
+            showSnackBar(empty_password, Color.RED);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -146,7 +183,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @Override
     public void navigateToHomePage() {
-        userLoggedIn();
+        userSharedImp.saveUserLogged();
         showSnackBar(getString(R.string.loginCorrect), Color.GREEN);
     }
 
@@ -170,11 +207,11 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         ctx.startActivity(intent);
     }
 
-    private void userLoggedIn() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(IS_LOGIN, "true");
-        editor.commit();
-    }
+//    private void userLoggedIn() {
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(IS_LOGIN, "true");
+//        editor.apply();
+//    }
 
     private void showSnackBar(String message, int color) {
         final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
@@ -185,28 +222,38 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         Typeface font = Typeface.create(text_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
+        tv.setTextColor(color_login);
         snackbar.show();
     }
 
-    private void cleanLoginSharedPreferences() {
-        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-    }
+//    private void cleanLoginSharedPreferences() {
+//        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.apply();
+//        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.apply();
+//        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.clear();
+//        editor.apply();
+//    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        cleanLoginSharedPreferences();
+        userSharedImp.removeSignInformation();
+    }
+    private SignupComponent component() {
+        if (component == null) {
+            component = DaggerSignupComponent.builder()
+                    .rootComponent(((App) getApplication()).getComponent())
+                    .signupModule(new SignupModule(getApplicationContext()))
+                    .mainModule(((App) getApplication()).getMainModule())
+                    .build();
+        }
+        return component;
     }
 }

@@ -32,4 +32,6 @@ public final class BuildConfig {
     public static final String USER_ID = "USER_ID";
     public static final int ACTION_CAMERA = 1;
     public static final int ACTION_GALERY = 2;
+    public static final String PREF_NAME = "PREF_NAME";
+    public static final String IS_LOGIN = "IS_LOGIN";
 }

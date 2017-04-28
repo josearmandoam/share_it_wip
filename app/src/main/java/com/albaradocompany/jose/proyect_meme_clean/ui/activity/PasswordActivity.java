@@ -271,6 +271,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
         Typeface font = Typeface.create(default_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        tv.setTextColor(color_login);
 
         snackbar.show();
     }

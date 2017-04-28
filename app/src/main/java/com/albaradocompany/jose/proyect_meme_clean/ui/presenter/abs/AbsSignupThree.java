@@ -15,19 +15,17 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
 
     public abstract void onBackPressed();
 
-    public abstract void onMenuPressed();
-
     public abstract void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login user);
 
     public abstract void onImageClicked();
 
     public abstract void onRefreshQuestionClicked();
 
+    public abstract void onCleanClicked();
+
     public interface View {
 
         void hideSignupThree();
-
-        void showMenu();
 
         void showLoading();
 
@@ -48,10 +46,11 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
         void showQuestions(List<Question> questions);
 
         void refreshQuestions();
+
+        void cleanFields();
     }
 
     public interface Navigator {
-
 
         void navigateToLogin();
     }

@@ -16,11 +16,9 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"/>
+        android:background="@drawable/fo2"
+        android:alpha="0.3"
+        />
     <EditText
         android:id="@+id/login_username"
         android:layout_width="@dimen/default_with"

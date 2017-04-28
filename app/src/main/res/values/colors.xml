@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#30425A</color>
-    <color name="colorPrimaryDark">#30425A</color>
-    <color name="colorAccent">#30425A</color>
-    <color name="color_login">#30425A</color>
-    <color name="text_color">#30425A</color>
-    <color name="color_button_login">#009A9A</color>
+    <color name="colorPrimary">#003142</color>
+    <color name="colorPrimaryDark">#021F2D</color>
+    <color name="colorAccent">#003142</color>30425A
+    <color name="color_login">#003142</color>
+    <color name="text_color">#FFFF</color>
+    <color name="color_button_login">#003142</color>
     <color name="red">#FF0E0E</color>
     <color name="green">#0EFF57</color>
-    <color name="text_color_signup">#30425A</color>
+    <color name="text_color_signup">#003142</color>
     <color name="light_gray">#B7B7B7</color>
 </resources>

@@ -2,9 +2,19 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/color_login"
     android:layout_height="match_parent"
     >
+    <ImageView
+        android:src="@color/color_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fo2"
+        android:alpha="0.3"
+        />
     <RelativeLayout
         android:id="@+id/add_photo_lyt_container"
         android:layout_width="match_parent"

@@ -8,10 +8,10 @@ import dagger.Module;
  * Created by jose on 25/04/2017.
  */
 @Module
-public class QuestionsModule {
+public class SignupModule {
     Context context;
 
-    public QuestionsModule(Context context) {
+    public SignupModule(Context context) {
         this.context = context;
     }
 }

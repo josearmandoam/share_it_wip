@@ -17,6 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
@@ -28,6 +33,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javax.inject.Inject;
+
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -64,12 +72,14 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     String passwordErrorS;
     @BindString(R.string.error_password_coincidence)
     String passwordMatchError;
+    @BindColor(R.color.color_login)
+    int color_login;
 
 
     AbsSignupTwo presenter;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
+    private SignupComponent component;
+    @Inject
+    UserSharedImp userSharedImp;
 
     @OnClick(R.id.signup_two_button_back)
     public void onBackpressed(View view) {
@@ -86,35 +96,29 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         presenter.onImageClicked();
     }
 
+    @OnClick(R.id.signup_two_button_menu)
+    public void onCleanClicked(View view) {
+        presenter.onCleanPressed();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        component().inject(this);
         initializePresenter();
     }
 
     private void checkDataSaved() {
-        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        username.setText(sharedPreferences.getString(BuildConfig.USER_USERNAME, ""));
-        password.setText(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
-        password2.setText(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
+        username.setText(userSharedImp.getUserUsernamedSaved());
+        password.setText(userSharedImp.getUserPasswordSaved());
+        password2.setText(userSharedImp.getUserPassword2Saved());
     }
 
     private void checkUserImage() {
-        sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        String isAvatarSelected = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
-        if (isAvatarSelected.equals("true")) {
-            String avatarPath = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_PATH, "");
-            String avatarId = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_ID, "");
-            String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
-            Picasso.with(this)
-                    .load(avatarPath)
-//                    .transform(new RoundedTransformation())
-                    .error(defaultUserImage)
-                    .into(image);
+        if (userSharedImp.isAvatarTaken()) {
+            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+            userSharedImp.showUserPhoto(image,userSharedImp.getUserPhoto());
         }
     }
 
@@ -134,11 +138,6 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     }
 
     @Override
-    public void showMenu() {
-
-    }
-
-    @Override
     public void loadUserImage() {
         checkUserImage();
     }
@@ -149,21 +148,24 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     }
 
     @Override
+    public void cleanFields() {
+        clean();
+    }
+
+    private void clean() {
+        username.setText("");
+        password.setText("");
+        password2.setText("");
+        userSharedImp.deleteSigntwoData();
+    }
+
+    @Override
     public void navigatePageThree() {
         if (checkFields()) {
-            saveSigntwoData();
+            userSharedImp.saveSigntwoData(username.getText().toString(), password.getText().toString());
             openSignupThreeActivity(this);
         }
     }
-
-    private void saveSigntwoData() {
-        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_USERNAME, username.getText().toString());
-        editor.putString(BuildConfig.USER_PASSWORD, password.getText().toString());
-        editor.apply();
-    }
-
     private boolean checkFields() {
         if (username.getText().toString().isEmpty()) {
             showSnackBar(userError, Color.RED);
@@ -200,12 +202,12 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     public void onResume() {
         super.onResume();
         presenter.resume();
+        checkDataSaved();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        checkDataSaved();
     }
 
     private void showSnackBar(String message, int color) {
@@ -217,18 +219,18 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         Typeface font = Typeface.create(text_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
+        tv.setTextColor(color_login);
         snackbar.show();
     }
 
-    private void cargarImagenPerfil(String path) {
-        try {
-            File f = new File(path);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            image.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            image.setImageResource(R.drawable.user_default_image);
-            //e.printStackTrace();
+    private SignupComponent component() {
+        if (component == null) {
+            component = DaggerSignupComponent.builder()
+                    .rootComponent(((App) getApplication()).getComponent())
+                    .signupModule(new SignupModule(getApplicationContext()))
+                    .mainModule(((App) getApplication()).getMainModule())
+                    .build();
         }
+        return component;
     }
 }

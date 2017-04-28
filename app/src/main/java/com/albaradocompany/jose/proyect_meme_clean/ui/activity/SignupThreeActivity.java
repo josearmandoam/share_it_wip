@@ -21,10 +21,11 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegistrationResponseImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerQuestionsComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.QuestionsComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.QuestionsModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
@@ -48,6 +49,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -88,6 +90,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     String acountCreated;
     @BindString(R.string.error_registration)
     String error_registration;
+    @BindColor(R.color.color_login)
+    int color_login;
 
     private AbsSignupThree presenter;
     private SharedPreferences sharedPreferences;
@@ -96,8 +100,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     private int cnt;
     @Inject
     QuestionsInteractor questionsInteractor;
+    @Inject
+    UserSharedImp userSharedImp;
     private List<Question> listQuestions;
-    private QuestionsComponent component;
+    private SignupComponent component;
 
 
     @OnClick(R.id.signup_three_button_back)
@@ -108,8 +114,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @OnClick(R.id.signup_three_button_confirm)
     public void onConfirmClicked(View view) {
         if (checkFields()) {
-            saveSignthreeData();
-            Login user = getUser();
+            userSharedImp.saveSignThreeData(question.getText().toString(),answer1.getText().toString(), answer2.getText().toString());
+            Login user = userSharedImp.getUser(image);
             interactor = new RegistrationResponseInteractor(new RegistrationResponseImp(user), new MainThreadImp(), new ThreadExecutor());
             presenter.onConfirmClicked(interactor, user);
         }
@@ -124,6 +130,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void onImageClicked(View view) {
         presenter.onImageClicked();
     }
+    @OnClick(R.id.signup_three_button_menu)
+    public void onCleanClicked(View view){
+        presenter.onCleanClicked();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,21 +144,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     }
 
     private void checkUserImage() {
-        sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        String isAvatarSelected = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
-        if (isAvatarSelected.equals("true")) {
-            String avatarPath = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_PATH, "");
-            String avatarId = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_ID, "");
-            String avatarDescription = sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, "");
-            Picasso.with(this)
-                    .load(avatarPath)
-//                    .transform(new RoundedTransformation())
-                    .error(defaultUserImage)
-                    .into(image);
+        if (userSharedImp.isAvatarTaken()) {
+            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            sharedPreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+            userSharedImp.showUserPhoto(image,userSharedImp.getUserPhoto());
         }
     }
 
@@ -172,11 +171,6 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void hideSignupThree() {
         onBackPressed();
-    }
-
-    @Override
-    public void showMenu() {
-
     }
 
     @Override
@@ -214,7 +208,6 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void showSuccess() {
         showSnackBar(acountCreated, Color.GREEN);
-
     }
 
     @Override
@@ -243,6 +236,17 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         question.setText(getQuestion());
     }
 
+    @Override
+    public void cleanFields() {
+        clean();
+    }
+
+    private void clean() {
+        answer1.setText("");
+        answer2.setText("");
+        userSharedImp.deleteSignThreeData();
+    }
+
     private String getQuestion() {
         String qtn = listQuestions.get(cnt++).getQuestion();
         if (cnt == listQuestions.size()) {
@@ -251,16 +255,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         return qtn;
     }
 
-    private int generateRandomNumber() {
-        Random r = new Random();
-        return r.nextInt(listQuestions.size());
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         presenter.resume();
+        checkDataSaved();
     }
 
     private boolean checkFields() {
@@ -280,55 +279,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         Typeface font = Typeface.create(text_font, Typeface.BOLD);
         tv.setTypeface(font);
         tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
+        tv.setTextColor(color_login);
         snackbar.show();
-    }
-
-    private void saveSignthreeData() {
-        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_QUESTION, question.getText().toString());
-        editor.putString(BuildConfig.USER_ANSWER1, answer1.getText().toString());
-        if (answer2.getText().toString().isEmpty()) {
-            editor.putString(BuildConfig.USER_ANSWER2, "");
-        } else {
-            editor.putString(BuildConfig.USER_ANSWER2, answer2.getText().toString());
-        }
-        editor.apply();
-    }
-
-    public Login getUser() {
-        Login c = new Login();
-        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        c.setNombre(sharedPreferences.getString(BuildConfig.USER_NAME, ""));
-        c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
-        c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
-        c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
-        c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID, ""));
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
-            sharedPreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-            if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
-                sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-                c.setImagePath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
-            } else {
-                c.setBlob(compressImage());
-                //photo from camera or gallery
-            }
-        }
-        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        c.setUsername(sharedPreferences.getString(BuildConfig.USER_USERNAME, ""));
-        c.setPassword(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));
-        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        c.setPreguntaSeguridad(sharedPreferences.getString(BuildConfig.USER_QUESTION, ""));
-        c.setRespuestaSeguridad(sharedPreferences.getString(BuildConfig.USER_ANSWER1, ""));
-        c.setRespuestaSeguridad2(sharedPreferences.getString(BuildConfig.USER_ANSWER2, ""));
-        return c;
-    }
-
-    private String createId() {
-        Calendar c = Calendar.getInstance();
-        String userId = "user" + Calendar.YEAR + Calendar.MONTH + Calendar.DAY_OF_MONTH + Calendar.HOUR + Calendar.MINUTE + Calendar.SECOND;
-        return userId;
     }
 
     @Override
@@ -343,63 +295,24 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         ctx.startActivity(intent);
     }
 
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-    }
-
-
     private void checkDataSaved() {
-        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        answer1.setText(sharedPreferences.getString(BuildConfig.USER_ANSWER1, ""));
-        answer2.setText(sharedPreferences.getString(BuildConfig.USER_ANSWER2, ""));
+        answer1.setText(userSharedImp.getUserAnswer1Saved());
+        answer2.setText(userSharedImp.getUserAnswer2Saved());
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        checkDataSaved();
     }
 
-    private QuestionsComponent component() {
+    private SignupComponent component() {
         if (component == null) {
-            component = DaggerQuestionsComponent.builder()
+            component = DaggerSignupComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .questionsModule(new QuestionsModule(getApplicationContext()))
+                    .signupModule(new SignupModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }
         return component;
-    }
-
-    private void cargarImagenPerfil(String path) {
-        try {
-            File f = new File(path);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            image.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            image.setImageResource(R.drawable.user_default_image);
-            //e.printStackTrace();
-        }
-    }
-
-    private byte[] compressImage() {
-        Bitmap bm = ((BitmapDrawable) image.getDrawable()).getBitmap();
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) 400) / width;
-        float scaleHeight = ((float) 450) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap bitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return b;
     }
 }
