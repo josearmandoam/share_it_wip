@@ -53,8 +53,8 @@ public class PasswordPresenter extends AbsPassword {
             }
 
             @Override
-            public void onUserReceived(List<Login> user) {
-                view.showEmailSucces(user.get(0));
+            public void onUserReceived(Login user) {
+                view.showEmailSucces(user);
                 view.hideEmailLoading();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -64,14 +64,29 @@ public class PasswordPresenter extends AbsPassword {
                     }
                 }, 2000);
             }
+
+            @Override
+            public void onFailure() {
+                view.hideEmailLoading();
+                view.showEmailFailure();
+            }
         });
     }
 
     @Override
     public void onQuestionsSubmitClicked(Login login, String res1, String res2) {
-        if (login.getPreguntaSeguridad().toUpperCase().equals(res1.toUpperCase())
-                || login.getPreguntaSeguridad().toUpperCase().equals(res2.toUpperCase())) {
+        if (login.getRespuestaSeguridad().toUpperCase().equals(res1.toUpperCase())
+                || login.getRespuestaSeguridad().toUpperCase().equals(res2.toUpperCase())
+                ||login.getRespuestaSeguridad2().toUpperCase().equals(res1.toUpperCase())
+                || login.getRespuestaSeguridad2().toUpperCase().equals(res2.toUpperCase())) {
             view.showQuestionsSuccess();
+            Handler handler=new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    navigator.navigateToUpdatePassword();
+                }
+            },2000);
         } else {
             view.shoQuestionsFailure();
         }
@@ -112,5 +127,15 @@ public class PasswordPresenter extends AbsPassword {
                 view.showUpdateFailure();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigator.navigateToBack();
+    }
+
+    @Override
+    public void onCleanClicked() {
+        view.cleanFields();
     }
 }

@@ -46,7 +46,11 @@ public class UserByEmailImp implements GetUserByEmail, Callback<LoginApiResponse
     @Override
     public void onResponse(Call<LoginApiResponse> call, Response<LoginApiResponse> response) {
         if (response.isSuccessful()) {
-            listener.onUserReceived(response.body().parseLogins());
+            if (response.body().parseLogins().size()>0) {
+                listener.onUserReceived(response.body().parseLogins().get(0));
+            }else{
+                listener.onFailure();
+            }
         } else {
             listener.onError(new Exception("Error body malformed"));
         }
@@ -69,7 +73,12 @@ public class UserByEmailImp implements GetUserByEmail, Callback<LoginApiResponse
         }
 
         @Override
-        public void onUserReceived(List<Login> user) {
+        public void onUserReceived(Login user) {
+
+        }
+
+        @Override
+        public void onFailure() {
 
         }
     }

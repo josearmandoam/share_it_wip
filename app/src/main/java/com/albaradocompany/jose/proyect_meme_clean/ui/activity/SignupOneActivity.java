@@ -103,8 +103,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     @OnClick(R.id.signup_button_menu)
-    public void onMenuClicked(View view) {
-        presenter.onMenuPressed();
+    public void onCleanClicked(View view) {
+        presenter.onCleanPressed();
     }
 
     @Override
@@ -155,8 +155,14 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     @Override
-    public void showMenu() {
-        openOptionsMenu();
+    public void cleanFields() {
+        clean();
+    }
+
+    private void clean() {
+        name.setText("");
+        lastName.setText("");
+        email.setText("");
     }
 
     @Override

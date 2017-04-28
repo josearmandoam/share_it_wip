@@ -16,6 +16,8 @@ public interface GetUserByEmail {
 
         void onError(Exception e);
 
-        void onUserReceived(List<Login> user);
+        void onUserReceived(Login user);
+
+        void onFailure();
     }
 }

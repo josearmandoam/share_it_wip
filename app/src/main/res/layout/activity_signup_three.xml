@@ -175,7 +175,7 @@
         android:layout_alignEnd="@+id/signup_three_container_image"
         android:layout_alignBottom="@+id/signup_two_title_image"
         android:layout_marginTop="@dimen/default_margin"
-        android:src="@drawable/menu"
+        android:src="@drawable/delete"
         android:background="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

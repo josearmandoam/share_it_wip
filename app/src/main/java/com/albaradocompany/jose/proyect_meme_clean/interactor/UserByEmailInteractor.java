@@ -45,10 +45,14 @@ public class UserByEmailInteractor implements Interactor, GetUserByEmail, GetUse
     }
 
     @Override
-    public void onUserReceived(List<Login> user) {
+    public void onUserReceived(Login user) {
         listener.onUserReceived(user);
     }
 
+    @Override
+    public void onFailure() {
+        listener.onFailure();
+    }
     private class NullListener implements Listener {
         @Override
         public void onNoInternetAvailable() {
@@ -61,7 +65,12 @@ public class UserByEmailInteractor implements Interactor, GetUserByEmail, GetUse
         }
 
         @Override
-        public void onUserReceived(List<Login> user) {
+        public void onUserReceived(Login user) {
+
+        }
+
+        @Override
+        public void onFailure() {
 
         }
     }

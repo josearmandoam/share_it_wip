@@ -16,6 +16,10 @@ public abstract class AbsPassword extends Presenter<AbsPassword.View, AbsPasswor
 
     public abstract void onUpdateSubmitClicked(UpdatePasswordInteractor updatePasswordInteractor);
 
+    public abstract void onBackPressed();
+
+    public abstract void onCleanClicked();
+
     public interface View {
         void showNoInternetAvailable();
 
@@ -43,6 +47,9 @@ public abstract class AbsPassword extends Presenter<AbsPassword.View, AbsPasswor
 
         void showUpdateFailure();
 
+        void showEmailFailure();
+
+        void cleanFields();
     }
 
     public interface Navigator {
@@ -51,5 +58,8 @@ public abstract class AbsPassword extends Presenter<AbsPassword.View, AbsPasswor
         void navigateToUpdatePassword();
 
         void navigateToSignin();
+
+        void navigateToBack();
+
     }
 }

@@ -21,7 +21,7 @@ public class UpdatePasswordImp implements UpdatePassword, Callback<GenericApiRes
     String newPassword;
     String idUser;
 
-    public UpdatePasswordImp(String newPassword, String idUser) {
+    public UpdatePasswordImp(String idUser, String newPassword) {
         this.newPassword = newPassword;
         this.idUser = idUser;
     }

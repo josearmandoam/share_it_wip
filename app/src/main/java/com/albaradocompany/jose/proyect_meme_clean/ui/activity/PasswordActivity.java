@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -23,6 +24,7 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsPassword;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.PasswordPresenter;
 
+import butterknife.BindColor;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,11 +37,11 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     @BindView(R.id.password_pbr_update)
     ProgressBar update_pbr;
     @BindView(R.id.password_tv_email_send)
-    TextView send_email;
+    Button send_email;
     @BindView(R.id.password_tv_question_send)
-    TextView send_question;
+    Button send_question;
     @BindView(R.id.password_tv_update_send)
-    TextView send_update;
+    Button send_update;
     @BindView(R.id.password_lyt_email)
     RelativeLayout lyt_email;
     @BindView(R.id.password_lyt_question)
@@ -56,6 +58,8 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     EditText password1;
     @BindView(R.id.password_et_password2)
     EditText password2;
+    @BindView(R.id.password_tv_question)
+    TextView question;
 
     @BindString(R.string.default_font)
     String default_font;
@@ -73,6 +77,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     String password_changed;
     @BindString(R.string.password_not_changed)
     String password_not_changed;
+    @BindString(R.string.failed_email)
+    String failed_email;
+    @BindString(R.string.empty_email)
+    String empty_email;
+    @BindColor(R.color.color_login)
+    int color_login;
 
     UserByEmailInteractor interactor;
     UpdatePasswordInteractor passwordInteractor;
@@ -83,9 +93,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     public void onEmailSendClicked(View view) {
         interactor = new UserByEmailInteractor(new UserByEmailImp(email.getText().toString()),
                 new MainThreadImp(), new ThreadExecutor());
-        presenter.onEmailSubmitClicked(interactor);
+        if (!email.getText().toString().isEmpty()){
+            presenter.onEmailSubmitClicked(interactor);
+        }else{
+            showSnackBar(empty_email, Color.RED);
+        }
     }
-
     @OnClick(R.id.password_tv_question_send)
     public void onQuestionSendClicked(View view) {
         presenter.onQuestionsSubmitClicked(user, answ1.getText().toString(), answ2.getText().toString());
@@ -100,11 +113,17 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
             showSnackBar(error_passwords, Color.RED);
         }
     }
-
+    @OnClick(R.id.password_iv_back)
+    public void onBackClicked(View view){
+        presenter.onBackPressed();
+    }
+    @OnClick(R.id.password_iv_delete)
+    public void onCloseClicked(View view){
+        presenter.onCleanClicked();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password);
         initializePresenter();
     }
 
@@ -145,6 +164,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     public void hideEmailLoading() {
         send_email.setVisibility(View.VISIBLE);
         email_pbr.setVisibility(View.GONE);
+        question.setText(user.getPreguntaSeguridad());
     }
 
     @Override
@@ -198,6 +218,24 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     }
 
     @Override
+    public void showEmailFailure() {
+        showSnackBar(failed_email, Color.RED);
+    }
+
+    @Override
+    public void cleanFields() {
+        clean();
+    }
+
+    private void clean() {
+        email.setText("");
+        answ1.setText("");
+        answ2.setText("");
+        password1.setText("");
+        password2.setText("");
+    }
+
+    @Override
     public void navigateToQuestions() {
         lyt_email.setVisibility(View.GONE);
         lyt_question.setVisibility(View.VISIBLE);
@@ -214,6 +252,10 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
         openSignin(this);
     }
 
+    @Override
+    public void navigateToBack() {
+        this.finish();
+    }
     private void openSignin(Context context) {
         this.finish();
         Intent intent = new Intent(this, LoginActivity.class);

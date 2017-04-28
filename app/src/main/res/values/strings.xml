@@ -52,4 +52,6 @@
     <string name="failed_asnwers">Incorrect answers</string>
     <string name="password_changed">Password updated!</string>
     <string name="password_not_changed">Password not updated</string>
+    <string name="failed_email">Email not registered, you can sign up quickly!</string>
+    <string name="empty_email">Please enter any email</string>
 </resources>

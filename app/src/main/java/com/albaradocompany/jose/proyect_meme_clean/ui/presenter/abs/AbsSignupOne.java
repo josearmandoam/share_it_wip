@@ -11,7 +11,7 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onBackPressed();
 
-    public abstract void onMenuPressed();
+    public abstract void onCleanPressed();
 
     public abstract void onNextPagePressed();
 
@@ -21,13 +21,11 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onImageClicked();
 
-    public abstract void onTestClicked(SendImageInteractor sendImageInteractor);
-
     public interface View {
 
         void hideSignupOne();
 
-        void showMenu();
+        void cleanFields();
 
         void loadUserImage();
 
