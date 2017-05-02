@@ -15,6 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
@@ -27,6 +31,8 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import javax.inject.Inject;
 
 import butterknife.BindDrawable;
 import butterknife.BindView;
@@ -61,10 +67,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     AlertDialog dialog;
     Context context;
     AbsShowAvatar presenter;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     int numberActivity;
-
+    @Inject
+    UserSharedImp userSharedImp;
     public ShowAvatarDialog(Context context) {
         super(context);
 
@@ -96,6 +101,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     public ShowAvatarDialog(Context context, int numberActivity) {
         super(context);
         this.context = context;
+        getComponent().inject(this);
         this.numberActivity = numberActivity;
         dialog = new AlertDialog.Builder(context)
                 .setView(R.layout.dialog_show_avatar)
@@ -105,7 +111,6 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         dialog.getWindow().setLayout(getWidth(), getWidth());
         initializePresenter();
     }
-
     @Override
     public void deleteImage() {
         deleteUserImage();
@@ -117,16 +122,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void checkImage() {
-        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        String isAvatarSelected = sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false");
-        if (isAvatarSelected.equals("true")) {
+        if (userSharedImp.isAvatarTaken()) {
             Picasso.with(context)
-                    .load(sharedPreferences.getString(BuildConfig.AVATAR_IMAGE_PATH, ""))
+                    .load(userSharedImp.getUserAvatar())
                     .error(defaultImageUser)
                     .into(image);
         } else {
-            sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-            cargarImagenPerfil(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+            cargarImagenPerfil(userSharedImp.getUserPhoto());
         }
     }
 
@@ -143,14 +145,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void deleteUserImage() {
-        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
+        userSharedImp.deleteImages();
         dialog.dismiss();
         switch (numberActivity) {
             case 1:
@@ -176,5 +171,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     public static void openAddPhoto(Context ctx) {
         Intent intent = new Intent(ctx, AddPhotoActivty.class);
         ctx.startActivity(intent);
+    }
+
+    protected SignupComponent getComponent() {
+        return ((SignupOneActivity) context).component();
     }
 }

@@ -26,8 +26,7 @@ public interface RegistrationService {
                                                    @Field("fechaNacimiento") String fechaNacimiento,
                                                    @Field("nombre") String nombre,
                                                    @Field("apellidos") String apellidos,
-                                                   @Field("imagePath") String imagePath,
-                                                   @Field("imageBlob") byte[] imageBlob);
+                                                   @Field("imagePath") String imagePath);
 
     @POST("insertUser.php")
     Call<GenericApiResponse> getRegistrationResult(@Body Login login);

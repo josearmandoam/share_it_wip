@@ -3,6 +3,8 @@ package com.albaradocompany.jose.proyect_meme_clean.usecase;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
+
 /**
  * Created by jose on 28/04/2017.
  */
@@ -49,4 +51,8 @@ public interface SignupShared {
     String getUserAnswer1Saved();
 
     String getUserAnswer2Saved();
+
+    void saveUserAvatar(Avatar avatar);
+
+    void deleteImages();
 }

@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 
 import dagger.Component;
 

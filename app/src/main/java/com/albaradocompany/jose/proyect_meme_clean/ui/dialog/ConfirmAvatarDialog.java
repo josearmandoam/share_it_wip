@@ -12,6 +12,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
@@ -19,6 +25,8 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ConfirmAvatarPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsConfirmAvatar;
 import com.squareup.picasso.Picasso;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +41,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     ImageButton accept;
     @BindView(R.id.confirm_avatar_image)
     ImageView avatarImage;
+    private AvatarComponent component;
 
     @OnClick(R.id.confirm_avatar_accept)
     public void onAcceptClicked(View view) {
@@ -43,9 +52,8 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     private Context context;
     private Avatar avatar;
     private AbsConfirmAvatar presenter;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
+    @Inject
+    UserSharedImp userSharedImp;
     public ConfirmAvatarDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
@@ -65,6 +73,8 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         dialog.getWindow().setLayout((int) (getWidth() / 1.5), (int) (getWidth() / 1.5));
         initialize();
         loadAvatarImage();
+        getComponent().inject(this);
+
     }
 
     private int getWidth() {
@@ -87,27 +97,13 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
                 .load(avatar.getImagePath())
                 .into(avatarImage);
     }
-
     @Override
     public void closeConfirmAvatar() {
-        saveImageData();
-    }
-
-    private void saveImageData() {
-        sharedPreferences = context.getSharedPreferences(this.getClass().getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
-        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "true");
-        editor.putString(BuildConfig.AVATAR_IMAGE_PATH, avatar.getImagePath());
-        editor.putString(BuildConfig.AVATAR_IMAGE_ID, String.valueOf(avatar.getId()));
-        editor.putString(BuildConfig.AVATAR_IMAGE_DESCRIPTION, avatar.getDescription());
-        editor.apply();
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "true");
-        editor.putString(BuildConfig.USER_AVATAR, avatar.getImagePath());
-        editor.apply();
+        userSharedImp.saveUserAvatar(avatar);
         ((AddPhotoActivty) context).onBackPressed();
+    }
+    protected SignupComponent getComponent() {
+
+        return ((AddPhotoActivty)context).component();
     }
 }

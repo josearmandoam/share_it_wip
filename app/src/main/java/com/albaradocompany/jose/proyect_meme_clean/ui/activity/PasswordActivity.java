@@ -23,6 +23,8 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsPassword;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.PasswordPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import butterknife.BindColor;
 import butterknife.BindString;
@@ -88,17 +90,19 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     UpdatePasswordInteractor passwordInteractor;
     AbsPassword presenter;
     private Login user;
+    ShowSnackBar showSnackBar;
 
     @OnClick(R.id.password_tv_email_send)
     public void onEmailSendClicked(View view) {
         interactor = new UserByEmailInteractor(new UserByEmailImp(email.getText().toString()),
                 new MainThreadImp(), new ThreadExecutor());
-        if (!email.getText().toString().isEmpty()){
+        if (!email.getText().toString().isEmpty()) {
             presenter.onEmailSubmitClicked(interactor);
-        }else{
-            showSnackBar(empty_email, Color.RED);
+        } else {
+            showSnackBar.show(empty_email, Color.RED);
         }
     }
+
     @OnClick(R.id.password_tv_question_send)
     public void onQuestionSendClicked(View view) {
         presenter.onQuestionsSubmitClicked(user, answ1.getText().toString(), answ2.getText().toString());
@@ -110,21 +114,29 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
             passwordInteractor = new UpdatePasswordInteractor(new UpdatePasswordImp(user.getIdUser(), password1.getText().toString()), new MainThreadImp(), new ThreadExecutor());
             presenter.onUpdateSubmitClicked(passwordInteractor);
         } else {
-            showSnackBar(error_passwords, Color.RED);
+            showSnackBar.show(error_passwords, Color.RED);
         }
     }
+
     @OnClick(R.id.password_iv_back)
-    public void onBackClicked(View view){
+    public void onBackClicked(View view) {
         presenter.onBackPressed();
     }
+
     @OnClick(R.id.password_iv_delete)
-    public void onCloseClicked(View view){
+    public void onCloseClicked(View view) {
         presenter.onCleanClicked();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializePresenter();
+        initialize();
+    }
+
+    private void initialize() {
+        showSnackBar = new ShowSnackBarImp(this);
     }
 
     private void initializePresenter() {
@@ -146,12 +158,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar(noInternet, Color.RED);
+        showSnackBar.show(noInternet, Color.RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), Color.RED);
     }
 
     @Override
@@ -193,33 +205,33 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @Override
     public void showEmailSucces(Login login) {
-        showSnackBar(correct_email, Color.GREEN);
+        showSnackBar.show(correct_email, Color.RED);
         this.user = login;
     }
 
     @Override
     public void showQuestionsSuccess() {
-        showSnackBar(correct_answers, Color.GREEN);
+        showSnackBar.show(correct_answers, Color.GREEN);
     }
 
     @Override
     public void shoQuestionsFailure() {
-        showSnackBar(failed_answers, Color.RED);
+        showSnackBar.show(failed_answers, Color.RED);
     }
 
     @Override
     public void showUpdateSuccess() {
-        showSnackBar(password_changed, Color.GREEN);
+        showSnackBar.show(password_changed, Color.GREEN);
     }
 
     @Override
     public void showUpdateFailure() {
-        showSnackBar(password_not_changed, Color.RED);
+        showSnackBar.show(password_not_changed, Color.RED);
     }
 
     @Override
     public void showEmailFailure() {
-        showSnackBar(failed_email, Color.RED);
+        showSnackBar.show(failed_email, Color.RED);
     }
 
     @Override
@@ -256,23 +268,10 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     public void navigateToBack() {
         this.finish();
     }
+
     private void openSignin(Context context) {
         this.finish();
         Intent intent = new Intent(this, LoginActivity.class);
         context.startActivity(intent);
-    }
-
-    private void showSnackBar(String message, int color) {
-        final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(color);
-        View view = snackbar.getView();
-
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create(default_font, Typeface.BOLD);
-        tv.setTypeface(font);
-        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tv.setTextColor(color_login);
-
-        snackbar.show();
     }
 }

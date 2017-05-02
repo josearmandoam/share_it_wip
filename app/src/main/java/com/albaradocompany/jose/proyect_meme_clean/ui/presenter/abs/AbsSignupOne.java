@@ -1,6 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
-import com.albaradocompany.jose.proyect_meme_clean.interactor.SendImageInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 /**

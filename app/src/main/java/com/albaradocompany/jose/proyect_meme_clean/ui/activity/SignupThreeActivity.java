@@ -3,21 +3,19 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegistrationResponseImp;
@@ -26,26 +24,24 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.RegistrationResponseInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
+import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
+import org.apache.commons.net.ftp.FTPClient;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Calendar;
+import java.net.InetAddress;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -103,7 +99,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Inject
     UserSharedImp userSharedImp;
     private List<Question> listQuestions;
-    private SignupComponent component;
+    SignupComponent component;
+    private ShowSnackBarImp showSnackBar;
 
 
     @OnClick(R.id.signup_three_button_back)
@@ -114,10 +111,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @OnClick(R.id.signup_three_button_confirm)
     public void onConfirmClicked(View view) {
         if (checkFields()) {
-            userSharedImp.saveSignThreeData(question.getText().toString(),answer1.getText().toString(), answer2.getText().toString());
-            Login user = userSharedImp.getUser(image);
+            userSharedImp.saveSignThreeData(question.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
+            Login user = userSharedImp.getUser();
             interactor = new RegistrationResponseInteractor(new RegistrationResponseImp(user), new MainThreadImp(), new ThreadExecutor());
             presenter.onConfirmClicked(interactor, user);
+
         }
     }
 
@@ -130,8 +128,9 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void onImageClicked(View view) {
         presenter.onImageClicked();
     }
+
     @OnClick(R.id.signup_three_button_menu)
-    public void onCleanClicked(View view){
+    public void onCleanClicked(View view) {
         presenter.onCleanClicked();
     }
 
@@ -140,14 +139,18 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         super.onCreate(savedInstanceState);
         component().inject(this);
         initializePrensenter();
+        initialize();
+    }
 
+    private void initialize() {
+        showSnackBar = new ShowSnackBarImp(this);
     }
 
     private void checkUserImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            userSharedImp.showUserPhoto(image,userSharedImp.getUserPhoto());
+            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
         }
     }
 
@@ -169,8 +172,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     }
 
     @Override
-    public void hideSignupThree() {
-        onBackPressed();
+    public void checkInfoSaved() {
+        checkDataSaved();
     }
 
     @Override
@@ -197,24 +200,24 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar(noInternet, Color.RED);
+        showSnackBar.show(noInternet, Color.RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), Color.RED);
     }
 
     @Override
     public void showSuccess() {
-        showSnackBar(acountCreated, Color.GREEN);
+        showSnackBar.show(acountCreated, Color.GREEN);
     }
 
     @Override
     public void showErrorRegistration() {
         pbr.setVisibility(View.GONE);
         bConfirm.setVisibility(View.VISIBLE);
-        showSnackBar(error_registration, Color.RED);
+        showSnackBar.show(error_registration, Color.RED);
     }
 
     @Override
@@ -259,30 +262,15 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void onResume() {
         super.onResume();
         presenter.resume();
-        checkDataSaved();
     }
 
     private boolean checkFields() {
         if (answer1.getText().toString().isEmpty()) {
-            showSnackBar(answerErrorMessage, Color.RED);
+            showSnackBar.show(answerErrorMessage, Color.RED);
             return false;
         }
         return true;
     }
-
-    private void showSnackBar(String message, int color) {
-        final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(color);
-        View view = snackbar.getView();
-
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create(text_font, Typeface.BOLD);
-        tv.setTypeface(font);
-        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tv.setTextColor(color_login);
-        snackbar.show();
-    }
-
     @Override
     public void navigateToLogin() {
         this.finish();
@@ -305,7 +293,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         super.onBackPressed();
     }
 
-    private SignupComponent component() {
+    public SignupComponent component() {
         if (component == null) {
             component = DaggerSignupComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())

@@ -26,6 +26,8 @@ public abstract class AbsSignupTwo extends Presenter<AbsSignupTwo.View, AbsSignu
         void showImage();
 
         void cleanFields();
+
+        void checkInfoSaved();
     }
 
     public interface Navigator {

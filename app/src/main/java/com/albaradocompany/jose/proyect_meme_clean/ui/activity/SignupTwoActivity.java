@@ -2,9 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -15,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -22,16 +20,12 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupTwoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupTwo;
+import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import javax.inject.Inject;
 
@@ -80,6 +74,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     private SignupComponent component;
     @Inject
     UserSharedImp userSharedImp;
+    private ShowSnackBarImp showSnackBar;
 
     @OnClick(R.id.signup_two_button_back)
     public void onBackpressed(View view) {
@@ -106,6 +101,11 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         super.onCreate(savedInstanceState);
         component().inject(this);
         initializePresenter();
+        intialize();
+    }
+
+    private void intialize() {
+        showSnackBar = new ShowSnackBarImp(this);
     }
 
     private void checkDataSaved() {
@@ -118,7 +118,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            userSharedImp.showUserPhoto(image,userSharedImp.getUserPhoto());
+            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
         }
     }
 
@@ -152,6 +152,11 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         clean();
     }
 
+    @Override
+    public void checkInfoSaved() {
+        checkDataSaved();
+    }
+
     private void clean() {
         username.setText("");
         password.setText("");
@@ -166,21 +171,22 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
             openSignupThreeActivity(this);
         }
     }
+
     private boolean checkFields() {
         if (username.getText().toString().isEmpty()) {
-            showSnackBar(userError, Color.RED);
+            showSnackBar.show(userError, Color.RED);
             return false;
         }
         if (password.getText().toString().isEmpty()) {
-            showSnackBar(passwordError, Color.RED);
+            showSnackBar.show(passwordError, Color.RED);
             return false;
         }
         if (password2.getText().toString().isEmpty()) {
-            showSnackBar(passwordErrorS, Color.RED);
+            showSnackBar.show(passwordErrorS, Color.RED);
             return false;
         }
         if (!password.getText().toString().equals(password2.getText().toString())) {
-            showSnackBar(passwordMatchError, Color.RED);
+            showSnackBar.show(passwordMatchError, Color.RED);
             return false;
         }
         return true;
@@ -202,25 +208,11 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     public void onResume() {
         super.onResume();
         presenter.resume();
-        checkDataSaved();
-    }
+   }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    private void showSnackBar(String message, int color) {
-        final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(color);
-        View view = snackbar.getView();
-
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create(text_font, Typeface.BOLD);
-        tv.setTypeface(font);
-        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tv.setTextColor(color_login);
-        snackbar.show();
     }
 
     private SignupComponent component() {

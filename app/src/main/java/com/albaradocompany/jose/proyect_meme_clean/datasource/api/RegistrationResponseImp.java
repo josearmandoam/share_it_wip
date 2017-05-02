@@ -41,7 +41,7 @@ public class RegistrationResponseImp implements GetRegistrationResponse, Callbac
         RegistrationService service = retrofit.create(RegistrationService.class);
         service.getRegistrationResult(user.getIdUser(), user.getUsername(), user.getPassword(),
                 user.getPreguntaSeguridad(), user.getRespuestaSeguridad(), user.getRespuestaSeguridad2(),
-                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(), user.getImagePath(), user.getBlob())
+                user.getEmail(), user.getFechaNacimiento(), user.getNombre(), user.getApellidos(), user.getImagePath())
                 .enqueue(this);
 //        service.getRegistrationResult(user).enqueue(this);
     }

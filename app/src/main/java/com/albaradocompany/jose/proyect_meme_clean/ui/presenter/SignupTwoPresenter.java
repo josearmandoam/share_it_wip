@@ -23,7 +23,7 @@ public class SignupTwoPresenter extends AbsSignupTwo {
     @Override
     public void resume() {
         view.loadUserImage();
-
+        view.checkInfoSaved();
     }
 
     @Override

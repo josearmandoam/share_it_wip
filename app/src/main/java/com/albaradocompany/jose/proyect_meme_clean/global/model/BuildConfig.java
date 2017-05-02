@@ -34,4 +34,5 @@ public final class BuildConfig {
     public static final int ACTION_GALERY = 2;
     public static final String PREF_NAME = "PREF_NAME";
     public static final String IS_LOGIN = "IS_LOGIN";
+    public static final String USER_PHOTO_PATH = "USER_PHOTO_PATH";
 }

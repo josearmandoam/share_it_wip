@@ -25,7 +25,7 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
 
     public interface View {
 
-        void hideSignupThree();
+        void checkInfoSaved();
 
         void showLoading();
 

@@ -12,7 +12,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SplashPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
 
@@ -88,6 +87,7 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
         Intent intent = new Intent(ctx, SignupOneActivity.class);
         ctx.startActivity(intent);
     }
+
     private SignupComponent component() {
         if (component == null) {
             component = DaggerSignupComponent.builder()

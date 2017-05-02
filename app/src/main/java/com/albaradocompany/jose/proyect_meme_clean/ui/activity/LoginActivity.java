@@ -23,9 +23,10 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
+import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import javax.inject.Inject;
 
@@ -36,9 +37,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivty implements AbsUserLogin.View, AbsUserLogin.Navigator {
 
-    private static final String PREF_NAME = "AndroidHivePref";
-    private static final String IS_LOGIN = "IsLoggedIn";
-    private static final String KEY_NAME = "username";
     AbsUserLogin presenter;
     LoginInteractor loginInteractor;
 
@@ -63,12 +61,20 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     String empty_username_password;
     @BindColor(R.color.color_login)
     int color_login;
+    @BindString(R.string.errorUsername)
+    String errorUsername;
+    @BindString(R.string.errorPassword)
+    String errorPassword;
+    @BindString(R.string.noInternetAvailable)
+    String noInternet;
+    @BindString(R.string.loginCorrect)
+    String loginCorrect;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    private SignupComponent component;
+
+    SignupComponent component;
     @Inject
     UserSharedImp userSharedImp;
+    ShowSnackBar showSnackBar;
 
     @OnClick(R.id.login_b_signup)
     public void onSignupClicked(View view) {
@@ -90,13 +96,12 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         super.onCreate(savedInstanceState);
         component().inject(this);
         initializePresenter();
-//        removeSingupInformation();
+        initialize();
     }
 
-    private void removeSingupInformation() {
-        sharedPreferences = getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.clear().apply();
+    private void initialize() {
+        userSharedImp.removeSignInformation();
+        showSnackBar = new ShowSnackBarImp(this);
     }
 
     private void initializePresenter() {
@@ -115,16 +120,16 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     }
 
     private boolean checkFields() {
-        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()){
-            showSnackBar(empty_username_password, Color.RED);
+        if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
+            showSnackBar.show(empty_username_password, Color.RED);
             return false;
         }
-        if (username.getText().toString().isEmpty()){
-            showSnackBar(empty_username, Color.RED);
+        if (username.getText().toString().isEmpty()) {
+            showSnackBar.show(empty_username, Color.RED);
             return false;
         }
-        if (password.getText().toString().isEmpty()){
-            showSnackBar(empty_password, Color.RED);
+        if (password.getText().toString().isEmpty()) {
+            showSnackBar.show(empty_password, Color.RED);
             return false;
         }
         return true;
@@ -147,23 +152,23 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @Override
     public void showErrorUserNotFound() {
-        showSnackBar(getString(R.string.errorUsername), Color.RED);
+        showSnackBar.show(errorUsername, Color.RED);
     }
 
 
     @Override
     public void showErrorLoginPassword() {
-        showSnackBar(getString(R.string.errorPassword), Color.RED);
+        showSnackBar.show(errorPassword, Color.RED);
     }
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar(getString(R.string.noInternetAvailable), Color.RED);
+        showSnackBar.show(noInternet, Color.RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar(error, Color.RED);
+        showSnackBar.show(error, Color.RED);
     }
 
     @Override
@@ -184,7 +189,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @Override
     public void navigateToHomePage() {
         userSharedImp.saveUserLogged();
-        showSnackBar(getString(R.string.loginCorrect), Color.GREEN);
+        showSnackBar.show(loginCorrect, Color.RED);
     }
 
     @Override
@@ -206,46 +211,12 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         Intent intent = new Intent(ctx, SignupOneActivity.class);
         ctx.startActivity(intent);
     }
-
-//    private void userLoggedIn() {
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString(IS_LOGIN, "true");
-//        editor.apply();
-//    }
-
-    private void showSnackBar(String message, int color) {
-        final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(color);
-        View view = snackbar.getView();
-
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create(text_font, Typeface.BOLD);
-        tv.setTypeface(font);
-        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tv.setTextColor(color_login);
-        snackbar.show();
-    }
-
-//    private void cleanLoginSharedPreferences() {
-//        sharedPreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-//        editor = sharedPreferences.edit();
-//        editor.clear();
-//        editor.apply();
-//        sharedPreferences = this.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-//        editor = sharedPreferences.edit();
-//        editor.clear();
-//        editor.apply();
-//        sharedPreferences = this.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-//        editor = sharedPreferences.edit();
-//        editor.clear();
-//        editor.apply();
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
         userSharedImp.removeSignInformation();
     }
+
     private SignupComponent component() {
         if (component == null) {
             component = DaggerSignupComponent.builder()

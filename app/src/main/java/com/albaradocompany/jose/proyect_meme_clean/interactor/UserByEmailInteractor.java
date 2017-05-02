@@ -3,8 +3,6 @@ package com.albaradocompany.jose.proyect_meme_clean.interactor;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
 
-import java.util.List;
-
 /**
  * Created by jose on 27/04/2017.
  */
@@ -53,6 +51,7 @@ public class UserByEmailInteractor implements Interactor, GetUserByEmail, GetUse
     public void onFailure() {
         listener.onFailure();
     }
+
     private class NullListener implements Listener {
         @Override
         public void onNoInternetAvailable() {

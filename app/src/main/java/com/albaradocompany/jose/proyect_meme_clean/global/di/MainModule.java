@@ -9,6 +9,7 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,7 +29,8 @@ public class MainModule {
 
         avatarInteractor = new AvatarInteractor(new AvatarsApiImp(), new ThreadExecutor(), new MainThreadImp());
         questionsInteractor = new QuestionsInteractor(new QuestionsApiImp(), new MainThreadImp(), new ThreadExecutor());
-        userSharedImp=new UserSharedImp(application.getApplicationContext());
+        userSharedImp = new UserSharedImp(application.getApplicationContext());
+
     }
 
     @Provides
@@ -42,5 +44,7 @@ public class MainModule {
     }
 
     @Provides
-    public UserSharedImp provideUserSharedImp() { return userSharedImp; }
+    public UserSharedImp provideUserSharedImp() {
+        return userSharedImp;
+    }
 }

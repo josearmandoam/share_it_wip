@@ -39,7 +39,8 @@
         <activity
             android:name=".ui.activity.AddPhotoActivty"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.PasswordActivity"></activity>
+        <activity android:name=".ui.activity.PasswordActivity" />
+        <activity android:name=".ui.activity.ProfileActivity"></activity>
     </application>
 
 </manifest>

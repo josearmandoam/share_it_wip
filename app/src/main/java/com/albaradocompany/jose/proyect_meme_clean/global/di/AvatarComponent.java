@@ -1,6 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 
 import dagger.Component;
 
@@ -10,4 +12,6 @@ import dagger.Component;
 @Component(dependencies = RootComponent.class, modules = {AvatarModule.class, MainModule.class})
 public interface AvatarComponent {
     void inject(AddPhotoActivty addPhotoActivty);
+
+    void inject(ConfirmAvatarDialog confirmAvatarDialog);
 }

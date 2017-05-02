@@ -21,10 +21,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerAvatarComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
@@ -108,7 +112,9 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
 
     @OnClick(R.id.add_photo_avatar)
     public void onAvatarClicked(View view) {
-        presenter.onTabAvatarClicked();
+        if (layoutCamera.isShown()) {
+            presenter.onTabAvatarClicked();
+        }
     }
 
     @OnClick(R.id.add_photo_next)
@@ -123,12 +129,12 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
 
     @Inject
     AvatarInteractor avatarInteractor;
+    @Inject
+    UserSharedImp userSharedImp;
 
     AbsAddPhoto presenter;
-    AvatarComponent component;
+    SignupComponent component;
     AvatarsRecyclerAdapter adapter;
-    SharedPreferences sharedpreferences;
-    SharedPreferences.Editor editor;
 
     AvatarsRecyclerAdapter.OnAvatarClicked onAvatarClicked = new AvatarsRecyclerAdapter.OnAvatarClicked() {
         @Override
@@ -236,56 +242,66 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BuildConfig.ACTION_GALERY) {
             if (resultCode == RESULT_OK) {
-                pbt_camera.setVisibility(View.VISIBLE);
-                layoutCamera.setVisibility(View.GONE);
-                new Thread(new Runnable() {
-                    public void run() {
-                        Uri fotoGaleria = data.getData();
-                        try {
-                            InputStream is = getContentResolver().openInputStream(fotoGaleria);
-                            BufferedInputStream bis = new BufferedInputStream(is);
-                            Bitmap bm = BitmapFactory.decodeStream(bis);
-                            String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
-                            if (bm != null) {
-                                String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
-                                savePhotoSharedPref(dirFotos);
-                            }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        AddPhotoActivty.this.finish();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                pbt_camera.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).start();
-            } else {
-                pbt_camera.setVisibility(View.VISIBLE);
-                layoutCamera.setVisibility(View.GONE);
-                new Thread(new Runnable() {
-                    public void run() {
-                        if (requestCode == BuildConfig.ACTION_CAMERA && resultCode == RESULT_OK) {
-                            Bitmap bm = (Bitmap) data.getExtras().get("data");
-                            String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
-                            if (bm != null) {
-                                String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
-                                savePhotoSharedPref(dirFotos);
-                            }
-                            AddPhotoActivty.this.finish();
-                        }
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-                                pbt_camera.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                }).start();
-
-
+                savePhotoFromGalery(data);
+            }
+        } else {
+            if (requestCode == BuildConfig.ACTION_CAMERA) {
+                if (resultCode == RESULT_OK) {
+                    savePhotoFromCamera(data);
+                }
             }
         }
+    }
+
+    private void savePhotoFromCamera(final Intent data) {
+        pbt_camera.setVisibility(View.VISIBLE);
+        layoutCamera.setVisibility(View.GONE);
+        new Thread(new Runnable() {
+            public void run() {
+                    Bitmap bm = (Bitmap) data.getExtras().get("data");
+                    String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
+                    if (bm != null) {
+                        String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
+                        userSharedImp.savePhotoTaken(dirFotos);
+                        userSharedImp.saveUserpPath(dirFotos);
+                    }
+                    AddPhotoActivty.this.finish();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pbt_camera.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void savePhotoFromGalery(final Intent data) {
+        pbt_camera.setVisibility(View.VISIBLE);
+        layoutCamera.setVisibility(View.GONE);
+        new Thread(new Runnable() {
+            public void run() {
+                Uri fotoGaleria = data.getData();
+                try {
+                    InputStream is = getContentResolver().openInputStream(fotoGaleria);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    Bitmap bm = BitmapFactory.decodeStream(bis);
+                    String photoName = "imagen" + AddPhotoActivty.this.getCurrentDateAndTime() + ".jpg";
+                    if (bm != null) {
+                        String dirFotos = guardarImagen(AddPhotoActivty.this, bm, photoName);
+                        userSharedImp.savePhotoTaken(dirFotos);
+                        userSharedImp.saveUserpPath(dirFotos);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                AddPhotoActivty.this.finish();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pbt_camera.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }).start();
     }
 
     private String getCurrentDateAndTime() {
@@ -321,21 +337,6 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
         return mypath.getAbsolutePath();
     }
 
-    private void savePhotoSharedPref(String path) {
-        sharedpreferences = this.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedpreferences.edit();
-        editor.putString(BuildConfig.USER_PHOTO, path);
-        editor.apply();
-        sharedpreferences = this.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedpreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "false");
-        editor.apply();
-        sharedpreferences = this.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedpreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "true");
-        editor.apply();
-    }
-
     private void cameraUp() {
         layoutAvatar.setVisibility(View.GONE);
         layoutCamera.setVisibility(View.VISIBLE);
@@ -354,11 +355,11 @@ public class AddPhotoActivty extends BaseActivty implements AbsAddPhoto.Navigato
         avatarIndicator.setBackgroundColor(ppColor);
     }
 
-    private AvatarComponent component() {
+    public SignupComponent component() {
         if (component == null) {
-            component = DaggerAvatarComponent.builder()
+            component = DaggerSignupComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .avatarModule(new AvatarModule(getApplicationContext()))
+                    .signupModule(new SignupModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }

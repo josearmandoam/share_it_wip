@@ -3,9 +3,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -24,16 +21,13 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupOnePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupOne;
+import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -82,12 +76,11 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     int color_login;
 
     AbsSignupOne presenter;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     public static boolean avatar;
     private SignupComponent component;
     @Inject
     UserSharedImp userSharedImp;
+    private ShowSnackBar showSnackBar;
 
     @OnClick(R.id.signup_button_back)
     public void onBackpressed(View view) {
@@ -124,15 +117,13 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         super.onCreate(savedInstanceState);
         component().inject(this);
         initializePresenter();
-        createUserID();
+        initialize();
     }
 
-    private String createUserID() {
-        Calendar calendar = Calendar.getInstance();
-        String userID = "user" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
-                + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
-        return userID;
+    private void initialize() {
+        showSnackBar = new ShowSnackBarImp(this);
     }
+
     private void initializePresenter() {
         presenter = new SignupOnePresenter(this);
         presenter.setNavigator(this);
@@ -219,28 +210,28 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     private void saveSignoneData() {
-        userSharedImp.saveSignoneInfo(name.getText().toString(),lastName.getText().toString(), email.getText().toString());
+        userSharedImp.saveSignoneInfo(name.getText().toString(), lastName.getText().toString(), email.getText().toString());
     }
 
     private boolean checkFields() {
         if (name.getText().toString().isEmpty()) {
-            showSnackBar(nameErrorMessage, Color.RED);
+            showSnackBar.show(nameErrorMessage, Color.RED);
             return false;
         }
         if (lastName.getText().toString().isEmpty()) {
-            showSnackBar(lastNameErrorMessage, Color.RED);
+            showSnackBar.show(lastNameErrorMessage, Color.RED);
             return false;
         }
         if (email.getText().toString().isEmpty()) {
-            showSnackBar(emailErrorMessage, Color.RED);
+            showSnackBar.show(emailErrorMessage, Color.RED);
             return false;
         }
         if (!userSharedImp.isPhotoTaken()) {
-            showSnackBar(photoErrorMessage, Color.RED);
+            showSnackBar.show(photoErrorMessage, Color.RED);
             return false;
         }
         if (!userSharedImp.isDateBirthDayTaken()) {
-            showSnackBar(dateErrorMessage, Color.RED);
+            showSnackBar.show(dateErrorMessage, Color.RED);
             return false;
         }
         return true;
@@ -265,26 +256,13 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     private void removeSignInformation() {
         userSharedImp.removeSignInformation();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         presenter.resume();
     }
-
-    private void showSnackBar(String message, int color) {
-        final Snackbar snackbar = Snackbar.make(this.getCurrentFocus(), message, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(color);
-        View view = snackbar.getView();
-
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        Typeface font = Typeface.create(text_font, Typeface.BOLD);
-        tv.setTypeface(font);
-        tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        tv.setTextColor(color_login);
-        snackbar.show();
-    }
-
-    private SignupComponent component() {
+    public SignupComponent component() {
         if (component == null) {
             component = DaggerSignupComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())

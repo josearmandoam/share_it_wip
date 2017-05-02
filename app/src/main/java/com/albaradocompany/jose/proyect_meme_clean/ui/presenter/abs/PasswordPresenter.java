@@ -7,8 +7,6 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInte
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.UpdatePassword;
 
-import java.util.List;
-
 /**
  * Created by jose on 27/04/2017.
  */
@@ -77,16 +75,16 @@ public class PasswordPresenter extends AbsPassword {
     public void onQuestionsSubmitClicked(Login login, String res1, String res2) {
         if (login.getRespuestaSeguridad().toUpperCase().equals(res1.toUpperCase())
                 || login.getRespuestaSeguridad().toUpperCase().equals(res2.toUpperCase())
-                ||login.getRespuestaSeguridad2().toUpperCase().equals(res1.toUpperCase())
+                || login.getRespuestaSeguridad2().toUpperCase().equals(res1.toUpperCase())
                 || login.getRespuestaSeguridad2().toUpperCase().equals(res2.toUpperCase())) {
             view.showQuestionsSuccess();
-            Handler handler=new Handler();
+            Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     navigator.navigateToUpdatePassword();
                 }
-            },2000);
+            }, 2000);
         } else {
             view.shoQuestionsFailure();
         }

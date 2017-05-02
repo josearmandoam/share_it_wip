@@ -1,7 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.usecase;
 
-import android.widget.ImageView;
-
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 
 /**
@@ -10,7 +8,10 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 
 public interface UserShared {
     boolean isLogged();
+
     void cleanUserLogged();
-    Login getUser(ImageView image);
+
     void saveUserLogged();
+
+    Login getUser();
 }

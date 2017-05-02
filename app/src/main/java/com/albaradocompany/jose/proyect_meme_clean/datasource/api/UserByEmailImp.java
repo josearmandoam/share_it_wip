@@ -7,8 +7,6 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,9 +44,9 @@ public class UserByEmailImp implements GetUserByEmail, Callback<LoginApiResponse
     @Override
     public void onResponse(Call<LoginApiResponse> call, Response<LoginApiResponse> response) {
         if (response.isSuccessful()) {
-            if (response.body().parseLogins().size()>0) {
+            if (response.body().parseLogins().size() > 0) {
                 listener.onUserReceived(response.body().parseLogins().get(0));
-            }else{
+            } else {
                 listener.onFailure();
             }
         } else {

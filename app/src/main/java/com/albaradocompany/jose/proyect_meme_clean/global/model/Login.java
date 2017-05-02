@@ -16,11 +16,10 @@ public class Login {
     private String nombre;
     private String apellidos;
     private String imagePath;
-    private byte[] blob;
 
     public Login(String idUser, String username, String password, String preguntaSeguridad,
                  String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento,
-                 String nombre, String apellidos, String imagePath, byte[] blob) {
+                 String nombre, String apellidos, String imagePath) {
         this.idUser = idUser;
         this.username = username;
         this.password = password;
@@ -32,7 +31,6 @@ public class Login {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.imagePath = imagePath;
-        this.blob = blob;
     }
 
 
@@ -48,8 +46,6 @@ public class Login {
         nombre = "";
         apellidos = "";
         imagePath = "";
-        blob = null;
-
     }
 
     public String getIdUser() {
@@ -136,15 +132,8 @@ public class Login {
         return imagePath;
     }
 
-    public void setImagePath(String imagePath) {
+    public void setAvatarPath(String imagePath) {
         this.imagePath = imagePath;
     }
 
-    public byte[] getBlob() {
-        return blob;
-    }
-
-    public void setBlob(byte[] blob) {
-        this.blob = blob;
-    }
 }

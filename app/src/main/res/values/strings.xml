@@ -21,7 +21,7 @@
     <string name="repitPassword">Repit password</string>
     <string name="navigation_info">Navigation information</string>
     <string name="security_info">Security information</string>
-    <string name="question">Loading…</string>
+    <string name="loading">Loading…</string>
     <string name="answer1">Answer</string>
     <string name="answer2">Optional answer</string>
     <string name="birthday">Birthday</string>

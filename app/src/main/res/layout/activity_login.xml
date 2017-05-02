@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,12 +12,13 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/fo2"
-        android:alpha="0.3"
-        />
+        android:alpha="0.3" />
+
     <EditText
         android:id="@+id/login_username"
         android:layout_width="@dimen/default_with"
@@ -53,16 +53,18 @@
         android:textSize="@dimen/text_size"
         android:layout_below="@id/login_username"
         android:layout_alignStart="@+id/login_separator3" />
+
     <Button
         android:id="@+id/login_b_signin"
         android:textColor="@android:color/white"
         android:text="@string/sign_in"
-        android:background="@color/color_login"
+        android:background="@color/color_buttons"
         android:layout_width="@dimen/default_with"
         android:layout_height="wrap_content"
         android:fontFamily="@string/default_font"
         android:layout_above="@+id/login_b_signup"
         android:layout_alignEnd="@+id/login_password" />
+
     <TextView
         android:id="@+id/login_b_signup"
         android:text="@string/sign_up"
@@ -74,6 +76,7 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_alignEnd="@+id/login_b_signin"
         android:layout_alignBottom="@+id/login_fPassword" />
+
     <TextView
         android:id="@+id/login_text_separator"
         android:textSize="@dimen/text_size"
@@ -86,6 +89,7 @@
         android:layout_marginBottom="@dimen/default_margin_x2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/login_fPassword"
         android:textSize="@dimen/text_size"
@@ -97,39 +101,41 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/login_password" />
+
     <ImageView
         android:id="@+id/login_separator1"
         android:layout_width="@dimen/default_with"
         android:layout_height="0.4dp"
         android:background="@color/text_color"
         android:layout_above="@id/login_username"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
+
     <ImageView
         android:id="@+id/login_separator2"
         android:layout_width="@dimen/default_with"
         android:layout_height="0.4dp"
         android:background="@color/text_color"
         android:layout_above="@id/login_password"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
+
     <ImageView
         android:id="@+id/login_separator3"
         android:layout_width="@dimen/default_with"
         android:layout_height="0.4dp"
         android:background="@color/text_color"
         android:layout_below="@id/login_password"
-        android:layout_centerHorizontal="true"
-        />
-    a<ImageView
+        android:layout_centerHorizontal="true" />
+    a
+
+    <ImageView
         android:id="@+id/login_logo"
         android:layout_width="150sp"
         android:layout_height="150sp"
         android:layout_marginTop="@dimen/default_margin"
         android:src="@mipmap/logo"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_alignParentTop="true" />
+
     <TextView
         android:id="@+id/login_text_logo"
         android:textColor="@color/text_color"
@@ -142,10 +148,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/default_margin_x2"
-        />
+        android:layout_marginBottom="@dimen/default_margin_x2" />
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/login_pbr"
         android:layout_centerHorizontal="true"
         android:progressDrawable="@color/light_gray"
