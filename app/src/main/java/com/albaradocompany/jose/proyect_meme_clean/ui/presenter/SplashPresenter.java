@@ -23,7 +23,6 @@ public class SplashPresenter extends AbsSplash {
         if (userLogged) {
             navigator.navigateToMainPage();
         } else {
-            Toast.makeText(context, "LOGGED", Toast.LENGTH_SHORT).show();
             navigator.navigateToLoginActivity();
         }
     }

@@ -36,8 +36,6 @@ public class AvatarsRecyclerAdapter extends RecyclerView.Adapter<AvatarsRecycler
     class ListAvatarAdapter extends RecyclerView.ViewHolder {
         @BindView(R.id.row_avatar)
         ImageView photo;
-        @BindView(R.id.row_container)
-        RelativeLayout container;
 
         @OnClick(R.id.row_avatar)
         public void onImageClicked(View view) {

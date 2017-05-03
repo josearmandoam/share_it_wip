@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class LoginPresenter extends AbsUserLogin {
-    private String password;
-    private String username;
+    String password;
+    String username;
     Context context;
     GetLogin getLogin;
 

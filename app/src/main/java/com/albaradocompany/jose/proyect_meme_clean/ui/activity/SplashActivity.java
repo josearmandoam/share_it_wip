@@ -40,17 +40,6 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
         presenter.initialize();
 
     }
-
-//    private boolean userLogged() {
-//        SharedPreferences sharedPref = this.getSharedPreferences(BuildConfig.PREF_NAME, Context.MODE_PRIVATE);
-//        String highScore = sharedPref.getString(BuildConfig.IS_LOGIN, "false");
-//        if (highScore.equals("true")) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
     private void initializePresenter() {
         presenter = new SplashPresenter(this);
         presenter.setView(this);
@@ -69,18 +58,17 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
 
     @Override
     public void navigateToLoginActivity() {
-        openLoginActivity(this);
+        openProfileActivity(this);
     }
 
-    public static void openLoginActivity(Context ctx) {
-        Intent intent = new Intent(ctx, LoginActivity.class);
+    public static void openProfileActivity(Context ctx) {
+        Intent intent = new Intent(ctx, ProfileActivity.class);
         ctx.startActivity(intent);
     }
 
     @Override
     public void navigateToMainPage() {
-        openLoginActivity(this);
-//        openSignUpActivity(this);
+        openProfileActivity(this);
     }
 
     public static void openSignUpActivity(Context ctx) {

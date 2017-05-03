@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -16,7 +14,7 @@
                 android:background="@drawable/fo3"
                 android:layout_width="match_parent"
                 android:alpha="0.75"
-                android:layout_height="250dp" />
+                android:layout_height="200dp" />
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_iv_photo"
                 android:src="@drawable/face"
@@ -100,12 +98,19 @@
                 android:src="@drawable/menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <android.support.design.widget.TabLayout
+                android:id="@+id/profile_tablayout"
+                android:layout_below="@id/profile_iv_photo"
+                android:layout_width="match_parent"
+                app:tabMode="fixed"
+                app:tabGravity="fill"
+                android:layout_height="wrap_content">
+            </android.support.design.widget.TabLayout>
             <android.support.v4.view.ViewPager
-                android:layout_below="@id/profile_iv_background"
+                android:id="@+id/profile_viewpager"
+                android:layout_below="@id/profile_tablayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
             </android.support.v4.view.ViewPager>
         </RelativeLayout>
-    </ScrollView>
 </FrameLayout>
