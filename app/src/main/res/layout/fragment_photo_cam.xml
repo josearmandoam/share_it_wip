@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/cam_gall_layout_camera"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/cam_gall_fromcamera"
+            android:drawableStart="@drawable/take_camera"
+            android:fontFamily="@string/default_font"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/cam_gall_view2"
+            android:textSize="@dimen/text_size_title"
+            android:gravity="center"
+            android:drawablePadding="7sp"
+            android:padding="15dp"
+            android:background="@color/color_login"
+            android:textColor="@android:color/white"
+            android:text="@string/take_from_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/cam_gall_view2"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:layout_width="0dp"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:id="@+id/cam_gall_fromgallery"
+            android:drawableStart="@drawable/take_gallery"
+            android:textAlignment="center"
+            android:fontFamily="@string/default_font"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/text_size_title"
+            android:gravity="center"
+            android:padding="15dp"
+            android:background="@color/color_login"
+            android:textColor="@android:color/white"
+            android:text="@string/take_from_gallery"
+            android:layout_alignStart="@id/cam_gall_fromcamera"
+            android:layout_alignEnd="@id/cam_gall_fromcamera"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/cam_gall_view2"
+            android:drawablePadding="7sp"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/cam_gall_pbr"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</FrameLayout>

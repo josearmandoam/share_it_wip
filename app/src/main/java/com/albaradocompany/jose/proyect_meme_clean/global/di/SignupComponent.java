@@ -8,6 +8,8 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 
 import dagger.Component;
@@ -34,4 +36,8 @@ public interface SignupComponent {
     void inject(ConfirmAvatarDialog confirmAvatarDialog);
 
     void inject(AddPhotoActivty addPhotoActivty);
+
+    void inject(CamGallFragment camGallFragment);
+
+    void inject(AvatarsFragment avatarsFragment);
 }

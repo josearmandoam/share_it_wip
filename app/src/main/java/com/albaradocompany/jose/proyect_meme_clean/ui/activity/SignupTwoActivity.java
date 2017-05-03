@@ -215,7 +215,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         super.onBackPressed();
     }
 
-    private SignupComponent component() {
+    public SignupComponent component() {
         if (component == null) {
             component = DaggerSignupComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())

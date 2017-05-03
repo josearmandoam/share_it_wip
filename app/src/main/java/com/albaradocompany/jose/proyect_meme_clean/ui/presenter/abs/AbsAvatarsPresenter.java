@@ -6,24 +6,14 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 import java.util.List;
 
 /**
- * Created by jose on 20/04/2017.
+ * Created by jose on 03/05/2017.
  */
 
-public abstract class AbsAddPhoto extends Presenter<AbsAddPhoto.View, AbsAddPhoto.Navigator> {
-    public abstract void onTabCameraClicked();
-
-    public abstract void onTabAvatarClicked();
-
-    public abstract void onTakeFromCameraClicked();
-
-    public abstract void onTakeFromGalleryClicked();
+public abstract class AbsAvatarsPresenter extends Presenter<AbsAvatarsPresenter.View, AbsAvatarsPresenter.Navigator> {
 
     public abstract void onAvatarClicked(Avatar avatar);
 
     public interface View {
-        void showCameraLayout();
-
-        void showAvatarLayout();
 
         void showLoading();
 
@@ -39,8 +29,5 @@ public abstract class AbsAddPhoto extends Presenter<AbsAddPhoto.View, AbsAddPhot
     }
 
     public interface Navigator {
-        void navigateToCamera();
-
-        void navigateToGallery();
     }
 }

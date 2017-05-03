@@ -101,8 +101,8 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     public ShowAvatarDialog(Context context, int numberActivity) {
         super(context);
         this.context = context;
-        getComponent().inject(this);
         this.numberActivity = numberActivity;
+        getComponent().inject(this);
         dialog = new AlertDialog.Builder(context)
                 .setView(R.layout.dialog_show_avatar)
                 .create();
@@ -174,6 +174,15 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     protected SignupComponent getComponent() {
-        return ((SignupOneActivity) context).component();
+        switch (numberActivity) {
+            case 1:
+                return ((SignupOneActivity) context).component();
+            case 2:
+                return ((SignupTwoActivity) context).component();
+            case 3:
+                return ((SignupThreeActivity) context).component();
+            default:
+                return null;
+        }
     }
 }

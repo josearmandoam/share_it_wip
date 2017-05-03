@@ -62,7 +62,7 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
     }
 
     public static void openProfileActivity(Context ctx) {
-        Intent intent = new Intent(ctx, ProfileActivity.class);
+        Intent intent = new Intent(ctx, LoginActivity.class);
         ctx.startActivity(intent);
     }
 
