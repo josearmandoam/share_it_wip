@@ -3,9 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -176,7 +174,9 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     public void hideEmailLoading() {
         send_email.setVisibility(View.VISIBLE);
         email_pbr.setVisibility(View.GONE);
-        question.setText(user.getPreguntaSeguridad());
+        if (user != null) {
+            question.setText(user.getPreguntaSeguridad());
+        }
     }
 
     @Override
