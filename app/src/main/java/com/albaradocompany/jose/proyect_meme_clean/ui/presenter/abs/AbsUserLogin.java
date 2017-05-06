@@ -15,6 +15,10 @@ public abstract class AbsUserLogin extends Presenter<AbsUserLogin.View, AbsUserL
 
     public abstract void onPasswordClicked();
 
+    public abstract void checkForUserPictures();
+
+    public abstract void checkForUserSavedPictures();
+
     public interface View {
 
         void showLoading();

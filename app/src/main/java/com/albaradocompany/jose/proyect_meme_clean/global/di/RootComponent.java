@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 
 import dagger.Component;
@@ -11,4 +12,6 @@ import dagger.Component;
 @Component(modules = MainModule.class)
 public interface RootComponent {
     void inject(App app);
+
+    void inject(ProfileActivity profileActivity);
 }

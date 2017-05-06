@@ -35,4 +35,11 @@ public final class BuildConfig {
     public static final String PREF_NAME = "PREF_NAME";
     public static final String IS_LOGIN = "IS_LOGIN";
     public static final String USER_PHOTO_PATH = "USER_PHOTO_PATH";
+    public static final String ADDRESS = "iesayala.ddns.net";
+    public static final String USERNAME = "joseA";
+    public static final java.lang.String PASSWORD = "joseA";
+    public static final String USER_BACKGROUND = "USER_BACKGROUND";
+    public static final String IS_SELECTED_BACKGROUND = "IS_SELECTED_BACKGROUND";
+    public static final String USER_DESCRIPTION = "USER_DESCRIPTION";
+    public static final String USER_LOGGED_ID = "USER_LOGGED_ID";
 }

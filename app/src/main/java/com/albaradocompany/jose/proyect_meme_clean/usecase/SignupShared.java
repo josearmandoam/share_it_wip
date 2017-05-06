@@ -28,7 +28,7 @@ public interface SignupShared {
 
     void savePhotoTaken(String path);
 
-    String guardarImagenOnInternal(Bitmap b, String name);
+    String savePictureOnMemory(Bitmap b, String name);
 
     String getUserPasswordSaved();
 
@@ -54,5 +54,5 @@ public interface SignupShared {
 
     void saveUserAvatar(Avatar avatar);
 
-    void deleteImages();
+    void deleteImageProfile();
 }

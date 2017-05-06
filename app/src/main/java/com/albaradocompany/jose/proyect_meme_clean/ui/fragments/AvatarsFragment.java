@@ -14,9 +14,9 @@ import android.widget.ProgressBar;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.AvatarsRecyclerAdapter;
@@ -53,7 +53,7 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     AvatarsRecyclerAdapter adapter;
     ShowSnackBar showSnackBar;
     Activity activity;
-    SignupComponent component;
+    UIComponent component;
     AbsAvatarsPresenter presenter;
 
     public AvatarsFragment(Activity activity) {
@@ -127,11 +127,11 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
         ConfirmAvatarDialog c = new ConfirmAvatarDialog(activity, avatar);
     }
 
-    public SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) activity.getApplication()).getComponent())
-                    .signupModule(new SignupModule(activity.getApplicationContext()))
+                    .uIModule(new UIModule(activity.getApplicationContext()))
                     .mainModule(((App) activity.getApplication()).getMainModule())
                     .build();
         }

@@ -2,24 +2,21 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LoginApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -70,8 +67,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @BindString(R.string.loginCorrect)
     String loginCorrect;
 
-
-    SignupComponent component;
+    UIComponent component;
     @Inject
     UserSharedImp userSharedImp;
     ShowSnackBar showSnackBar;
@@ -189,7 +185,19 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @Override
     public void navigateToHomePage() {
         userSharedImp.saveUserLogged();
-        showSnackBar.show(loginCorrect, Color.RED);
+        showSnackBar.show(loginCorrect, Color.GREEN);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                openProfileActivity();
+            }
+        }, 1500);
+    }
+
+    private void openProfileActivity() {
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -211,17 +219,18 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         Intent intent = new Intent(ctx, SignupOneActivity.class);
         ctx.startActivity(intent);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         userSharedImp.removeSignInformation();
     }
 
-    private SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .signupModule(new SignupModule(getApplicationContext()))
+                    .uIModule(new UIModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }

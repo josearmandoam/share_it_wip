@@ -2,7 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.annotation.StyleRes;
 import android.view.Display;
@@ -13,15 +12,9 @@ import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
-import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ConfirmAvatarPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsConfirmAvatar;
 import com.squareup.picasso.Picasso;
@@ -41,7 +34,6 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     ImageButton accept;
     @BindView(R.id.confirm_avatar_image)
     ImageView avatarImage;
-    private AvatarComponent component;
 
     @OnClick(R.id.confirm_avatar_accept)
     public void onAcceptClicked(View view) {
@@ -102,7 +94,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         userSharedImp.saveUserAvatar(avatar);
         ((AddPhotoActivty) context).onBackPressed();
     }
-    protected SignupComponent getComponent() {
+    protected UIComponent getComponent() {
 
         return ((AddPhotoActivty)context).component();
     }

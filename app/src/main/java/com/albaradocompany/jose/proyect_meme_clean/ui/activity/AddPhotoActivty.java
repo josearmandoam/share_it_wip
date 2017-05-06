@@ -9,9 +9,9 @@ import android.support.v4.view.ViewPager;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.AddPhotoViewPagerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
@@ -44,7 +44,7 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
 
     @Inject
     AvatarInteractor avatarInteractor;
-    SignupComponent component;
+    UIComponent component;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,11 +73,11 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
         return true;
     }
 
-    public SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .signupModule(new SignupModule(getApplicationContext()))
+                    .uIModule(new UIModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }

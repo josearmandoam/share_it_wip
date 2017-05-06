@@ -4,6 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.SavedPicturesBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
+
 import butterknife.ButterKnife;
 
 /**
@@ -18,6 +24,15 @@ public abstract class BaseActivty extends AppCompatActivity {
         setContentView(getLayoutId());
 
         ButterKnife.bind(this);
+
+
+        Configuration dbConfiguration = new Configuration.Builder(this)
+                .setDatabaseName("MyDb.db")
+                .addModelClass(UserBD.class)
+                .addModelClass(PicturesBD.class)
+                .addModelClass(SavedPicturesBD.class)
+                .create();
+        ActiveAndroid.initialize(dbConfiguration);
 
         if (hideToolbar()) {
             getSupportActionBar().hide();

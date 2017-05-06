@@ -3,28 +3,23 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupTwoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupTwo;
 import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -71,7 +66,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
 
     AbsSignupTwo presenter;
-    private SignupComponent component;
+    private UIComponent component;
     @Inject
     UserSharedImp userSharedImp;
     private ShowSnackBarImp showSnackBar;
@@ -215,11 +210,11 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         super.onBackPressed();
     }
 
-    public SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .signupModule(new SignupModule(getApplicationContext()))
+                    .uIModule(new UIModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }

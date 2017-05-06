@@ -2,6 +2,7 @@ package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import android.app.Application;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.AvatarsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.QuestionsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -9,6 +10,7 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserBD;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import dagger.Module;
@@ -23,6 +25,7 @@ public class MainModule {
     AvatarInteractor avatarInteractor;
     QuestionsInteractor questionsInteractor;
     UserSharedImp userSharedImp;
+    GetUserBDImp getUserBDImp;
 
     public MainModule(Application application) {
         this.application = application;
@@ -30,7 +33,7 @@ public class MainModule {
         avatarInteractor = new AvatarInteractor(new AvatarsApiImp(), new ThreadExecutor(), new MainThreadImp());
         questionsInteractor = new QuestionsInteractor(new QuestionsApiImp(), new MainThreadImp(), new ThreadExecutor());
         userSharedImp = new UserSharedImp(application.getApplicationContext());
-
+        getUserBDImp = new GetUserBDImp(application.getApplicationContext());
     }
 
     @Provides
@@ -47,4 +50,7 @@ public class MainModule {
     public UserSharedImp provideUserSharedImp() {
         return userSharedImp;
     }
+
+    @Provides
+    public GetUserBDImp provideGetUserBDImp() { return getUserBDImp; }
 }

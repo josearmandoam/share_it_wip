@@ -5,8 +5,6 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
@@ -21,7 +19,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog
 import com.albaradocompany.jose.proyect_meme_clean.usecase.SignupShared;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.UserShared;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -135,6 +132,8 @@ public class UserSharedImp implements UserShared, SignupShared {
     @Override
     public boolean isAvatarTaken() {
         SharedPreferences avatarShared = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         if (avatarShared.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
             editor = sharedPreferences.edit();
             editor.putString(BuildConfig.USER_AVATAR, avatarShared.getString(BuildConfig.AVATAR_IMAGE_PATH, ""));
@@ -186,7 +185,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public String guardarImagenOnInternal(Bitmap b, String name) {
+    public String savePictureOnMemory(Bitmap b, String name) {
         ContextWrapper cw = new ContextWrapper(context);
         File directory = new File(context.getFilesDir() + "/user_imagenes");
         directory.mkdirs();
@@ -210,19 +209,19 @@ public class UserSharedImp implements UserShared, SignupShared {
 
     @Override
     public String getUserPasswordSaved() {
-        sharedPreferences=context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_PASSWORD, "");
     }
 
     @Override
     public String getUserPassword2Saved() {
-        sharedPreferences=context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_PASSWORD, "");
     }
 
     @Override
     public String getUserUsernamedSaved() {
-        sharedPreferences=context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_USERNAME, "");
     }
 
@@ -254,10 +253,6 @@ public class UserSharedImp implements UserShared, SignupShared {
             editor = sharedPreferences.edit();
             editor.putString(BuildConfig.USER_PHOTO, BuildConfig.BASE_URL_DEFAULT + getUser().getIdUser() + "_" + "profile");
         }
-        Login user;
-        user = getUser();
-
-        user = getUser();
         editor.apply();
         sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -296,13 +291,13 @@ public class UserSharedImp implements UserShared, SignupShared {
 
     @Override
     public String getUserAnswer1Saved() {
-        sharedPreferences=context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_ANSWER1, "");
     }
 
     @Override
     public String getUserAnswer2Saved() {
-        sharedPreferences=context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_ANSWER2, "");
     }
 
@@ -325,7 +320,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public void deleteImages() {
+    public void deleteImageProfile() {
         sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear();
@@ -351,7 +346,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     public void cleanUserLogged() {
         sharedPreferences = context.getSharedPreferences(BuildConfig.PREF_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.clear();
+        editor.putString(BuildConfig.IS_LOGIN, "false");
         editor.apply();
     }
 
@@ -370,6 +365,8 @@ public class UserSharedImp implements UserShared, SignupShared {
         c.setNombre(sharedPreferences.getString(BuildConfig.USER_NAME, ""));
         c.setApellidos(sharedPreferences.getString(BuildConfig.USER_LAST_NAME, ""));
         c.setEmail(sharedPreferences.getString(BuildConfig.USER_EMAIL, ""));
+        c.setDescription(sharedPreferences.getString(BuildConfig.USER_DESCRIPTION, ""));
+        c.setBackgrundPath(sharedPreferences.getString(BuildConfig.USER_BACKGROUND, ""));
         c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
         c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID, ""));
         if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
@@ -395,23 +392,95 @@ public class UserSharedImp implements UserShared, SignupShared {
         return c;
     }
 
-    private byte[] compressImage(ImageView image) {
-        Bitmap bm = ((BitmapDrawable) image.getDrawable()).getBitmap();
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) 400) / width;
-        float scaleHeight = ((float) 450) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
+    @Override
+    public void saveUser(Login user) {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_NAME, user.getNombre());
+        editor.putString(BuildConfig.USER_LAST_NAME, user.getApellidos());
+        editor.putString(BuildConfig.USER_EMAIL, user.getEmail());
+        editor.putString(BuildConfig.USER_AVATAR, user.getImagePath());
+        editor.putString(BuildConfig.USER_BACKGROUND, user.getBackgrundPath());
+        editor.putString(BuildConfig.USER_ID, user.getIdUser());
+        editor.putString(BuildConfig.USER_DATE_BIRTHDAY, user.getFechaNacimiento());
+        editor.putString(BuildConfig.USER_DESCRIPTION, user.getDescription());
+        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "true");
+        editor.apply();
 
-        // "RECREATE" THE NEW BITMAP
-        Bitmap bitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return b;
+        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_USERNAME, user.getUsername());
+        editor.putString(BuildConfig.USER_PASSWORD, user.getPassword());
+        editor.apply();
+
+        sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_QUESTION, user.getPreguntaSeguridad());
+        editor.putString(BuildConfig.USER_ANSWER1, user.getRespuestaSeguridad());
+        editor.putString(BuildConfig.USER_ANSWER2, user.getRespuestaSeguridad2());
+        editor.apply();
+
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "true");
+        editor.apply();
+
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.AVATAR_IMAGE_PATH, user.getImagePath());
+        editor.apply();
+    }
+
+    @Override
+    public String getBackground() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_BACKGROUND, "");
+    }
+
+    @Override
+    public String getProfile() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_AVATAR, "");
+    }
+
+    @Override
+    public void saveBackground(String background) {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_BACKGROUND, background);
+        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "false");
+        editor.apply();
+    }
+
+    @Override
+    public boolean isSelectedBackground() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_BACKGROUND, "false").equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void deleteImageBackground() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "false");
+        editor.apply();
+    }
+
+    @Override
+    public void saveUserID(String id) {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_LOGGED_ID, id);
+        editor.apply();
+    }
+
+    @Override
+    public String getUserID() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_LOGGED_ID, "");
     }
 }

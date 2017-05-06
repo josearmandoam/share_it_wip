@@ -8,8 +8,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 public abstract class AbsSplash extends Presenter<AbsSplash.View, AbsSplash.Navigator> {
 
-    public abstract void userLogged(boolean userLogged);
-
     public interface View {
 
         void sleep();

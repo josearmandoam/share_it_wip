@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/signup_two_container_image"
             android:background="@android:color/white"
             android:layout_width="match_parent"
@@ -43,103 +43,104 @@
             android:layout_marginBottom="@dimen/default_margin_signup_TB"
             android:layout_marginLeft="@dimen/default_margin_signup_LR"
             android:layout_centerHorizontal="true"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
 
-        <TextView
-            android:id="@+id/signup_two_title_ly"
-            android:layout_width="match_parent"
-            android:textSize="@dimen/text_size_title"
-            android:textColor="@color/text_color_signup"
-            android:textStyle="bold"
-            android:fontFamily="@string/default_font"
-            android:text="@string/navigation_info"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
-            android:textAlignment="center"
-            android:layout_alignTop="@+id/signup_two_container_image"
-            android:layout_alignStart="@+id/signup_two_container_image"
-            android:layout_alignEnd="@+id/signup_two_container_image" />
+            <EditText
+                android:id="@+id/signup_two_et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signup_two_container_image"
+                android:layout_alignStart="@+id/signup_two_container_image"
+                android:layout_below="@+id/signup_two_image"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:background="@android:color/white"
+                android:fontFamily="@string/default_font"
+                android:hint="@string/username"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_signup"
+                android:textColorHint="@color/text_color_signup"
+                android:textSize="@dimen/text_size" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/signup_two_image"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:src="@drawable/user_default_image"
-            android:layout_marginTop="20sp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/signup_two_title_ly" />
+            <EditText
+                android:id="@+id/signup_two_et_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signup_two_container_image"
+                android:layout_alignStart="@+id/signup_two_container_image"
+                android:layout_below="@+id/signup_two_et_password"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:fontFamily="@string/default_font"
+                android:hint="@string/repitPassword"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_signup"
+                android:textColorHint="@color/text_color_signup"
+                android:textSize="@dimen/text_size" />
 
-        <EditText
-            android:id="@+id/signup_two_et_username"
-            android:textColor="@color/text_color_signup"
-            android:hint="@string/username"
-            android:layout_alignStart="@+id/signup_two_container_image"
-            android:layout_alignEnd="@+id/signup_two_container_image"
-            android:layout_below="@+id/signup_two_image"
-            android:background="@android:color/white"
-            android:textColorHint="@color/text_color_signup"
-            android:textAlignment="center"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
-            android:textSize="@dimen/text_size"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:layout_width="match_parent"
-            android:fontFamily="@string/default_font"
-            android:layout_height="wrap_content" />
+            <ImageButton
+                android:id="@+id/signup_two_button_next"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/roundedbutton"
+                android:src="@drawable/next" />
 
-        <EditText
-            android:id="@+id/signup_two_et_password"
-            android:textColor="@color/text_color_signup"
-            android:hint="@string/password"
-            android:layout_alignStart="@+id/signup_two_container_image"
-            android:layout_alignEnd="@+id/signup_two_container_image"
-            android:layout_below="@+id/signup_two_et_username"
-            android:background="@android:color/white"
-            android:textColorHint="@color/text_color_signup"
-            android:textAlignment="center"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="20sp"
-            android:fontFamily="@string/default_font"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textSize="@dimen/text_size"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/signup_two_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@+id/signup_two_title_ly"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/user_default_image" />
 
-        <EditText
-            android:id="@+id/signup_two_et_password2"
-            android:hint="@string/repitPassword"
-            android:textColor="@color/text_color_signup"
-            android:layout_alignStart="@+id/signup_two_container_image"
-            android:layout_alignEnd="@+id/signup_two_container_image"
-            android:layout_below="@+id/signup_two_et_password"
-            android:background="@android:color/white"
-            android:textColorHint="@color/text_color_signup"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="20sp"
-            android:textSize="@dimen/text_size"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_width="match_parent"
-            android:fontFamily="@string/default_font"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:inputType="textPassword" />
+            <EditText
+                android:id="@+id/signup_two_et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signup_two_container_image"
+                android:layout_alignStart="@+id/signup_two_container_image"
+                android:layout_below="@+id/signup_two_et_username"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:fontFamily="@string/default_font"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_signup"
+                android:textColorHint="@color/text_color_signup"
+                android:textSize="@dimen/text_size" />
 
-        <ImageButton
-            android:id="@+id/signup_two_button_next"
-            android:layout_marginBottom="10sp"
-            android:src="@drawable/next"
-            android:background="@drawable/roundedbutton"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBottom="@+id/signup_two_container_image"
-            android:layout_width="50sp"
-            android:layout_height="50sp" />
+            <TextView
+                android:id="@+id/signup_two_title_ly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signup_two_container_image"
+                android:layout_alignStart="@+id/signup_two_container_image"
+                android:layout_alignTop="@+id/signup_two_container_image"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@string/default_font"
+                android:text="@string/navigation_info"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_signup"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/signup_two_button_pageone"
@@ -147,7 +148,7 @@
             android:src="@drawable/page_one_dark"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/default_margin"
-            android:layout_marginLeft="100sp"
+            android:layout_marginLeft="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -169,7 +170,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="@dimen/default_margin"
-            android:layout_marginEnd="100sp"
+            android:layout_marginEnd="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

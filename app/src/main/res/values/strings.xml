@@ -57,4 +57,9 @@
     <string name="empty_username">Enter your username</string>
     <string name="empty_pasword">Enter your password</string>
     <string name="empty_username_password">Enter username/password</string>
+    <string name="edit">Edit</string>
+    <string name="logout">Log out</string>
+    <string name="text_large">Cada vez que escribo una entrada en este blog mis compañeros de estudio
+        se burlan un poco. Dicen que sufro de incontinencia, que no manejo adecuadamente los códigos
+        de un blog, que me extiendo demasiado.</string>
 </resources>

@@ -4,26 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegistrationResponseImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
@@ -36,11 +32,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThr
 import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
 import com.squareup.picasso.Picasso;
 
-import org.apache.commons.net.ftp.FTPClient;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.InetAddress;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -99,7 +90,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Inject
     UserSharedImp userSharedImp;
     private List<Question> listQuestions;
-    SignupComponent component;
+    UIComponent component;
     private ShowSnackBarImp showSnackBar;
 
 
@@ -293,11 +284,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         super.onBackPressed();
     }
 
-    public SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .signupModule(new SignupModule(getApplicationContext()))
+                    .uIModule(new UIModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }

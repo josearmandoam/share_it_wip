@@ -3,7 +3,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -16,11 +15,9 @@ import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.AvatarComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -54,6 +51,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     @BindDrawable(R.drawable.user_default_image)
     Drawable defaultImageUser;
 
+
     @OnClick(R.id.show_avatar_edit)
     public void onEditClicked(View view) {
         presenter.onEditClicked();
@@ -70,9 +68,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     int numberActivity;
     @Inject
     UserSharedImp userSharedImp;
+
     public ShowAvatarDialog(Context context) {
         super(context);
-
     }
 
     private int getWidth() {
@@ -111,6 +109,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         dialog.getWindow().setLayout(getWidth(), getWidth());
         initializePresenter();
     }
+
     @Override
     public void deleteImage() {
         deleteUserImage();
@@ -124,9 +123,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     private void checkImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(context)
-                    .load(userSharedImp.getUserAvatar())
-                    .error(defaultImageUser)
-                    .into(image);
+                .load(userSharedImp.getUserAvatar())
+                .error(defaultImageUser)
+                .into(image);
         } else {
             cargarImagenPerfil(userSharedImp.getUserPhoto());
         }
@@ -145,7 +144,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void deleteUserImage() {
-        userSharedImp.deleteImages();
+        userSharedImp.deleteImageProfile();
         dialog.dismiss();
         switch (numberActivity) {
             case 1:
@@ -157,6 +156,8 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
             case 3:
                 ((SignupThreeActivity) context).onResume();
                 break;
+            case 4:
+                ((ProfileActivity) context).onResume();
             default:
                 break;
         }
@@ -173,7 +174,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         ctx.startActivity(intent);
     }
 
-    protected SignupComponent getComponent() {
+    protected UIComponent getComponent() {
         switch (numberActivity) {
             case 1:
                 return ((SignupOneActivity) context).component();
@@ -181,8 +182,11 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 return ((SignupTwoActivity) context).component();
             case 3:
                 return ((SignupThreeActivity) context).component();
+            case 4:
+                return ((ProfileActivity) context).component();
             default:
                 return null;
         }
     }
+
 }

@@ -3,9 +3,11 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
@@ -14,6 +16,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThr
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
 
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.FileInputStream;
@@ -29,7 +32,7 @@ import javax.inject.Inject;
 public class SignupThreePresenter extends AbsSignupThree {
     Context context;
     GetQuestions getQuestions;
-    private SignupComponent component;
+    private UIComponent component;
     public String data;
 
     @Inject
@@ -107,16 +110,19 @@ public class SignupThreePresenter extends AbsSignupThree {
                                 FTPClient ftpClient = null;
                                 try {
                                     ftpClient = new FTPClient();
-                                    ftpClient.connect(InetAddress.getByName("iesayala.ddns.net"));
-                                    if (ftpClient.login("joseA", "joseA")) {
+                                    ftpClient.connect(InetAddress.getByName(BuildConfig.ADDRESS));
+                                    if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
                                         ftpClient.enterLocalPassiveMode(); // important!
-                                        ftpClient.setFileType(org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE);
+                                        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
                                         String photoname=userSharedImp.getUser().getIdUser()+"_profile";
                                         FileInputStream in = new FileInputStream(userSharedImp.getUserPhotoPath());
                                         boolean result = ftpClient.storeFile(photoname, in);
+                                        boolean ok = ftpClient.sendSiteCommand("chmod 777 "+ BuildConfig.BASE_URL_DEFAULT+photoname);
                                         in.close();
                                         if (result)
                                             Log.v("upload result", "succeeded");
+                                        if (ok)
+                                            Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
                                         ftpClient.logout();
                                         ftpClient.disconnect();
                                     }
@@ -176,7 +182,7 @@ public class SignupThreePresenter extends AbsSignupThree {
         view.cleanFields();
     }
 
-    protected SignupComponent getComponent() {
+    protected UIComponent getComponent() {
             return ((SignupThreeActivity) context).component();
     }
 }

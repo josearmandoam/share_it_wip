@@ -20,10 +20,11 @@ import android.widget.RelativeLayout;
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.CamGalPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsCamGalPresenter;
 
@@ -67,7 +68,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         presenter.onTakeFromGalleryClicked();
     }
 
-    private SignupComponent component;
+    private UIComponent component;
     AbsCamGalPresenter presenter;
     Activity activity;
 
@@ -153,8 +154,8 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
                 String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
                 if (bm != null) {
                     String dirFotos = guardarImagen(activity, bm, photoName);
-                    userSharedImp.savePhotoTaken(dirFotos);
-                    userSharedImp.saveUserpPath(dirFotos);
+                        userSharedImp.savePhotoTaken(dirFotos);
+                        userSharedImp.saveUserpPath(dirFotos);
                 }
                 activity.finish();
                 activity.runOnUiThread(new Runnable() {
@@ -179,8 +180,8 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
                     String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
                     if (bm != null) {
                         String dirFotos = guardarImagen(activity, bm, photoName);
-                        userSharedImp.savePhotoTaken(dirFotos);
-                        userSharedImp.saveUserpPath(dirFotos);
+                            userSharedImp.savePhotoTaken(dirFotos);
+                            userSharedImp.saveUserpPath(dirFotos);
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -217,11 +218,11 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         return mypath.getAbsolutePath();
     }
 
-    public SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) activity.getApplication()).getComponent())
-                    .signupModule(new SignupModule(activity.getApplicationContext()))
+                    .uIModule(new UIModule(activity.getApplicationContext()))
                     .mainModule(((App) activity.getApplication()).getMainModule())
                     .build();
         }

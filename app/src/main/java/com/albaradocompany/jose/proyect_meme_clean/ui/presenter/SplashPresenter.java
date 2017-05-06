@@ -1,9 +1,13 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
-import android.widget.Toast;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
+
+import javax.inject.Inject;
 
 /**
  * Created by jose on 18/04/2017.
@@ -11,16 +15,19 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
 
 public class SplashPresenter extends AbsSplash {
     Context context;
-    boolean userLogged;
+    private UIComponent component;
+    @Inject
+    UserSharedImp userSharedImp;
 
     public SplashPresenter(Context context) {
         this.context = context;
+        getComponent().inject(this);
     }
 
     @Override
     public void initialize() {
         view.sleep();
-        if (userLogged) {
+        if (userSharedImp.isLogged()) {
             navigator.navigateToMainPage();
         } else {
             navigator.navigateToLoginActivity();
@@ -42,8 +49,7 @@ public class SplashPresenter extends AbsSplash {
 
     }
 
-    @Override
-    public void userLogged(boolean userLogged) {
-        this.userLogged = userLogged;
+    protected UIComponent getComponent() {
+            return ((SplashActivity) context).component();
     }
 }

@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import java.util.List;
+
 /**
  * Created by jose on 21/04/2017.
  */
@@ -16,10 +18,12 @@ public class Login {
     private String nombre;
     private String apellidos;
     private String imagePath;
+    private String backgrundPath;
+    private String description;
 
     public Login(String idUser, String username, String password, String preguntaSeguridad,
                  String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento,
-                 String nombre, String apellidos, String imagePath) {
+                 String nombre, String apellidos, String imagePath, String backgrundPath, String description) {
         this.idUser = idUser;
         this.username = username;
         this.password = password;
@@ -31,8 +35,9 @@ public class Login {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.imagePath = imagePath;
+        this.backgrundPath = backgrundPath;
+        this.description = description;
     }
-
 
     public Login() {
         idUser = "";
@@ -46,6 +51,8 @@ public class Login {
         nombre = "";
         apellidos = "";
         imagePath = "";
+        backgrundPath = "";
+        description = "";
     }
 
     public String getIdUser() {
@@ -136,4 +143,23 @@ public class Login {
         this.imagePath = imagePath;
     }
 
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getBackgrundPath() {
+        return backgrundPath;
+    }
+
+    public void setBackgrundPath(String backgrundPath) {
+        this.backgrundPath = backgrundPath;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

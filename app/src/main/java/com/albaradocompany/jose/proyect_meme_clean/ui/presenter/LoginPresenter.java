@@ -2,12 +2,25 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetLogin;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.GetPicturesById;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by jose on 16/04/2017.
@@ -17,10 +30,19 @@ public class LoginPresenter extends AbsUserLogin {
     String password;
     String username;
     Context context;
+
     GetLogin getLogin;
+    GetPicturesById getPicturesById;
+
+    Login user;
+    @Inject
+    GetUserBDImp getUserBDImp;
+    @Inject
+    UserSharedImp userSharedImp;
 
     public LoginPresenter(Context context) {
         this.context = context;
+        getComponent().inject(this);
     }
 
     @Override
@@ -33,8 +55,10 @@ public class LoginPresenter extends AbsUserLogin {
             public void onLoginReceived(List<Login> login) {
                 if (login.size() > 0) {
                     if (login.get(0).getPassword().equals(password)) {
-                        view.hideLoading();
-                        navigator.navigateToHomePage();
+                        user = login.get(0); // user without photos/photos saved
+                        getUserBDImp.insertUserDB(user);
+                        userSharedImp.saveUserLogged();
+                        checkForUserPictures();
                         view.showButtonSignin();
                     } else {
                         view.hideLoading();
@@ -102,5 +126,65 @@ public class LoginPresenter extends AbsUserLogin {
     @Override
     public void onPasswordClicked() {
         navigator.navigateToPassword();
+    }
+
+    @Override
+    public void checkForUserPictures() {
+        PicturesByIdInteractor byIdInteractor = new PicturesByIdInteractor(new PicturesByIdImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
+        getPicturesById = byIdInteractor;
+        getPicturesById.getPictures(new GetPicturesById.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+                view.hideLoading();
+                view.showNoInternetAvailable();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.hideLoading();
+                view.showError(e);
+            }
+
+            @Override
+            public void onPicturesReceived(List<Picture> pictures) {
+                for (Picture picture : pictures) {
+                    getUserBDImp.insertUserPicture(picture);
+                }
+                checkForUserSavedPictures();
+            }
+        });
+    }
+
+    @Override
+    public void checkForUserSavedPictures() {
+        PicturesByIdInteractor byIdInteractor = new PicturesByIdInteractor(new PicturesSavedImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
+        getPicturesById = byIdInteractor;
+        getPicturesById.getPictures(new GetPicturesById.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+                view.hideLoading();
+                view.showNoInternetAvailable();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.hideLoading();
+                view.showError(e);
+            }
+
+            @Override
+            public void onPicturesReceived(List<Picture> pictures) {
+                for (Picture picture : pictures) {
+                    getUserBDImp.insertUserSavedPicture(picture);
+                }
+                userSharedImp.saveUserID(user.getIdUser());
+                view.hideLoading();
+                navigator.navigateToHomePage();
+            }
+        });
+    }
+
+    protected UIComponent getComponent() {
+        return ((LoginActivity) context).component();
     }
 }

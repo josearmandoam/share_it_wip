@@ -24,6 +24,11 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
+            <meta-data android:name="share_it_database" android:value="Pickrand.db" />
+            <meta-data android:name="AA_DB_VERSION" android:value="5" />
+            <!--<meta-data android:name="UserBD"-->
+                <!--android:value=".datasource.activeandroid.UserBD"-->
+                <!--/>-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +45,7 @@
             android:name=".ui.activity.AddPhotoActivty"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.PasswordActivity" />
-        <activity android:name=".ui.activity.ProfileActivity"></activity>
+        <activity android:name=".ui.activity.ProfileActivity"/>
     </application>
 
 </manifest>

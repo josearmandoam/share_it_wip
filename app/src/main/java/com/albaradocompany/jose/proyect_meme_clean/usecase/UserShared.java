@@ -14,4 +14,20 @@ public interface UserShared {
     void saveUserLogged();
 
     Login getUser();
+
+    void saveUser(Login user);
+
+    String getBackground();
+
+    String getProfile();
+
+    void saveBackground(String background);
+
+    boolean isSelectedBackground();
+
+    void deleteImageBackground();
+
+    void saveUserID(String id);
+
+    String getUserID();
 }

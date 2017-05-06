@@ -17,6 +17,9 @@ public class LoginApiEntry {
     String fechaNacimiento = "";
     String nombre = "";
     String apellidos = "";
+    String imagePath = "";
+    String backgrundPath = "";
+    String description = "";
 
     public Login parseLogin() {
         Login obj = new Login();
@@ -30,6 +33,9 @@ public class LoginApiEntry {
         obj.setFechaNacimiento(fechaNacimiento);
         obj.setNombre(nombre);
         obj.setApellidos(apellidos);
+        obj.setImagePath(imagePath);
+        obj.setBackgrundPath(backgrundPath);
+        obj.setDescription(description);
         return obj;
     }
 }

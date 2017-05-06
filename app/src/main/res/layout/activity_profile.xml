@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,66 +22,74 @@
                 android:src="@drawable/face"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="10dp"
-                android:layout_alignBottom="@+id/profile_iv_background"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@android:color/white"
+                android:layout_marginTop="150dp"
+                android:layout_centerHorizontal="true"
+                />
+            <View
+                android:layout_alignTop="@+id/profile_tv_user_name"
+                android:layout_alignBottom="@+id/profile_tv_user_description"
+                android:background="@color/color_login"
+                android:alpha="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageButton
+                android:id="@+id/profile_btn_edit"
+                android:background="@drawable/roundedbutton"
+                android:layout_marginTop="170dp"
+                android:layout_marginRight="50dp"
+                android:src="@drawable/edit_light"
+                android:layout_alignParentEnd="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                />
+            <ImageButton
+                android:id="@+id/profile_btn_saved"
+                android:background="@drawable/roundedbutton"
+                android:layout_marginTop="170dp"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/saved_light"
+                android:layout_alignParentStart="true"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 />
             <TextView
-                android:id="@+id/profile_tv_followers"
-                android:text="@string/loading"
-                android:layout_alignStart="@id/profile_iv_photo"
-                android:layout_alignEnd="@id/profile_iv_photo"
-                android:layout_above="@id/profile_iv_photo"
+                android:id="@+id/profile_tv_user_description"
+                android:layout_below="@+id/profile_tv_user_username"
+                android:layout_centerHorizontal="true"
+                android:text="@string/text_large"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/text_size_title"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size"
                 android:fontFamily="@string/default_font"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/profile_tv_user_name"
-                android:layout_alignBottom="@id/profile_iv_photo"
-                android:layout_alignParentEnd="true"
-                android:textColor="@android:color/white"
+                android:layout_below="@+id/profile_iv_photo"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/background_dark"
+                android:layout_marginTop="10dp"
                 android:textSize="@dimen/text_size_title"
-                android:layout_marginEnd="10dp"
                 android:textStyle="bold"
                 android:fontFamily="@string/default_font"
                 android:text="@string/loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/profile_tv_user_number_photos"
-                android:layout_alignParentEnd="true"
-                android:textColor="@android:color/white"
+                android:id="@+id/profile_tv_user_username"
+                android:layout_below="@+id/profile_tv_user_name"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/text_size"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:textStyle="italic"
                 android:fontFamily="@string/default_font"
                 android:text="@string/loading"
-                android:layout_above="@id/profile_tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_edit_photo"
-                android:visibility="gone"
-                android:layout_alignTop="@id/profile_iv_photo"
-                android:layout_alignEnd="@id/profile_iv_photo"
-                android:layout_alignBottom="@id/profile_iv_photo"
-                android:layout_alignStart="@id/profile_iv_photo"
-                android:src="@drawable/edit"
-                android:background="@null"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_edit_background"
-                android:visibility="gone"
-                android:layout_alignTop="@id/profile_iv_background"
-                android:layout_alignEnd="@id/profile_iv_background"
-                android:layout_margin="10dp"
-                android:background="@null"
-                android:src="@drawable/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageButton
@@ -90,27 +100,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <ImageButton
-                android:layout_alignTop="@id/profile_ibtn_back"
-                android:layout_alignBottom="@id/profile_ibtn_back"
+                android:id="@+id/profile_btn_menu"
+                android:layout_alignTop="@+id/profile_ibtn_back"
+                android:layout_alignBottom="@+id/profile_ibtn_back"
                 android:layout_marginRight="10dp"
                 android:layout_alignParentEnd="true"
                 android:background="@null"
-                android:src="@drawable/menu"
+                android:src="@drawable/exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <android.support.design.widget.TabLayout
-                android:id="@+id/profile_tablayout"
-                android:layout_below="@id/profile_iv_photo"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/profile_recyclerview_photos"
+                android:layout_below="@id/profile_tv_user_description"
                 android:layout_width="match_parent"
-                app:tabMode="fixed"
-                app:tabGravity="fill"
                 android:layout_height="wrap_content">
-            </android.support.design.widget.TabLayout>
-            <android.support.v4.view.ViewPager
-                android:id="@+id/profile_viewpager"
-                android:layout_below="@id/profile_tablayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </android.support.v4.view.ViewPager>
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
+    </ScrollView>
 </FrameLayout>

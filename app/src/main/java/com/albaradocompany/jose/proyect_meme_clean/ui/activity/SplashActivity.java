@@ -2,20 +2,16 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerSignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupComponent;
-import com.albaradocompany.jose.proyect_meme_clean.global.di.SignupModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SplashPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
-
-import javax.inject.Inject;
 
 public class SplashActivity extends AppCompatActivity implements AbsSplash.Navigator, AbsSplash.View {
 
@@ -23,12 +19,8 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String IS_FIRST_TIME = "IsFirstTime";
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     AbsSplash presenter;
-    private SignupComponent component;
-    @Inject
-    UserSharedImp userSharedImp;
+    private UIComponent component;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +28,12 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
 
         component().inject(this);
         initializePresenter();
-        presenter.userLogged(userSharedImp.isLogged());
-        presenter.initialize();
-
     }
     private void initializePresenter() {
         presenter = new SplashPresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
+        presenter.initialize();
     }
 
     @Override
@@ -58,11 +48,11 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
 
     @Override
     public void navigateToLoginActivity() {
-        openProfileActivity(this);
+        openLoginActivity(this);
     }
 
     public static void openProfileActivity(Context ctx) {
-        Intent intent = new Intent(ctx, LoginActivity.class);
+        Intent intent = new Intent(ctx, ProfileActivity.class);
         ctx.startActivity(intent);
     }
 
@@ -71,16 +61,16 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
         openProfileActivity(this);
     }
 
-    public static void openSignUpActivity(Context ctx) {
-        Intent intent = new Intent(ctx, SignupOneActivity.class);
+    public static void openLoginActivity(Context ctx) {
+        Intent intent = new Intent(ctx, LoginActivity.class);
         ctx.startActivity(intent);
     }
 
-    private SignupComponent component() {
+    public UIComponent component() {
         if (component == null) {
-            component = DaggerSignupComponent.builder()
+            component = DaggerUIComponent.builder()
                     .rootComponent(((App) getApplication()).getComponent())
-                    .signupModule(new SignupModule(getApplicationContext()))
+                    .uIModule(new UIModule(getApplicationContext()))
                     .mainModule(((App) getApplication()).getMainModule())
                     .build();
         }
