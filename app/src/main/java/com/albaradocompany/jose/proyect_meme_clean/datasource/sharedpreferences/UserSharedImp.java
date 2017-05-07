@@ -12,6 +12,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -433,28 +434,48 @@ public class UserSharedImp implements UserShared, SignupShared {
 
     @Override
     public String getBackground() {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         return sharedPreferences.getString(BuildConfig.USER_BACKGROUND, "");
     }
 
     @Override
     public String getProfile() {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        return sharedPreferences.getString(BuildConfig.USER_AVATAR, "");
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_PHOTO, "");
+    }
+
+    @Override
+    public void saveProfile(String profile) {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_PHOTO, profile);
+        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "true");
+        editor.putString(BuildConfig.IS_PROFILE_FTP, "false");
+        editor.apply();
+    }
+    @Override
+    public boolean isSelectedProfile() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void saveBackground(String background) {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(BuildConfig.USER_BACKGROUND, background);
-        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "false");
+        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "true");
+        editor.putString(BuildConfig.IS_BACKGROUND_FTP, "false");
         editor.apply();
     }
 
     @Override
     public boolean isSelectedBackground() {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         if (sharedPreferences.getString(BuildConfig.IS_SELECTED_BACKGROUND, "false").equals("true")) {
             return true;
         } else {
@@ -463,11 +484,111 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public void deleteImageBackground() {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+    public void deleteBackground() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "false");
         editor.apply();
+        saveBackgroundChanges("false");
+    }
+    @Override
+    public void deleteProfile() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "false");
+        editor.apply();
+        saveProfileChanges("false");
+    }
+
+    @Override
+    public boolean isProfileFTPSelected() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.IS_PROFILE_FTP, "false").equals("true");
+    }
+
+    @Override
+    public boolean isBackgroundFTPSelected() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.IS_BACKGROUND_FTP, "false").equals("true");
+    }
+
+    @Override
+    public void saveProfileFTPSelected() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_PROFILE_FTP, "true");
+        editor.apply();
+    }
+
+    @Override
+    public void saveBackgroundFTPSelected() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_BACKGROUND_FTP, "true");
+        editor.apply();
+    }
+
+    @Override
+    public boolean isProfileChanged() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PROFILE_CHANGES, "false").equals("true");
+    }
+
+    @Override
+    public void saveProfileChanges(String cond) {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PROFILE_CHANGES, cond);
+        editor.apply();
+    }
+    @Override
+    public boolean isBackgroundChanged() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.BACKGROUND_CHANGES, "false").equals("true");
+    }
+
+    @Override
+    public void deleteUserData() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    @Override
+    public void saveBackgroundChanges(String cond) {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.BACKGROUND_CHANGES, cond);
+        editor.apply();
+    }
+
+    @Override
+    public void saveNewBackground(String dir) {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.NEW_BACKGROUND, dir);
+        editor.apply();
+    }
+
+    @Override
+    public void saveNewPicture(String dir) {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.NEW_PROFILE, dir);
+        editor.apply();
+    }
+
+    @Override
+    public String getNewProfile() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.NEW_PROFILE, "");
+    }
+
+    @Override
+    public String getNewBackground() {
+        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.NEW_BACKGROUND, "");
     }
 
     @Override

@@ -62,4 +62,8 @@
     <string name="text_large">Cada vez que escribo una entrada en este blog mis compañeros de estudio
         se burlan un poco. Dicen que sufro de incontinencia, que no manejo adecuadamente los códigos
         de un blog, que me extiendo demasiado.</string>
+    <string name="posts">Posts</string>
+    <string name="default_likes">155</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="description">Description</string>
 </resources>

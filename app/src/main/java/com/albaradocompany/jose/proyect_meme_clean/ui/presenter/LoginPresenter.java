@@ -3,6 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -18,6 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetLogin;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetPicturesById;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -130,8 +132,7 @@ public class LoginPresenter extends AbsUserLogin {
 
     @Override
     public void checkForUserPictures() {
-        PicturesByIdInteractor byIdInteractor = new PicturesByIdInteractor(new PicturesByIdImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
-        getPicturesById = byIdInteractor;
+        getPicturesById = new PicturesByIdInteractor(new PicturesByIdImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {
@@ -155,10 +156,29 @@ public class LoginPresenter extends AbsUserLogin {
         });
     }
 
+    private void insertNewPicturesBD(List<Picture> pictures) {
+        List<PicturesBD> pictureFromBD = getUserBDImp.getUserPictures(userSharedImp.getUserID());
+        List<Picture> newPhotos = new ArrayList<Picture>();
+        boolean exist = false;
+        for (int i = 0; i < pictures.size(); i++) {
+            for (int j = 0; j < pictureFromBD.size(); j++) {
+                if (pictures.get(i).getImagePath().equals(pictureFromBD.get(j).imagePath)) {
+                    exist = true;
+                }
+            }
+            if (!exist) {
+                newPhotos.add(pictures.get(i));
+            }
+            exist = false;
+        }
+        for (Picture picture : newPhotos) {
+            getUserBDImp.insertUserPicture(picture);
+        }
+    }
+
     @Override
     public void checkForUserSavedPictures() {
-        PicturesByIdInteractor byIdInteractor = new PicturesByIdInteractor(new PicturesSavedImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
-        getPicturesById = byIdInteractor;
+        getPicturesById = new PicturesByIdInteractor(new PicturesSavedImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {

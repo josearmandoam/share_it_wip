@@ -125,8 +125,6 @@
         android:background="@color/text_color"
         android:layout_below="@id/login_password"
         android:layout_centerHorizontal="true" />
-    a
-
     <ImageView
         android:id="@+id/login_logo"
         android:layout_width="150sp"
@@ -151,8 +149,9 @@
         android:layout_marginBottom="@dimen/default_margin_x2" />
 
     <ProgressBar
-        android:visibility="gone"
         android:id="@+id/login_pbr"
+        android:visibility="gone"
+        android:background="@drawable/progress"
         android:layout_centerHorizontal="true"
         android:progressDrawable="@color/light_gray"
         android:layout_above="@+id/login_b_signup"

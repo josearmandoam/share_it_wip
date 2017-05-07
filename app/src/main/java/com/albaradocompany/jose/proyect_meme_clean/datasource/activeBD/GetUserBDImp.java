@@ -56,6 +56,9 @@ public class GetUserBDImp implements GetUserBD {
         picturesBD.imagePath = picture.getImagePath();
         picturesBD.description = picture.getDescription();
         picturesBD.date = picture.getDate();
+        picturesBD.imageId = picture.getImageId();
+        picturesBD.coments = picture.getComents();
+        picturesBD.likes = picture.getLikes();
         picturesBD.save();
     }
 
@@ -66,6 +69,9 @@ public class GetUserBDImp implements GetUserBD {
         picturesBD.imagePath = picture.getImagePath();
         picturesBD.description = picture.getDescription();
         picturesBD.date = picture.getDate();
+        picturesBD.imageId = picture.getImageId();
+        picturesBD.coments = picture.getComents();
+        picturesBD.likes = picture.getLikes();
         picturesBD.save();
     }
 
@@ -77,5 +83,15 @@ public class GetUserBDImp implements GetUserBD {
     @Override
     public List<SavedPicturesBD> getUserSavedPictures(String userId) {
         return new Select().from(SavedPicturesBD.class).where("userId = ?", userId).execute();
+    }
+
+    @Override
+    public void deleteUserPictures(String id) {
+        new Delete().from(PicturesBD.class).where("userId = ?", id).execute();
+    }
+
+    @Override
+    public void deleteUserSavedPictures(String id) {
+        new Delete().from(SavedPicturesBD.class).where("userId = ?", id).execute();
     }
 }

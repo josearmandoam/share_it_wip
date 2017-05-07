@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import android.content.DialogInterface;
+
 /**
  * Created by jose on 21/04/2017.
  */
@@ -42,4 +44,12 @@ public final class BuildConfig {
     public static final String IS_SELECTED_BACKGROUND = "IS_SELECTED_BACKGROUND";
     public static final String USER_DESCRIPTION = "USER_DESCRIPTION";
     public static final String USER_LOGGED_ID = "USER_LOGGED_ID";
+    public static final int ACTION_BACKGROUND = 2;
+    public static final int ACTION_PROFILE = 1;
+    public static final String IS_PROFILE_FTP = "IS_PROFILE_FTP";
+    public static final String IS_BACKGROUND_FTP = "IS_BACKGROUND_FTP";
+    public static final String PROFILE_CHANGES = "PROFILE_CHANGES";
+    public static final String NEW_BACKGROUND = "NEW_BACKGROUND";
+    public static final String NEW_PROFILE = "NEW_PROFILE";
+    public static final String BACKGROUND_CHANGES = "BACKGROUND_CHANGES";
 }

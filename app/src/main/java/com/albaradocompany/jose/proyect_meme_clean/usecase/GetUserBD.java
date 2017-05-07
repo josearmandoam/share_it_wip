@@ -26,4 +26,8 @@ public interface GetUserBD {
     List<PicturesBD> getUserPictures(String userId);
 
     List<SavedPicturesBD> getUserSavedPictures(String userId);
+
+    void deleteUserPictures(String id);
+
+    void deleteUserSavedPictures(String id);
 }

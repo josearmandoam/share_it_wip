@@ -30,8 +30,6 @@ import butterknife.BindView;
  */
 
 public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelectedListener {
-
-
     @BindView(R.id.add_photo_pageviewer)
     ViewPager viewPager;
     @BindView(R.id.add_photo_tablayout)
@@ -45,6 +43,7 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
     @Inject
     AvatarInteractor avatarInteractor;
     UIComponent component;
+    private int action;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,15 +53,23 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
     }
 
     private void intialize() {
+        getBundles();
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new CamGallFragment(this));
-        fragments.add(new AvatarsFragment(this));
-        viewPager.setAdapter(new AddPhotoViewPagerAdapter(getSupportFragmentManager(),fragments));
+        fragments.add(new CamGallFragment(this, action));
+        fragments.add(new AvatarsFragment(this, action));
+        viewPager.setAdapter(new AddPhotoViewPagerAdapter(getSupportFragmentManager(), fragments));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
         tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.drawable.camera_dark));
         tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.drawable.avatar_light));
+
     }
+
+    private void getBundles() {
+        Bundle bundle = getIntent().getExtras();
+        action = (int) bundle.get("action");
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_add_photo;

@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import android.graphics.Bitmap;
+
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 /**
@@ -12,6 +14,12 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
     public abstract void onBackClicked();
 
+    public abstract void onEditClicked();
+
+    public abstract void saveProfileOnMemory(Bitmap bitmap);
+
+    public abstract void saveBackgroundOnMemory(Bitmap bitmap);
+
     public interface View {
         void showProfile();
 
@@ -22,9 +30,17 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
         void showUsername();
 
         void showDescription();
+
+        void showPhotos();
+
+        void checkProfile();
+
+        void checkBackground();
     }
 
     public interface Navigator {
         void navigateToLogin();
+
+        void navigateToEdit();
     }
 }

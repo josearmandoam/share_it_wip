@@ -1,8 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.UpdatePasswordService;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.UpdateUserService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePassword;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -13,33 +13,43 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by jose on 28/04/2017.
+ * Created by jose on 06/05/2017.
  */
 
-public class UpdatePasswordImp implements UpdatePassword, Callback<GenericApiResponse> {
-    UpdatePassword.Listener listener = new NullListener();
-    String newPassword;
-    String idUser;
+public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
+    UpdateUser.Listener listener = new NullListener();
+    String userId;
+    String name;
+    String lastName;
+    String email;
+    String username;
+    String profile;
+    String background;
+    String description;
 
-    public UpdatePasswordImp(String idUser, String newPassword) {
-        this.newPassword = newPassword;
-        this.idUser = idUser;
+    public UpdateUserImp(String userId, String name, String lastName, String email, String username,
+                         String profile, String background, String description) {
+        this.userId = userId;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.profile = profile;
+        this.background = background;
+        this.description = description;
     }
 
     @Override
-    public void updatePassword(Listener listener) {
+    public void updateUser(Listener listener) {
         if (listener != null) {
             this.listener = listener;
         }
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL_DEFAULT)
+        Gson gson = new GsonBuilder().setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(BuildConfig.BASE_URL_DEFAULT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        UpdatePasswordService service = retrofit.create(UpdatePasswordService.class);
-        service.updatePassword(idUser, newPassword).enqueue(this);
+        UpdateUserService service = retrofit.create(UpdateUserService.class);
+        service.updateUser(userId, name, lastName, email, description, username, profile, background).enqueue(this);
     }
 
     @Override
@@ -51,7 +61,7 @@ public class UpdatePasswordImp implements UpdatePassword, Callback<GenericApiRes
                 listener.onUpdateFailure();
             }
         } else {
-            listener.onError(new Exception("Body malformed"));
+            listener.onError(new Exception("Body failed"));
         }
     }
 
@@ -80,6 +90,5 @@ public class UpdatePasswordImp implements UpdatePassword, Callback<GenericApiRes
         public void onUpdateFailure() {
 
         }
-
     }
 }

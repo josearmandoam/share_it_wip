@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.UpdatePassword;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePassword;
 
 /**
  * Created by jose on 27/04/2017.

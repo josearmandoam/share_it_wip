@@ -1,31 +1,31 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
-import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePassword;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateUser;
 
 /**
- * Created by jose on 28/04/2017.
+ * Created by jose on 06/05/2017.
  */
 
-public class UpdatePasswordInteractor implements Interactor, UpdatePassword, UpdatePassword.Listener {
-    UpdatePassword updatePassword;
+public class UpdateUserInteractor implements Interactor, UpdateUser, UpdateUser.Listener {
+    UpdateUser updateUser;
     MainThread mainThread;
     Executor executor;
 
-    UpdatePassword.Listener listener = new NullListener();
+    UpdateUser.Listener listener = new NullListener();
 
-    public UpdatePasswordInteractor(UpdatePassword updatePassword, MainThread mainThread, Executor executor) {
-        this.updatePassword = updatePassword;
+    public UpdateUserInteractor(UpdateUser updateUser, MainThread mainThread, Executor executor) {
+        this.updateUser = updateUser;
         this.mainThread = mainThread;
         this.executor = executor;
     }
 
     @Override
     public void run() {
-        updatePassword.updatePassword(listener);
+        updateUser.updateUser(listener);
     }
 
     @Override
-    public void updatePassword(Listener listener) {
+    public void updateUser(Listener listener) {
         if (listener != null) {
             this.listener = listener;
         }

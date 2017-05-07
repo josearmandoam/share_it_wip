@@ -17,14 +17,25 @@ public class SavedPicturesBD extends Model{
     public String description;
     @Column(name = "date")
     public String date;
+    @Column(name = "imageId")
+    public String imageId;
+    @Column(name = "coments")
+    public String coments;
+    @Column(name = "likes")
+    public String likes;
 
     public SavedPicturesBD() {
+        super();
     }
 
-    public SavedPicturesBD(String userId, String imagePath, String description, String date) {
+    public SavedPicturesBD(String userId, String imagePath, String description, String date,
+                           String imageId, String coments, String likes) {
         this.userId = userId;
         this.imagePath = imagePath;
         this.description = description;
         this.date = date;
+        this.imageId = imageId;
+        this.coments = coments;
+        this.likes = likes;
     }
 }

@@ -11,12 +11,19 @@ public class PictureApiEntry {
     String imagePath = "";
     String description = "";
     String fechaSubida = "";
-    public Picture parsePicture(){
+    String imageId = "";
+    String comentarios = "";
+    String likes = "";
+
+    public Picture parsePicture() {
         Picture obj = new Picture();
         obj.setUserId(userId);
         obj.setImagePath(imagePath);
         obj.setDescription(description);
         obj.setDate(fechaSubida);
+        obj.setImageId(imageId);
+        obj.setComents(comentarios);
+        obj.setLikes(likes);
         return obj;
     }
 }

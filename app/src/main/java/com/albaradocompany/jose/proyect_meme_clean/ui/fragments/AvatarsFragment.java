@@ -55,9 +55,11 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     Activity activity;
     UIComponent component;
     AbsAvatarsPresenter presenter;
+    int action;
 
-    public AvatarsFragment(Activity activity) {
+    public AvatarsFragment(Activity activity, int action) {
         this.activity = activity;
+        this.action = action;
     }
 
     AvatarsRecyclerAdapter.OnAvatarClicked onAvatarClicked = new AvatarsRecyclerAdapter.OnAvatarClicked() {
@@ -124,7 +126,7 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
 
     @Override
     public void showAvatarClicked(Avatar avatar) {
-        ConfirmAvatarDialog c = new ConfirmAvatarDialog(activity, avatar);
+        ConfirmAvatarDialog c = new ConfirmAvatarDialog(activity, avatar, action);
     }
 
     public UIComponent component() {

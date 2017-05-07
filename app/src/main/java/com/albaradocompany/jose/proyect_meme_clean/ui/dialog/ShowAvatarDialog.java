@@ -14,10 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -62,12 +63,15 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         presenter.onDeleteClicked();
     }
 
+    private int action;
     AlertDialog dialog;
     Context context;
     AbsShowAvatar presenter;
     int numberActivity;
     @Inject
     UserSharedImp userSharedImp;
+    @Inject
+    GetUserBDImp getUserBDImp;
 
     public ShowAvatarDialog(Context context) {
         super(context);
@@ -96,10 +100,26 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         super(context, cancelable, cancelListener);
     }
 
+    public ShowAvatarDialog(Context context, int numberActivity, int action) {
+        super(context);
+        this.context = context;
+        this.numberActivity = numberActivity;
+        this.action = action;
+        getComponent().inject(this);
+        dialog = new AlertDialog.Builder(context)
+                .setView(R.layout.dialog_show_avatar)
+                .create();
+        dialog.show();
+        initialize();
+        dialog.getWindow().setLayout(getWidth(), getWidth());
+        initializePresenter();
+    }
+
     public ShowAvatarDialog(Context context, int numberActivity) {
         super(context);
         this.context = context;
         this.numberActivity = numberActivity;
+        action = 0;
         getComponent().inject(this);
         dialog = new AlertDialog.Builder(context)
                 .setView(R.layout.dialog_show_avatar)
@@ -121,17 +141,52 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void checkImage() {
-        if (userSharedImp.isAvatarTaken()) {
-            Picasso.with(context)
-                .load(userSharedImp.getUserAvatar())
-                .error(defaultImageUser)
-                .into(image);
-        } else {
-            cargarImagenPerfil(userSharedImp.getUserPhoto());
+        switch (action) {
+            case 0:
+                if (userSharedImp.isAvatarTaken()) {
+                    Picasso.with(context)
+                            .load(userSharedImp.getUserAvatar())
+                            .error(defaultImageUser)
+                            .into(image);
+                } else {
+                    loadImage(userSharedImp.getUserPhoto());
+                }
+                break;
+            case 1: /* action profile */
+                if (userSharedImp.isSelectedProfile()) {
+                    if (userSharedImp.isProfileFTPSelected()){
+                        Picasso.with(context)
+                                .load(userSharedImp.getProfile())
+                                .into(image);
+                    }else {
+                        loadImage(userSharedImp.getProfile());
+                    }
+                } else {
+                    Picasso.with(context)
+                            .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile)
+                            .into(image);
+                }
+                break;
+            case 2: /* action background */
+                if (userSharedImp.isSelectedBackground()) {
+                    if (userSharedImp.isBackgroundFTPSelected()){
+                        Picasso.with(context)
+                                .load(userSharedImp.getBackground())
+                                .into(image);
+                    }else {
+                        loadImage(userSharedImp.getBackground());
+                    }
+                } else {
+                    Picasso.with(context)
+                            .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background)
+                            .into(image);
+                }
+                break;
         }
+
     }
 
-    private void cargarImagenPerfil(String path) {
+    private void loadImage(String path) {
         try {
             File f = new File(path);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -140,27 +195,41 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
             image.setImageResource(R.drawable.user_default_image);
             //e.printStackTrace();
         }
-
     }
 
     private void deleteUserImage() {
-        userSharedImp.deleteImageProfile();
-        dialog.dismiss();
-        switch (numberActivity) {
-            case 1:
-                ((SignupOneActivity) context).onResume();
+        switch (action) {
+            case 0:
+                userSharedImp.deleteImageProfile();
+                dialog.dismiss();
+                switch (numberActivity) {
+                    case 1:
+                        ((SignupOneActivity) context).onResume();
+                        break;
+                    case 2:
+                        ((SignupTwoActivity) context).onResume();
+                        break;
+                    case 3:
+                        ((SignupThreeActivity) context).onResume();
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            case 2:
-                ((SignupTwoActivity) context).onResume();
+            case 1: /* action profile */
+                userSharedImp.deleteProfile();
+                userSharedImp.saveProfileChanges("false");
+                dialog.dismiss();
+                ((EditProfileActivity) context).onResume();
                 break;
-            case 3:
-                ((SignupThreeActivity) context).onResume();
-                break;
-            case 4:
-                ((ProfileActivity) context).onResume();
-            default:
+            case 2: /*action background*/
+                userSharedImp.deleteBackground();
+                userSharedImp.saveBackgroundChanges("false");
+                dialog.dismiss();
+                ((EditProfileActivity) context).onResume();
                 break;
         }
+
     }
 
     @Override
@@ -169,8 +238,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         dialog.dismiss();
     }
 
-    public static void openAddPhoto(Context ctx) {
+    public void openAddPhoto(Context ctx) {
         Intent intent = new Intent(ctx, AddPhotoActivty.class);
+        intent.putExtra("action", this.action);
         ctx.startActivity(intent);
     }
 
@@ -183,7 +253,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
             case 3:
                 return ((SignupThreeActivity) context).component();
             case 4:
-                return ((ProfileActivity) context).component();
+                return ((EditProfileActivity) context).component();
             default:
                 return null;
         }

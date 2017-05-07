@@ -24,7 +24,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.CamGalPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsCamGalPresenter;
 
@@ -50,6 +49,7 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View, AbsCamGalPresenter.Navigator {
+    int action;
     @BindView(R.id.cam_gall_layout_camera)
     RelativeLayout layout;
     @BindView(R.id.cam_gall_pbr)
@@ -72,8 +72,9 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
     AbsCamGalPresenter presenter;
     Activity activity;
 
-    public CamGallFragment(Activity activity) {
+    public CamGallFragment(Activity activity, int action) {
         this.activity = activity;
+        this.action = action;
     }
 
     @Override
@@ -154,8 +155,20 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
                 String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
                 if (bm != null) {
                     String dirFotos = guardarImagen(activity, bm, photoName);
-                        userSharedImp.savePhotoTaken(dirFotos);
-                        userSharedImp.saveUserpPath(dirFotos);
+                    switch (action) {
+                        case 0:
+                            userSharedImp.savePhotoTaken(dirFotos);
+                            userSharedImp.saveUserpPath(dirFotos);
+                            break;
+                        case 1: /*Profile Case*/
+                            userSharedImp.saveProfile(dirFotos);
+                            userSharedImp.saveProfileChanges("true");
+                            break;
+                        case 2: /*Background Case*/
+                            userSharedImp.saveBackground(dirFotos);
+                            userSharedImp.saveBackgroundChanges("true");
+                            break;
+                    }
                 }
                 activity.finish();
                 activity.runOnUiThread(new Runnable() {
@@ -180,8 +193,20 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
                     String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
                     if (bm != null) {
                         String dirFotos = guardarImagen(activity, bm, photoName);
-                            userSharedImp.savePhotoTaken(dirFotos);
-                            userSharedImp.saveUserpPath(dirFotos);
+                        switch (action) {
+                            case 0:
+                                userSharedImp.savePhotoTaken(dirFotos);
+                                userSharedImp.saveUserpPath(dirFotos);
+                                break;
+                            case 1:/*Profile case*/
+                                userSharedImp.saveProfile(dirFotos);
+                                userSharedImp.saveProfileChanges("true");
+                                break;
+                            case 2:/*Backgrund case*/
+                                userSharedImp.saveBackground(dirFotos);
+                                userSharedImp.saveBackgroundChanges("true");
+                                break;
+                        }
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();

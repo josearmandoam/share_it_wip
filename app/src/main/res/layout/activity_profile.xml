@@ -9,6 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
+            android:id="@+id/profile_lyt_container"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -17,6 +20,12 @@
                 android:layout_width="match_parent"
                 android:alpha="0.75"
                 android:layout_height="200dp" />
+            <View
+                android:layout_below="@id/profile_iv_background"
+                android:layout_alignBottom="@+id/profile_tv_user_description"
+                android:alpha="0.7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_iv_photo"
                 android:src="@drawable/face"
@@ -27,13 +36,7 @@
                 android:layout_marginTop="150dp"
                 android:layout_centerHorizontal="true"
                 />
-            <View
-                android:layout_alignTop="@+id/profile_tv_user_name"
-                android:layout_alignBottom="@+id/profile_tv_user_description"
-                android:background="@color/color_login"
-                android:alpha="0.1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+
             <ImageButton
                 android:id="@+id/profile_btn_edit"
                 android:background="@drawable/roundedbutton"
@@ -63,6 +66,7 @@
                 android:textStyle="bold"
                 android:padding="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/text_size"
                 android:fontFamily="@string/default_font"
@@ -86,7 +90,6 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/text_size"
-                android:layout_marginEnd="10dp"
                 android:textStyle="italic"
                 android:fontFamily="@string/default_font"
                 android:text="@string/loading"
@@ -109,10 +112,42 @@
                 android:src="@drawable/exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <View
+                android:id="@+id/profile_vw_sep2"
+                android:layout_width="match_parent"
+                android:layout_below="@id/profile_tv_user_description"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/color_login"
+                android:layout_height="0.5dp"/>
+            <TextView
+                android:id="@+id/profile_tv_title_posts"
+                android:text="@string/posts"
+                android:layout_below="@id/profile_vw_sep2"
+                android:textStyle="bold"
+                android:textColor="@color/color_login"
+                android:padding="10dp"
+                android:textSize="@dimen/text_size_title"
+                android:fontFamily="@string/default_font"
+                android:layout_alignStart="@+id/profile_vw_sep1"
+                android:layout_alignEnd="@+id/profile_vw_sep1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <View
+                android:id="@+id/profile_vw_sep1"
+                android:layout_width="match_parent"
+                android:layout_below="@id/profile_tv_title_posts"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/color_login"
+                android:layout_height="0.5dp"/>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/profile_recyclerview_photos"
-                android:layout_below="@id/profile_tv_user_description"
+                android:layout_below="@id/profile_vw_sep1"
                 android:layout_width="match_parent"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>

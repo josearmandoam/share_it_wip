@@ -40,12 +40,14 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         presenter.onAcceptClicked();
     }
 
+    int action;
     private AlertDialog dialog;
     private Context context;
     private Avatar avatar;
     private AbsConfirmAvatar presenter;
     @Inject
     UserSharedImp userSharedImp;
+
     public ConfirmAvatarDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
@@ -54,10 +56,11 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         super(context, themeResId);
     }
 
-    public ConfirmAvatarDialog(Context context, Avatar avatar) {
+    public ConfirmAvatarDialog(Context context, Avatar avatar, int action) {
         super(context);
         this.context = context;
         this.avatar = avatar;
+        this.action = action;
         dialog = new AlertDialog.Builder(context)
                 .setView(R.layout.dialog_confirm_avatar)
                 .create();
@@ -89,13 +92,32 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
                 .load(avatar.getImagePath())
                 .into(avatarImage);
     }
+
     @Override
     public void closeConfirmAvatar() {
-        userSharedImp.saveUserAvatar(avatar);
-        ((AddPhotoActivty) context).onBackPressed();
+        switch (action){
+            case 0:
+                userSharedImp.saveUserAvatar(avatar);
+                ((AddPhotoActivty) context).onBackPressed();
+                break;
+            case 1:
+                userSharedImp.saveProfile(avatar.getImagePath());
+                userSharedImp.saveProfileChanges("true");
+                userSharedImp.saveProfileFTPSelected();
+                ((AddPhotoActivty) context).onBackPressed();
+                break;
+            case 2:
+                userSharedImp.saveBackground(avatar.getImagePath());
+                userSharedImp.saveBackgroundChanges("true");
+                userSharedImp.saveBackgroundFTPSelected();
+                ((AddPhotoActivty) context).onBackPressed();
+                break;
+        }
+
     }
+
     protected UIComponent getComponent() {
 
-        return ((AddPhotoActivty)context).component();
+        return ((AddPhotoActivty) context).component();
     }
 }

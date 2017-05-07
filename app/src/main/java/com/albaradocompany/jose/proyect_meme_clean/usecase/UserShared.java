@@ -21,13 +21,45 @@ public interface UserShared {
 
     String getProfile();
 
+    void saveProfile(String profile);
+
     void saveBackground(String background);
 
     boolean isSelectedBackground();
 
-    void deleteImageBackground();
+    void deleteBackground();
 
     void saveUserID(String id);
 
     String getUserID();
+
+    boolean isSelectedProfile();
+
+    void deleteProfile();
+
+    boolean isProfileFTPSelected();
+
+    boolean isBackgroundFTPSelected();
+
+    void saveProfileFTPSelected();
+
+    void saveBackgroundFTPSelected();
+
+    boolean isProfileChanged();
+
+    void saveProfileChanges(String cond);
+
+    void saveNewBackground(String dir);
+
+    void saveNewPicture(String dir);
+
+    String getNewProfile();
+
+    String getNewBackground();
+
+    void saveBackgroundChanges(String cond);
+
+    boolean isBackgroundChanged();
+
+    void deleteUserData();
 }

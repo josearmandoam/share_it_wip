@@ -97,6 +97,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     private void initialize() {
         userSharedImp.removeSignInformation();
+        userSharedImp.deleteUserData();
         showSnackBar = new ShowSnackBarImp(this);
     }
 
@@ -224,6 +225,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     protected void onResume() {
         super.onResume();
         userSharedImp.removeSignInformation();
+        userSharedImp.deleteUserData();
     }
 
     public UIComponent component() {

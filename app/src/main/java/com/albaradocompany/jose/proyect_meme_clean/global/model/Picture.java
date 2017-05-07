@@ -9,12 +9,19 @@ public class Picture {
     String imagePath;
     String description;
     String date;
+    String imageId;
+    String coments;
+    String likes;
 
-    public Picture(String userId, String imagePath, String description, String date) {
+    public Picture(String userId, String imagePath, String description, String date, String imageId,
+                   String coments, String likes) {
         this.userId = userId;
         this.imagePath = imagePath;
         this.description = description;
         this.date = date;
+        this.imageId = imageId;
+        this.coments = coments;
+        this.likes = likes;
     }
 
     public Picture() {
@@ -22,6 +29,9 @@ public class Picture {
         imagePath = "";
         description = "";
         date = "";
+        imageId = "";
+        coments = "";
+        likes = "";
     }
 
     public String getUserId() {
@@ -54,5 +64,29 @@ public class Picture {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getComents() {
+        return coments;
+    }
+
+    public void setComents(String coments) {
+        this.coments = coments;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
     }
 }
