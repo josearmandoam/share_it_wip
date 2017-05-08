@@ -333,6 +333,14 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
+    public void photoStateTaken(String state) {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "false");
+        editor.apply();
+    }
+
+    @Override
     public boolean isLogged() {
         SharedPreferences sharedPref = context.getSharedPreferences(BuildConfig.PREF_NAME, Context.MODE_PRIVATE);
         String highScore = sharedPref.getString(BuildConfig.IS_LOGIN, "false");
@@ -453,6 +461,7 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor.putString(BuildConfig.IS_PROFILE_FTP, "false");
         editor.apply();
     }
+
     @Override
     public boolean isSelectedProfile() {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
@@ -491,6 +500,7 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor.apply();
         saveBackgroundChanges("false");
     }
+
     @Override
     public void deleteProfile() {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
@@ -541,6 +551,7 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor.putString(BuildConfig.PROFILE_CHANGES, cond);
         editor.apply();
     }
+
     @Override
     public boolean isBackgroundChanged() {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
@@ -572,7 +583,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public void saveNewPicture(String dir) {
+    public void saveNewProfile(String dir) {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(BuildConfig.NEW_PROFILE, dir);

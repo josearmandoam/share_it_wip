@@ -45,6 +45,9 @@ public class ProfilePresenter extends AbsProfilePresenter {
     public void resume() {
         view.checkProfile();
         view.checkBackground();
+        view.showName();
+        view.showUsername();
+        view.showDescription();
     }
 
     @Override
@@ -79,6 +82,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
                 public void run() {
                     String dirProf = userSharedImp.savePictureOnMemory(bitmap, userSharedImp.getUserID() + getCurrentDateAndTime());
                     userSharedImp.saveProfile(dirProf);
+                    userSharedImp.saveNewProfile(dirProf);
+                    userSharedImp.saveProfileChanges("false");
                 }
             }).start();
         }
@@ -91,6 +96,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
                 public void run() {
                     String dirBack = userSharedImp.savePictureOnMemory(bitmap, userSharedImp.getUserID() + getCurrentDateAndTime());
                     userSharedImp.saveBackground(dirBack);
+                    userSharedImp.saveNewBackground(dirBack);
+                    userSharedImp.saveBackgroundChanges("false");
                 }
             }).start();
         }

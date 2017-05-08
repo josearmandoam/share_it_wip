@@ -30,9 +30,6 @@
             <meta-data
                 android:name="AA_DB_VERSION"
                 android:value="5" />
-            <!-- <meta-data android:name="UserBD" -->
-            <!-- android:value=".datasource.activeandroid.UserBD" -->
-            <!-- /> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +47,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.PasswordActivity" />
         <activity android:name=".ui.activity.ProfileActivity" />
-        <activity android:name=".ui.activity.EditProfileActivity"></activity>
+        <activity android:name=".ui.activity.EditProfileActivity"/>
     </application>
 
 </manifest>

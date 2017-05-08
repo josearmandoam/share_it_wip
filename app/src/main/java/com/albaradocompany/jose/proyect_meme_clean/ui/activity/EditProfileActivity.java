@@ -19,6 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateUserInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -82,6 +83,9 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
     public void onUpdateClicked(View view) {
         UpdateUserInteractor interactor = getInteractor();
         presenter.onAcceptClicked(interactor);
+        UserBD u1 = getUserBDImp.getUserBD(userSharedImp.getUserID());
+        updateUserBD();
+        UserBD u2 = getUserBDImp.getUserBD(userSharedImp.getUserID());
     }
 
     @OnClick(R.id.edit_profile_iv_profile)
@@ -200,12 +204,12 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void showBackgroundDialog() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 4, BuildConfig.ACTION_BACKGROUND);
+       new ShowAvatarDialog(this, 4, BuildConfig.ACTION_BACKGROUND);
     }
 
     @Override
     public void showProfileDialog() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 4, BuildConfig.ACTION_PROFILE);
+       new ShowAvatarDialog(this, 4, BuildConfig.ACTION_PROFILE);
     }
 
     @Override
@@ -255,13 +259,11 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void navigateToBack() {
-        userSharedImp.saveBackgroundChanges("false");
-        userSharedImp.saveProfileChanges("false");
-        super.onBackPressed();
+        this.finish();
     }
 
     private UpdateUserInteractor getInteractor() {
-        UpdateUserInteractor interactor;
+        UpdateUserInteractor interactor = null;
         if (userSharedImp.isProfileChanged() && userSharedImp.isBackgroundChanged()) {
             interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
                     name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
@@ -270,47 +272,79 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
                     new MainThreadImp(), new ThreadExecutor());
         } else {
             if (userSharedImp.isProfileChanged()) {
-                interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
-                    name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                    userName.getText().toString(), BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile", userBD.user_background,
-                    description.getText().toString()),
-                    new MainThreadImp(), new ThreadExecutor());
-            } else {
-                if (userSharedImp.isBackgroundChanged()) {
+                if (userSharedImp.isProfileFTPSelected()) {
                     interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
-                    name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                    userName.getText().toString(), userBD.user_profile, BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background",
-                    description.getText().toString()),
-                    new MainThreadImp(), new ThreadExecutor());
-                } else {
-                    if (userSharedImp.isBackgroundFTPSelected()) {
-                        interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
-                        name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                        userName.getText().toString(), userSharedImp.getProfile(), userSharedImp.getBackground(),
-                        description.getText().toString()),
-                        new MainThreadImp(), new ThreadExecutor());
-                        userSharedImp.saveBackgroundChanges("false");
-                    } else {
-                        if (userSharedImp.isProfileFTPSelected()) {
-                            interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), userSharedImp.getProfile(), userBD.user_background,
                             description.getText().toString()),
                             new MainThreadImp(), new ThreadExecutor());
-                            userSharedImp.saveProfileChanges("false");
-                        } else {
-                            interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+
+                } else {
+                    interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                            name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
+                            userName.getText().toString(), BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile", userBD.user_background,
+                            description.getText().toString()),
+                            new MainThreadImp(), new ThreadExecutor());
+                }
+            } else {
+                if (userSharedImp.isBackgroundChanged()) {
+                    if (userSharedImp.isBackgroundFTPSelected()) {
+                        interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                                name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
+                                userName.getText().toString(), userBD.user_profile, userSharedImp.getBackground(),
+                                description.getText().toString()),
+                                new MainThreadImp(), new ThreadExecutor());
+
+                    } else {
+                        interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                                name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
+                                userName.getText().toString(), userBD.user_profile, BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background",
+                                description.getText().toString()),
+                                new MainThreadImp(), new ThreadExecutor());
+                    }
+                }else{
+                    interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), userBD.user_profile, userBD.user_background,
                             description.getText().toString()),
                             new MainThreadImp(), new ThreadExecutor());
-                        }
-                    }
-
                 }
             }
         }
         return interactor;
     }
+    private void updateUserBD(){
+        Login c = new Login();
+        c.setIdUser(userSharedImp.getUserID());
+        if (userSharedImp.isProfileChanged()){
+            if (userSharedImp.isProfileFTPSelected()){
+                c.setImagePath(userSharedImp.getProfile());
+                userSharedImp.saveNewProfile(userSharedImp.getProfile());
+            }else {
+                c.setImagePath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile");
+                userSharedImp.saveNewProfile(userSharedImp.getProfile());
+            }
+        }else{
+            c.setImagePath(userBD.user_profile);
+        }
+        if (userSharedImp.isBackgroundChanged()){
+            if (userSharedImp.isBackgroundFTPSelected()){
+                c.setBackgrundPath(userSharedImp.getBackground());
+                userSharedImp.saveNewBackground(userSharedImp.getBackground());
+            }else {
+                c.setBackgrundPath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_backgrund");
+                userSharedImp.saveNewBackground(userSharedImp.getBackground());
+            }
+        }else{
+            c.setBackgrundPath(userBD.user_background);
+        }
+        c.setEmail(email.getText().toString());
+        c.setNombre(name.getText().toString());
+        c.setApellidos(lastName.getText().toString());
+        c.setDescription(description.getText().toString());
+        c.setUsername(userName.getText().toString());
+        getUserBDImp.updateUserBD(c);
 
+
+    }
 }

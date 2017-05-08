@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     Button bSignin;
 
     @BindString(R.string.default_font)
-    String text_font;
+    String textFont;
     @BindString(R.string.error)
     String error;
     @BindString(R.string.empty_username)
@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @BindString(R.string.empty_username_password)
     String empty_username_password;
     @BindColor(R.color.color_login)
-    int color_login;
+    int colorLogin;
     @BindString(R.string.errorUsername)
     String errorUsername;
     @BindString(R.string.errorPassword)

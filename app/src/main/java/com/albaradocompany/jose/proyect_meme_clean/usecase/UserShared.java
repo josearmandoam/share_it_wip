@@ -51,7 +51,7 @@ public interface UserShared {
 
     void saveNewBackground(String dir);
 
-    void saveNewPicture(String dir);
+    void saveNewProfile(String dir);
 
     String getNewProfile();
 

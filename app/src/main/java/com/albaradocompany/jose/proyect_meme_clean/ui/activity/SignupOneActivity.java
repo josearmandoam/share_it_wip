@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -39,7 +40,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @BindView(R.id.signup_button_back)
     ImageButton bBack;
-    @BindView(R.id.signup_button_menu)
+    @BindView(R.id.signup_btn_clean)
     ImageButton bMenu;
     @BindView(R.id.signup_button_next)
     ImageButton bNext;
@@ -55,10 +56,13 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     EditText lastName;
     @BindView(R.id.signup_image_user)
     ImageView image;
+    @BindView(R.id.signup_lyt_container)
+    RelativeLayout layout;
+
     @BindDrawable(R.drawable.user_default_image)
     Drawable defaultUserImage;
     @BindString(R.string.default_font)
-    String text_font;
+    String textFont;
     @BindString(R.string.error_name)
     String nameErrorMessage;
     @BindString(R.string.error_email)
@@ -70,7 +74,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     @BindString(R.string.error_photo_not_taken)
     String photoErrorMessage;
     @BindColor(R.color.color_login)
-    int color_login;
+    int colorLogin;
 
     AbsSignupOne presenter;
     public static boolean avatar;
@@ -104,7 +108,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         presenter.onAddImageClicked();
     }
 
-    @OnClick(R.id.signup_button_menu)
+    @OnClick(R.id.signup_btn_clean)
     public void onCleanClicked(View view) {
         presenter.onCleanPressed();
     }
@@ -126,6 +130,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         presenter.setNavigator(this);
         presenter.setView(this);
         presenter.initialize();
+
+        layout.requestFocus();
     }
 
     @Override

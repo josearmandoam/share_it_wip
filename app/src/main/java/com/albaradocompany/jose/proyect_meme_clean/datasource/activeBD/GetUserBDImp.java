@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.SavedPicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
@@ -93,5 +94,30 @@ public class GetUserBDImp implements GetUserBD {
     @Override
     public void deleteUserSavedPictures(String id) {
         new Delete().from(SavedPicturesBD.class).where("userId = ?", id).execute();
+    }
+
+    @Override
+    public void updateUserBD(Login user) {
+        new Update(UserBD.class).set("user_profile = ?", user.getImagePath()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_description = ?", user.getDescription()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_username = ?", user.getUsername()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_background = ?", user.getBackgrundPath()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_email = ?", user.getEmail()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_lastname = ?", user.getApellidos()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("user_name = ?", user.getNombre()).where("userId = ?", user.getIdUser()).execute();
+//        new Update(UserBD.class).set("user_profile = ?, user_description = ?, user_username = ?," +
+//                        " user_background = ?, user_email = ?, user_lastname = ?, user_name = ?", user.getImagePath(),
+//                user.getDescription(), user.getUsername(), user.getBackgrundPath(), user.getEmail(), user.getApellidos(),
+//                user.getNombre()).where("userId = ?", user.getIdUser()).execute();
+    }
+
+    @Override
+    public void removeUserDBData() {
+        new Delete().from(UserBD.class).execute();
+    }
+
+    @Override
+    public List<UserBD> getUsers() {
+        return new Select().from(UserBD.class).execute();
     }
 }

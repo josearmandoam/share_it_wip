@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
@@ -63,10 +64,13 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     ImageView image;
     @BindView(R.id.signup_three_pbr)
     ProgressBar pbr;
+    @BindView(R.id.signup_three_lyt)
+    RelativeLayout layout;
+
     @BindDrawable(R.drawable.user_default_image)
     Drawable defaultUserImage;
     @BindString(R.string.default_font)
-    String text_font;
+    String textFont;
     @BindString(R.string.error_answer)
     String answerErrorMessage;
     @BindString(R.string.noInternetAvailable)
@@ -76,13 +80,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @BindString(R.string.account_created)
     String acountCreated;
     @BindString(R.string.error_registration)
-    String error_registration;
+    String errorRegistration;
     @BindColor(R.color.color_login)
-    int color_login;
+    int colorLogin;
 
     private AbsSignupThree presenter;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
     private RegistrationResponseInteractor interactor;
     private int cnt;
     @Inject
@@ -150,6 +152,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         presenter.setView(this);
         presenter.setNavigator(this);
         presenter.initialize();
+
+        layout.requestFocus();
     }
 
     @Override
@@ -208,7 +212,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void showErrorRegistration() {
         pbr.setVisibility(View.GONE);
         bConfirm.setVisibility(View.VISIBLE);
-        showSnackBar.show(error_registration, Color.RED);
+        showSnackBar.show(errorRegistration, Color.RED);
     }
 
     @Override

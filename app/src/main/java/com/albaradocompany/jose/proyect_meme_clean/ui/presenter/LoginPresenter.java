@@ -58,6 +58,8 @@ public class LoginPresenter extends AbsUserLogin {
                 if (login.size() > 0) {
                     if (login.get(0).getPassword().equals(password)) {
                         user = login.get(0); // user without photos/photos saved
+                        userSharedImp.saveUserID(login.get(0).getIdUser());
+                        getUserBDImp.removeUserDBData();
                         getUserBDImp.insertUserDB(user);
                         userSharedImp.saveUserLogged();
                         checkForUserPictures();

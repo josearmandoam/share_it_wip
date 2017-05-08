@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,12 +43,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     Button send_question;
     @BindView(R.id.password_tv_update_send)
     Button send_update;
-    @BindView(R.id.password_lyt_email)
-    RelativeLayout lyt_email;
-    @BindView(R.id.password_lyt_question)
-    RelativeLayout lyt_question;
-    @BindView(R.id.password_lyt_update_password)
-    RelativeLayout lyt_update;
+    @BindView(R.id.password_lyt_nsc_email)
+    NestedScrollView lyt_email;
+    @BindView(R.id.password_lyt_nsc_question)
+    NestedScrollView lyt_question;
+    @BindView(R.id.password_lyt_nsc_password)
+    NestedScrollView lyt_update;
     @BindView(R.id.password_et_email)
     EditText email;
     @BindView(R.id.password_et_answer1)
@@ -82,7 +83,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     @BindString(R.string.empty_email)
     String empty_email;
     @BindColor(R.color.color_login)
-    int color_login;
+    int colorLogin;
 
     UserByEmailInteractor interactor;
     UpdatePasswordInteractor passwordInteractor;
@@ -205,7 +206,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @Override
     public void showEmailSucces(Login login) {
-        showSnackBar.show(correct_email, Color.RED);
+        showSnackBar.show(correct_email, Color.GREEN);
         this.user = login;
     }
 

@@ -30,4 +30,10 @@ public interface GetUserBD {
     void deleteUserPictures(String id);
 
     void deleteUserSavedPictures(String id);
+
+    void updateUserBD(Login user);
+
+    void removeUserDBData();
+
+    List<UserBD> getUsers();
 }

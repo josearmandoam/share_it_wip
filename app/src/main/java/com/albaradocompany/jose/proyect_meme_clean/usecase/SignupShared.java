@@ -55,4 +55,6 @@ public interface SignupShared {
     void saveUserAvatar(Avatar avatar);
 
     void deleteImageProfile();
+
+    void photoStateTaken(String state);
 }

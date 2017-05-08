@@ -1,7 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -12,7 +11,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateUserInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsEditProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateUser;
 
@@ -89,14 +87,14 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
 
             @Override
             public void onUpdateSuccess() {
-                view.hideLoading();
-                view.showSuccess();
                 if (userSharedImp.isBackgroundChanged()){
                     uploadBackground();
                 }
                 if (userSharedImp.isProfileChanged()){
                     uploadProfile();
                 }
+                view.hideLoading();
+                view.showSuccess();
                 navigator.navigateToBack();
             }
 
@@ -132,10 +130,6 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                 }
                 ((EditProfileActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
-                        view.hideLoading();
-                        view.showSuccess();
-                        userSharedImp.saveBackgroundChanges("false");
-                        navigator.navigateToBack();
 
                     }
                 });
@@ -167,10 +161,7 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                 }
                 ((EditProfileActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
-                        view.hideLoading();
-                        view.showSuccess();
-                        userSharedImp.saveProfileChanges("false");
-                        navigator.navigateToBack();
+
                     }
                 });
             }

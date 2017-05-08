@@ -15,10 +15,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSplash;
 
 public class SplashActivity extends AppCompatActivity implements AbsSplash.Navigator, AbsSplash.View {
 
-    private static final String PREF_NAME = "AndroidHivePref";
-    private static final String IS_LOGIN = "IsLoggedIn";
-    private static final String IS_FIRST_TIME = "IsFirstTime";
-
     AbsSplash presenter;
     private UIComponent component;
 

@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Point;
@@ -42,7 +43,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
 
     int action;
     private AlertDialog dialog;
-    private Context context;
+    private Activity activity;
     private Avatar avatar;
     private AbsConfirmAvatar presenter;
     @Inject
@@ -56,12 +57,12 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         super(context, themeResId);
     }
 
-    public ConfirmAvatarDialog(Context context, Avatar avatar, int action) {
-        super(context);
-        this.context = context;
+    public ConfirmAvatarDialog(Activity activity, Avatar avatar, int action) {
+        super(activity);
+        this.activity = activity;
         this.avatar = avatar;
         this.action = action;
-        dialog = new AlertDialog.Builder(context)
+        dialog = new AlertDialog.Builder(activity)
                 .setView(R.layout.dialog_confirm_avatar)
                 .create();
         dialog.show();
@@ -73,7 +74,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     }
 
     private int getWidth() {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -82,35 +83,36 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
 
     private void initialize() {
         ButterKnife.bind(this, dialog);
-        presenter = new ConfirmAvatarPresenter(context);
+        presenter = new ConfirmAvatarPresenter(activity);
         presenter.setView(this);
         presenter.setNavigator(this);
     }
 
     public void loadAvatarImage() {
-        Picasso.with(context)
+        Picasso.with(activity)
                 .load(avatar.getImagePath())
                 .into(avatarImage);
     }
 
     @Override
     public void closeConfirmAvatar() {
+        dialog.dismiss();
         switch (action){
             case 0:
                 userSharedImp.saveUserAvatar(avatar);
-                ((AddPhotoActivty) context).onBackPressed();
+                activity.finish();
                 break;
             case 1:
                 userSharedImp.saveProfile(avatar.getImagePath());
-                userSharedImp.saveProfileChanges("true");
                 userSharedImp.saveProfileFTPSelected();
-                ((AddPhotoActivty) context).onBackPressed();
+                userSharedImp.saveProfileChanges("true");
+                activity.finish();
                 break;
             case 2:
                 userSharedImp.saveBackground(avatar.getImagePath());
-                userSharedImp.saveBackgroundChanges("true");
                 userSharedImp.saveBackgroundFTPSelected();
-                ((AddPhotoActivty) context).onBackPressed();
+                userSharedImp.saveBackgroundChanges("true");
+                activity.finish();
                 break;
         }
 
@@ -118,6 +120,6 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
 
     protected UIComponent getComponent() {
 
-        return ((AddPhotoActivty) context).component();
+        return ((AddPhotoActivty) activity).component();
     }
 }

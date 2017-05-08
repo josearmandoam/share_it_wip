@@ -153,13 +153,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 }
                 break;
             case 1: /* action profile */
-                if (userSharedImp.isSelectedProfile()) {
+                if (userSharedImp.isProfileChanged()) {
                     if (userSharedImp.isProfileFTPSelected()){
                         Picasso.with(context)
                                 .load(userSharedImp.getProfile())
                                 .into(image);
                     }else {
-                        loadImage(userSharedImp.getProfile());
+                        loadImage(userSharedImp.getNewProfile());
                     }
                 } else {
                     Picasso.with(context)
@@ -168,13 +168,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 }
                 break;
             case 2: /* action background */
-                if (userSharedImp.isSelectedBackground()) {
+                if (userSharedImp.isBackgroundChanged()) {
                     if (userSharedImp.isBackgroundFTPSelected()){
                         Picasso.with(context)
                                 .load(userSharedImp.getBackground())
                                 .into(image);
                     }else {
-                        loadImage(userSharedImp.getBackground());
+                        loadImage(userSharedImp.getNewBackground());
                     }
                 } else {
                     Picasso.with(context)
@@ -201,6 +201,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         switch (action) {
             case 0:
                 userSharedImp.deleteImageProfile();
+                userSharedImp.photoStateTaken("false");
                 dialog.dismiss();
                 switch (numberActivity) {
                     case 1:

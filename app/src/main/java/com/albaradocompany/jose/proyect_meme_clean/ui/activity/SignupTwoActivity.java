@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -33,7 +34,7 @@ import butterknife.OnClick;
 public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View, AbsSignupTwo.Navigator {
     @BindView(R.id.signup_two_button_back)
     ImageButton bBack;
-    @BindView(R.id.signup_two_button_menu)
+    @BindView(R.id.signup_two_button_clear)
     ImageButton bMenu;
     @BindView(R.id.signup_two_button_next)
     ImageButton bNext;
@@ -49,6 +50,9 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     EditText password2;
     @BindView(R.id.signup_two_image)
     ImageView image;
+    @BindView(R.id.signup_two_layout)
+    RelativeLayout layout;
+
     @BindDrawable(R.drawable.user_default_image)
     Drawable defaultUserImage;
     @BindString(R.string.default_font)
@@ -62,7 +66,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     @BindString(R.string.error_password_coincidence)
     String passwordMatchError;
     @BindColor(R.color.color_login)
-    int color_login;
+    int colorLogin;
 
 
     AbsSignupTwo presenter;
@@ -86,7 +90,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         presenter.onImageClicked();
     }
 
-    @OnClick(R.id.signup_two_button_menu)
+    @OnClick(R.id.signup_two_button_clear)
     public void onCleanClicked(View view) {
         presenter.onCleanPressed();
     }
@@ -192,6 +196,8 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         presenter.setNavigator(this);
         presenter.setView(this);
         presenter.initialize();
+
+        layout.requestFocus();
     }
 
     public static void openSignupThreeActivity(Context ctx) {

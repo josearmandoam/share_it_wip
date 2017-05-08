@@ -62,12 +62,15 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
         tabLayout.addOnTabSelectedListener(this);
         tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.drawable.camera_dark));
         tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.drawable.avatar_light));
-
     }
 
     private void getBundles() {
         Bundle bundle = getIntent().getExtras();
-        action = (int) bundle.get("action");
+        if (bundle != null) {
+            action = (int) bundle.get("action");
+        } else {
+            action = 0;
+        }
     }
 
     @Override
