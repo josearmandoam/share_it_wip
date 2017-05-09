@@ -17,7 +17,7 @@ public class SignupOnePresenter extends AbsSignupOne {
 
     @Override
     public void initialize() {
-        view.loadUserImage();
+
     }
 
     @Override

@@ -40,7 +40,6 @@
             android:layout_alignBottom="@+id/signup_three_button_confirm"
             android:layout_alignTop="@+id/signup_three_title_ly"
             android:background="@drawable/textrounded2"
-            android:layout_marginBottom="-5dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_height="wrap_content" />
@@ -175,11 +174,10 @@
             android:id="@+id/signup_three_pbr"
             android:layout_width="wrap_content"
             android:background="@drawable/progress"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
+            android:layout_alignTop="@+id/signup_three_button_confirm"
             />
 
         <ImageButton

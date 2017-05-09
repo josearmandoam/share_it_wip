@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import android.graphics.Bitmap;
+
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
@@ -15,7 +17,7 @@ public abstract class AbsSignupThree extends Presenter<AbsSignupThree.View, AbsS
 
     public abstract void onBackPressed();
 
-    public abstract void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login user);
+    public abstract void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login user, Bitmap bitmap);
 
     public abstract void onImageClicked();
 

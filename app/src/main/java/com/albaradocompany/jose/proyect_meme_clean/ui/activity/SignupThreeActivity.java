@@ -2,9 +2,11 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -94,7 +96,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     private List<Question> listQuestions;
     UIComponent component;
     private ShowSnackBarImp showSnackBar;
-
+    public static Uri uriReceived;
+    public static Bitmap bitmapReceived;
 
     @OnClick(R.id.signup_three_button_back)
     public void onBackpressed(View view) {
@@ -106,8 +109,9 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         if (checkFields()) {
             userSharedImp.saveSignThreeData(question.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
             Login user = userSharedImp.getUser();
+
             interactor = new RegistrationResponseInteractor(new RegistrationResponseImp(user), new MainThreadImp(), new ThreadExecutor());
-            presenter.onConfirmClicked(interactor, user);
+            presenter.onConfirmClicked(interactor, user, ((BitmapDrawable) image.getDrawable()).getBitmap());
 
         }
     }
@@ -137,15 +141,30 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     private void initialize() {
         showSnackBar = new ShowSnackBarImp(this);
-    }
 
-    private void checkUserImage() {
-        if (userSharedImp.isAvatarTaken()) {
-            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
-        } else {
-            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
+        uriReceived = null;
+        bitmapReceived = null;
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Uri uri = (Uri) bundle.get("uri");
+            if (uri != null) {
+                uriReceived = uri;
+            }
+            Bitmap bm = (Bitmap) bundle.get("bitmap");
+            if (bm != null) {
+                bitmapReceived = bm;
+            }
         }
     }
+
+//    private void checkUserImage() {
+//        if (userSharedImp.isAvatarTaken()) {
+//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+//        } else {
+//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
+//        }
+//    }
 
     private void initializePrensenter() {
         presenter = new SignupThreePresenter(this, questionsInteractor);
@@ -174,7 +193,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void showLoading() {
         pbr.setVisibility(View.VISIBLE);
-        bConfirm.setVisibility(View.GONE);
+        bConfirm.setBackgroundColor(this.getResources().getColor(android.R.color.white));
     }
 
     @Override
@@ -185,7 +204,16 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void loadUserImage() {
-        checkUserImage();
+        if (userSharedImp.isAvatarTaken()) {
+            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+        } else {
+            if (uriReceived != null) {
+                image.setImageURI(uriReceived);
+            }
+            if (bitmapReceived != null) {
+                image.setImageBitmap(bitmapReceived);
+            }
+        }
     }
 
     @Override
@@ -266,6 +294,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         }
         return true;
     }
+
     @Override
     public void navigateToLogin() {
         this.finish();
@@ -286,6 +315,14 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent();
+        if (uriReceived != null) {
+            intent.putExtra("uri", uriReceived);
+        }
+        if (bitmapReceived != null) {
+            intent.putExtra("bitmap", bitmapReceived);
+        }
+        setResult(RESULT_OK, intent);
     }
 
     public UIComponent component() {

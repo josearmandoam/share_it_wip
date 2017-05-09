@@ -3,8 +3,10 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -38,6 +40,7 @@ import butterknife.OnClick;
 
 public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navigator, AbsSignupOne.View {
 
+    private static final int SIGNUPONE = 1;
     @BindView(R.id.signup_button_back)
     ImageButton bBack;
     @BindView(R.id.signup_btn_clean)
@@ -82,6 +85,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     @Inject
     UserSharedImp userSharedImp;
     private ShowSnackBar showSnackBar;
+    public static Uri uriReceived;
+    public static Bitmap bitmapReceived;
 
     @OnClick(R.id.signup_button_back)
     public void onBackpressed(View view) {
@@ -129,7 +134,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         presenter = new SignupOnePresenter(this);
         presenter.setNavigator(this);
         presenter.setView(this);
-        presenter.initialize();
+
+        image.setImageDrawable(defaultUserImage);
 
         layout.requestFocus();
     }
@@ -146,6 +152,13 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void hideSignupOne() {
+        depurateSignup();
+    }
+
+    private void depurateSignup() {
+        removeSignInformation();
+        uriReceived = null;
+        bitmapReceived = null;
         finish();
     }
 
@@ -163,16 +176,25 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void loadUserImage() {
-        checkUserImage();
-    }
-
-    private void checkUserImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
         } else {
-            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
+            if (uriReceived != null) {
+                image.setImageURI(uriReceived);
+            }
+            if (bitmapReceived != null) {
+                image.setImageBitmap(bitmapReceived);
+            }
         }
     }
+
+//    private void checkUserImage() {
+//        if (userSharedImp.isAvatarTaken()) {
+//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+//        } else {
+//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
+//        }
+//    }
 
     @Override
     public void showDatePicker() {
@@ -208,7 +230,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     public void navigatePageTwo() {
         if (checkFields()) {
             saveSignoneData();
-            openPageTwo(this);
+            openPageTwo();
         }
     }
 
@@ -240,9 +262,15 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         return true;
     }
 
-    public static void openPageTwo(Context ctx) {
-        Intent intent = new Intent(ctx, SignupTwoActivity.class);
-        ctx.startActivity(intent);
+    public void openPageTwo() {
+        Intent intent = new Intent(this, SignupTwoActivity.class);
+        if (uriReceived != null) {
+            intent.putExtra("uri", uriReceived);
+        }
+        if (bitmapReceived != null) {
+            intent.putExtra("bitmap", bitmapReceived);
+        }
+        startActivityForResult(intent, SIGNUPONE);
     }
 
     @Override
@@ -252,8 +280,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        removeSignInformation();
+        presenter.onBackPressed();
     }
 
     private void removeSignInformation() {
@@ -265,6 +292,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         super.onResume();
         presenter.resume();
     }
+
     public UIComponent component() {
         if (component == null) {
             component = DaggerUIComponent.builder()
@@ -274,5 +302,23 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
                     .build();
         }
         return component;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SIGNUPONE) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Uri uri = (Uri) bundle.get("uri");
+                    if (uri != null)
+                        uriReceived = uri;
+                    Bitmap bm = (Bitmap) bundle.get("bitmap");
+                    if (bm != null)
+                        bitmapReceived = bm;
+                }
+            }
+        }
     }
 }

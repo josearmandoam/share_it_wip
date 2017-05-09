@@ -45,6 +45,7 @@ public class UserSharedImp implements UserShared, SignupShared {
         deleteSignoneData();
         deleteSigntwoData();
         deleteSignThreeData();
+
         sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear().apply();
@@ -207,7 +208,10 @@ public class UserSharedImp implements UserShared, SignupShared {
         }
         return mypath.getAbsolutePath();
     }
-
+    public String getPicturesDir(){
+        String dir = context.getFilesDir() + "/user_pictures";
+        return dir;
+    }
     @Override
     public String getUserPasswordSaved() {
         sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
@@ -336,7 +340,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     public void photoStateTaken(String state) {
         sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_PHOTO, "false");
+        editor.putString(BuildConfig.IS_SELECTED_PHOTO, state);
         editor.apply();
     }
 

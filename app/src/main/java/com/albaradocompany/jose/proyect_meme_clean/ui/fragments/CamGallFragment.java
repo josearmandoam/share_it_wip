@@ -24,6 +24,9 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.CamGalPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsCamGalPresenter;
 
@@ -116,7 +119,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
     }
 
     public void openCamera() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, BuildConfig.ACTION_CAMERA);
     }
 
@@ -126,7 +129,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
     }
 
     public void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, BuildConfig.ACTION_GALERY);
     }
 
@@ -136,13 +139,36 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         if (requestCode == BuildConfig.ACTION_GALERY) {
             if (resultCode == RESULT_OK) {
                 hideOptions();
-                savePhotoFromGalery(data);
+//                savePhotoFromGalery(data);
+                switch (action) {
+                    case 0:
+                        userSharedImp.deleteImageProfile();
+                        SignupOneActivity.uriReceived = data.getData();
+                        SignupTwoActivity.uriReceived = data.getData();
+                        SignupThreeActivity.uriReceived = data.getData();
+                        userSharedImp.photoStateTaken("true");
+                        activity.finish();
+                        break;
+                }
+
             }
         } else {
             if (requestCode == BuildConfig.ACTION_CAMERA) {
                 if (resultCode == RESULT_OK) {
                     hideOptions();
-                    savePhotoFromCamera(data);
+//                    savePhotoFromCamera(data);
+                    switch (action) {
+                        case 0:
+                            userSharedImp.deleteImageProfile();
+                            Bundle extras = data.getExtras();
+                            SignupOneActivity.bitmapReceived = (Bitmap) extras.get("data");
+                            SignupTwoActivity.bitmapReceived = (Bitmap) extras.get("data");
+                            SignupThreeActivity.bitmapReceived = (Bitmap) extras.get("data");
+                            userSharedImp.photoStateTaken("true");
+                            activity.finish();
+                            break;
+                    }
+
                 }
             }
         }

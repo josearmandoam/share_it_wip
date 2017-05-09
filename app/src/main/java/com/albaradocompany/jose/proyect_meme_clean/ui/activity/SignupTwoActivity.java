@@ -1,9 +1,10 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View, AbsSignupTwo.Navigator {
+    private static final int SIGNUPTWO = 2;
     @BindView(R.id.signup_two_button_back)
     ImageButton bBack;
     @BindView(R.id.signup_two_button_clear)
@@ -68,12 +70,13 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     @BindColor(R.color.color_login)
     int colorLogin;
 
-
     AbsSignupTwo presenter;
     private UIComponent component;
     @Inject
     UserSharedImp userSharedImp;
     private ShowSnackBarImp showSnackBar;
+    public static Uri uriReceived;
+    public static Bitmap bitmapReceived;
 
     @OnClick(R.id.signup_two_button_back)
     public void onBackpressed(View view) {
@@ -105,6 +108,20 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
     private void intialize() {
         showSnackBar = new ShowSnackBarImp(this);
+        uriReceived = null;
+        bitmapReceived = null;
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Uri uri = (Uri) bundle.get("uri");
+            if (uri != null) {
+                uriReceived = uri;
+            }
+            Bitmap bm = (Bitmap) bundle.get("bitmap");
+            if (bm != null) {
+                bitmapReceived = bm;
+            }
+        }
     }
 
     private void checkDataSaved() {
@@ -113,13 +130,13 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         password2.setText(userSharedImp.getUserPassword2Saved());
     }
 
-    private void checkUserImage() {
-        if (userSharedImp.isAvatarTaken()) {
-            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
-        } else {
-            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
-        }
-    }
+//    private void checkUserImage() {
+//        if (userSharedImp.isAvatarTaken()) {
+//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+//        } else {
+//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
+//        }
+//    }
 
     @Override
     protected int getLayoutId() {
@@ -138,7 +155,16 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
     @Override
     public void loadUserImage() {
-        checkUserImage();
+        if (userSharedImp.isAvatarTaken()) {
+            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+        } else {
+            if (uriReceived != null) {
+                image.setImageURI(uriReceived);
+            }
+            if (bitmapReceived != null) {
+                image.setImageBitmap(bitmapReceived);
+            }
+        }
     }
 
     @Override
@@ -167,7 +193,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     public void navigatePageThree() {
         if (checkFields()) {
             userSharedImp.saveSigntwoData(username.getText().toString(), password.getText().toString());
-            openSignupThreeActivity(this);
+            openSignupThreeActivity();
         }
     }
 
@@ -195,25 +221,39 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         presenter = new SignupTwoPresenter(this);
         presenter.setNavigator(this);
         presenter.setView(this);
-        presenter.initialize();
 
         layout.requestFocus();
     }
 
-    public static void openSignupThreeActivity(Context ctx) {
-        Intent intent = new Intent(ctx, SignupThreeActivity.class);
-        ctx.startActivity(intent);
+    public void openSignupThreeActivity() {
+        Intent intent = new Intent(this, SignupThreeActivity.class);
+        if (uriReceived != null) {
+            intent.putExtra("uri", uriReceived);
+        }
+        if (bitmapReceived != null) {
+            intent.putExtra("bitmap", bitmapReceived);
+        }
+        startActivityForResult(intent, SIGNUPTWO);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         presenter.resume();
-   }
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent();
+        if (uriReceived != null) {
+            intent.putExtra("uri", uriReceived);
+        }
+        if (bitmapReceived != null) {
+            intent.putExtra("bitmap", bitmapReceived);
+        }
+        setResult(RESULT_OK, intent);
+
     }
 
     public UIComponent component() {
@@ -225,5 +265,23 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
                     .build();
         }
         return component;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SIGNUPTWO) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    Uri uri = (Uri) bundle.get("uri");
+                    if (uri != null)
+                        uriReceived = uri;
+                    Bitmap bm = (Bitmap) bundle.get("bitmap");
+                    if (bm != null)
+                        bitmapReceived = bm;
+                }
+            }
+        }
     }
 }

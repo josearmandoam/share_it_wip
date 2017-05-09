@@ -1,6 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,7 +21,10 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationRespon
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
 
@@ -87,7 +92,7 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     @Override
-    public void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login login) {
+    public void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login login, final Bitmap bitmap) {
         view.showLoading();
         getRegistrationResponse.getRegistrationResponse(new GetRegistrationResponse.Listener() {
             @Override
@@ -104,58 +109,8 @@ public class SignupThreePresenter extends AbsSignupThree {
 
             @Override
             public void onRegistrationSuccess(GenericResponse response) {
-                if(userSharedImp.isPhotoTaken() && !userSharedImp.isAvatarTaken()){
-                        new Thread(new Runnable() {
-                            public void run() {
-                                FTPClient ftpClient = null;
-                                try {
-                                    ftpClient = new FTPClient();
-                                    ftpClient.connect(InetAddress.getByName(BuildConfig.ADDRESS));
-                                    if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
-                                        ftpClient.enterLocalPassiveMode(); // important!
-                                        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-                                        String photoname=userSharedImp.getUser().getIdUser()+"_profile";
-                                        FileInputStream in = new FileInputStream(userSharedImp.getUserPhotoPath());
-                                        boolean result = ftpClient.storeFile(photoname, in);
-                                        boolean ok = ftpClient.sendSiteCommand("chmod 777 "+ BuildConfig.BASE_URL_DEFAULT+photoname);
-                                        in.close();
-                                        if (result)
-                                            Log.v("upload result", "succeeded");
-                                        if (ok)
-                                            Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
-                                        ftpClient.logout();
-                                        ftpClient.disconnect();
-                                    }
-                                } catch (Exception e) {
-                                    Log.v("count", "error");
-                                    e.printStackTrace();
-                                }
-                                ((SignupThreeActivity)context).runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        view.hideLoading();
-                                        view.showSuccess();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                navigator.navigateToLogin();
-                                                // Actions to do after 10 seconds
-                                            }
-                                        }, 1500);
-                                    }
-                                });
-                            }
-                        }).start();
-                }else {
-                    view.hideLoading();
-                    view.showSuccess();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            navigator.navigateToLogin();
-                            // Actions to do after 10 seconds
-                        }
-                    }, 1500);
-                }
+                saveImageOnMemory(context, bitmap, userSharedImp.getUserID() + "_profile");
+                savePhotoFTP();
 
             }
 
@@ -165,6 +120,41 @@ public class SignupThreePresenter extends AbsSignupThree {
                 view.showErrorRegistration();
             }
         });
+    }
+
+    private void savePhotoFTP() {
+            new Thread(new Runnable() {
+                public void run() {
+                    FTPClient ftpClient = null;
+                    try {
+                        ftpClient = new FTPClient();
+                        ftpClient.connect(InetAddress.getByName(BuildConfig.ADDRESS));
+                        if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
+                            ftpClient.enterLocalPassiveMode(); // important!
+                            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                            String photoname = userSharedImp.getUserID() + "_profile";
+                            FileInputStream in = new FileInputStream(userSharedImp.getProfile());
+                            boolean result = ftpClient.storeFile(photoname, in);
+                            boolean ok = ftpClient.sendSiteCommand("chmod 777 " + BuildConfig.BASE_URL_DEFAULT + photoname);
+                            in.close();
+                            if (result)
+                                Log.v("upload result", "succeeded");
+                            if (ok)
+                                Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
+                            ftpClient.logout();
+                            ftpClient.disconnect();
+                        }
+                    } catch (Exception e) {
+                        Log.v("count", "error");
+                        e.printStackTrace();
+                    }
+                    ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
+                        public void run() {
+                            /**/
+                        }
+                    });
+                }
+            }).start();
     }
 
     @Override
@@ -183,6 +173,42 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     protected UIComponent getComponent() {
-            return ((SignupThreeActivity) context).component();
+        return ((SignupThreeActivity) context).component();
+    }
+
+    public void saveImageOnMemory(final Context context, final Bitmap b, final String name) {
+        File mypath = null;
+        view.showLoading();
+        new Thread(new Runnable() {
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+                File directory = new File(context.getFilesDir() + "/user_imagenes");
+                directory.mkdirs();
+                File mypath = new File(directory, name);
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                userSharedImp.saveProfile(mypath.getAbsolutePath());
+                ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
+                    public void run() {
+                        /**/
+                        view.showLoading();
+                        view.showSuccess();
+                    }
+                });
+            }
+        }).start();
+
     }
 }
