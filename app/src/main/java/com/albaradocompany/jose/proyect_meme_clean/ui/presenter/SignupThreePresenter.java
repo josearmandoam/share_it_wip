@@ -111,7 +111,6 @@ public class SignupThreePresenter extends AbsSignupThree {
             public void onRegistrationSuccess(GenericResponse response) {
                 saveImageOnMemory(context, bitmap, userSharedImp.getUserID() + "_profile");
                 savePhotoFTP();
-
             }
 
             @Override
@@ -123,38 +122,38 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     private void savePhotoFTP() {
-            new Thread(new Runnable() {
-                public void run() {
-                    FTPClient ftpClient = null;
-                    try {
-                        ftpClient = new FTPClient();
-                        ftpClient.connect(InetAddress.getByName(BuildConfig.ADDRESS));
-                        if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
-                            ftpClient.enterLocalPassiveMode(); // important!
-                            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-                            String photoname = userSharedImp.getUserID() + "_profile";
-                            FileInputStream in = new FileInputStream(userSharedImp.getProfile());
-                            boolean result = ftpClient.storeFile(photoname, in);
-                            boolean ok = ftpClient.sendSiteCommand("chmod 777 " + BuildConfig.BASE_URL_DEFAULT + photoname);
-                            in.close();
-                            if (result)
-                                Log.v("upload result", "succeeded");
-                            if (ok)
-                                Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
-                            ftpClient.logout();
-                            ftpClient.disconnect();
-                        }
-                    } catch (Exception e) {
-                        Log.v("count", "error");
-                        e.printStackTrace();
+        new Thread(new Runnable() {
+            public void run() {
+                FTPClient ftpClient = null;
+                try {
+                    ftpClient = new FTPClient();
+                    ftpClient.connect(InetAddress.getByName(BuildConfig.ADDRESS));
+                    if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
+                        ftpClient.enterLocalPassiveMode(); // important!
+                        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                        String photoname = userSharedImp.getUser().getIdUser() + "_profile";
+                        FileInputStream in = new FileInputStream(userSharedImp.getProfile());
+                        boolean result = ftpClient.storeFile(photoname, in);
+                        boolean ok = ftpClient.sendSiteCommand("chmod 777 " + BuildConfig.BASE_URL_DEFAULT + photoname);
+                        in.close();
+                        if (result)
+                            Log.v("upload result", "succeeded");
+                        if (ok)
+                            Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
+                        ftpClient.logout();
+                        ftpClient.disconnect();
                     }
-                    ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
-                        public void run() {
-                            /**/
-                        }
-                    });
+                } catch (Exception e) {
+                    Log.v("count", "error");
+                    e.printStackTrace();
                 }
-            }).start();
+                ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
+                    public void run() {
+                            /**/
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -203,8 +202,20 @@ public class SignupThreePresenter extends AbsSignupThree {
                 ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
                         /**/
-                        view.showLoading();
-                        view.showSuccess();
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.hideLoading();
+                                view.showSuccess();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        navigator.navigateToLogin();
+                                    }
+                                }, 1500);
+                            }
+                        }, 2500);
                     }
                 });
             }

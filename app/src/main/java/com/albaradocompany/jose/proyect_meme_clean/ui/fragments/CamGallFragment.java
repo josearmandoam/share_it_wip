@@ -138,6 +138,9 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BuildConfig.ACTION_GALERY) {
             if (resultCode == RESULT_OK) {
+                SignupOneActivity.bitmapReceived = null;
+                SignupTwoActivity.bitmapReceived = null;
+                SignupThreeActivity.bitmapReceived = null;
                 hideOptions();
 //                savePhotoFromGalery(data);
                 switch (action) {
@@ -155,6 +158,9 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         } else {
             if (requestCode == BuildConfig.ACTION_CAMERA) {
                 if (resultCode == RESULT_OK) {
+                    SignupOneActivity.uriReceived= null;
+                    SignupTwoActivity.uriReceived= null;
+                    SignupThreeActivity.uriReceived= null;
                     hideOptions();
 //                    savePhotoFromCamera(data);
                     switch (action) {

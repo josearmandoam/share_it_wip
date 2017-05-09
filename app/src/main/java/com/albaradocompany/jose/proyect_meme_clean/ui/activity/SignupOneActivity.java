@@ -178,33 +178,28 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     public void loadUserImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+            uriReceived = null;
+            bitmapReceived = null;
         } else {
-            if (uriReceived != null) {
+            if (uriReceived != null)
                 image.setImageURI(uriReceived);
+            if (bitmapReceived != null)
+                    image.setImageBitmap(bitmapReceived);
+
             }
-            if (bitmapReceived != null) {
-                image.setImageBitmap(bitmapReceived);
-            }
+        if (!userSharedImp.isAvatarTaken() && uriReceived == null && bitmapReceived == null)
+            image.setImageDrawable(defaultUserImage);
         }
-    }
 
-//    private void checkUserImage() {
-//        if (userSharedImp.isAvatarTaken()) {
-//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
-//        } else {
-//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
-//        }
-//    }
+        @Override
+        public void showDatePicker () {
+            showDialogDate();
+        }
 
-    @Override
-    public void showDatePicker() {
-        showDialogDate();
-    }
-
-    @Override
-    public void showImage() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 1);
-    }
+        @Override
+        public void showImage () {
+            ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 1);
+        }
 
     private void showDialogDate() {
         final Calendar myCalendar = Calendar.getInstance();

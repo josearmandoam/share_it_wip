@@ -157,6 +157,8 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     public void loadUserImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+            uriReceived = null;
+            bitmapReceived = null;
         } else {
             if (uriReceived != null) {
                 image.setImageURI(uriReceived);
@@ -165,6 +167,8 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
                 image.setImageBitmap(bitmapReceived);
             }
         }
+        if (!userSharedImp.isAvatarTaken() && uriReceived == null && bitmapReceived == null)
+            image.setImageDrawable(defaultUserImage);
     }
 
     @Override

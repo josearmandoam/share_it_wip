@@ -144,46 +144,88 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         switch (action) {
             case 0:
                 if (userSharedImp.isAvatarTaken()) {
-                    Picasso.with(context)
-                            .load(userSharedImp.getUserAvatar())
-                            .error(defaultImageUser)
-                            .into(image);
+                    checkImageFromFTP();
                 } else {
-                    loadImage(userSharedImp.getUserPhoto());
+                    checkImageFromActivity();
+                }
+                    break;
+                    case 1: /* action profile */
+                        if (userSharedImp.isProfileChanged()) {
+                            if (userSharedImp.isProfileFTPSelected()) {
+                                Picasso.with(context)
+                                        .load(userSharedImp.getProfile())
+                                        .into(image);
+                            } else {
+                                loadImage(userSharedImp.getNewProfile());
+                            }
+                        } else {
+                            Picasso.with(context)
+                                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile)
+                                    .into(image);
+                        }
+                        break;
+                    case 2: /* action background */
+                        if (userSharedImp.isBackgroundChanged()) {
+                            if (userSharedImp.isBackgroundFTPSelected()) {
+                                Picasso.with(context)
+                                        .load(userSharedImp.getBackground())
+                                        .into(image);
+                            } else {
+                                loadImage(userSharedImp.getNewBackground());
+                            }
+                        } else {
+                            Picasso.with(context)
+                                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background)
+                                    .into(image);
+                        }
+                        break;
+                }
+
+        }
+
+    private void checkImageFromFTP() {
+        Picasso.with(context)
+                .load(userSharedImp.getUserAvatar())
+                .error(defaultImageUser)
+                .into(image);
+    }
+
+    private void checkImageFromActivity() {
+        switch (numberActivity) {
+            case 1:
+                if (SignupOneActivity.bitmapReceived != null) {
+                    image.setImageBitmap(SignupOneActivity.bitmapReceived);
+                } else {
+                    if (SignupOneActivity.uriReceived != null) {
+                        image.setImageURI(SignupOneActivity.uriReceived);
+                    } else {
+                        image.setImageDrawable(defaultImageUser);
+                    }
                 }
                 break;
-            case 1: /* action profile */
-                if (userSharedImp.isProfileChanged()) {
-                    if (userSharedImp.isProfileFTPSelected()){
-                        Picasso.with(context)
-                                .load(userSharedImp.getProfile())
-                                .into(image);
-                    }else {
-                        loadImage(userSharedImp.getNewProfile());
-                    }
+            case 2:
+                if (SignupTwoActivity.bitmapReceived != null) {
+                    image.setImageBitmap(SignupTwoActivity.bitmapReceived);
                 } else {
-                    Picasso.with(context)
-                            .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile)
-                            .into(image);
+                    if (SignupTwoActivity.uriReceived != null) {
+                        image.setImageURI(SignupTwoActivity.uriReceived);
+                    } else {
+                        image.setImageDrawable(defaultImageUser);
+                    }
                 }
                 break;
-            case 2: /* action background */
-                if (userSharedImp.isBackgroundChanged()) {
-                    if (userSharedImp.isBackgroundFTPSelected()){
-                        Picasso.with(context)
-                                .load(userSharedImp.getBackground())
-                                .into(image);
-                    }else {
-                        loadImage(userSharedImp.getNewBackground());
-                    }
+            case 3:
+                if (SignupThreeActivity.bitmapReceived != null) {
+                    image.setImageBitmap(SignupThreeActivity.bitmapReceived);
                 } else {
-                    Picasso.with(context)
-                            .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background)
-                            .into(image);
+                    if (SignupThreeActivity.uriReceived != null) {
+                        image.setImageURI(SignupThreeActivity.uriReceived);
+                    } else {
+                        image.setImageDrawable(defaultImageUser);
+                    }
                 }
                 break;
         }
-
     }
 
     private void loadImage(String path) {
@@ -202,6 +244,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
             case 0:
                 userSharedImp.deleteImageProfile();
                 userSharedImp.photoStateTaken("false");
+                invalidatePhotos();
                 dialog.dismiss();
                 switch (numberActivity) {
                     case 1:
@@ -231,6 +274,16 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 break;
         }
 
+    }
+
+    private void invalidatePhotos() {
+        SignupOneActivity.bitmapReceived = null;
+        SignupTwoActivity.bitmapReceived = null;
+        SignupThreeActivity.bitmapReceived = null;
+
+        SignupOneActivity.uriReceived= null;
+        SignupTwoActivity.uriReceived= null;
+        SignupThreeActivity.uriReceived= null;
     }
 
     @Override

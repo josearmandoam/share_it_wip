@@ -83,9 +83,12 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     String acountCreated;
     @BindString(R.string.error_registration)
     String errorRegistration;
+    @BindColor(android.R.color.white)
+    int white;
     @BindColor(R.color.color_login)
     int colorLogin;
-
+    @BindDrawable(R.drawable.roundedbutton)
+    Drawable round;
     private AbsSignupThree presenter;
     private RegistrationResponseInteractor interactor;
     private int cnt;
@@ -193,19 +196,21 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void showLoading() {
         pbr.setVisibility(View.VISIBLE);
-        bConfirm.setBackgroundColor(this.getResources().getColor(android.R.color.white));
+        bConfirm.setBackgroundColor(white);
     }
 
     @Override
     public void hideLoading() {
         pbr.setVisibility(View.GONE);
-        bConfirm.setVisibility(View.VISIBLE);
+        bConfirm.setBackground(round);
     }
 
     @Override
     public void loadUserImage() {
         if (userSharedImp.isAvatarTaken()) {
             Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
+            uriReceived = null;
+            bitmapReceived = null;
         } else {
             if (uriReceived != null) {
                 image.setImageURI(uriReceived);
@@ -214,6 +219,8 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
                 image.setImageBitmap(bitmapReceived);
             }
         }
+        if (!userSharedImp.isAvatarTaken() && uriReceived == null && bitmapReceived == null)
+            image.setImageDrawable(defaultUserImage);
     }
 
     @Override
