@@ -1,6 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -17,7 +19,10 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateUser;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 
 import javax.inject.Inject;
@@ -46,12 +51,19 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
         view.showProfilePicture();
         view.showName();
         view.showUserName();
+        userSharedImp.saveBackgroundChanges("false");
+        userSharedImp.saveProfileChanges("false");
     }
 
     @Override
     public void resume() {
         view.checkProfile();
         view.checkBaground();
+        view.showDescription();
+        view.showEmail();
+        view.showLastName();
+        view.showName();
+        view.showUserName();
     }
 
     @Override
@@ -70,7 +82,7 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
     }
 
     @Override
-    public void onAcceptClicked(UpdateUserInteractor interactor) {
+    public void onAcceptClicked(UpdateUserInteractor interactor, final Bitmap profile, final Bitmap background) {
         view.showLoading();
         interactor.updateUser(new UpdateUser.Listener() {
             @Override
@@ -87,15 +99,18 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
 
             @Override
             public void onUpdateSuccess() {
-                if (userSharedImp.isBackgroundChanged()){
-                    uploadBackground();
+                if (userSharedImp.isBackgroundChanged()) {
+                    saveBackgroundOnMemoryAsync(background, userSharedImp.getUserID() + "_background");
                 }
-                if (userSharedImp.isProfileChanged()){
-                    uploadProfile();
+                if (userSharedImp.isProfileChanged()) {
+                    saveProfileOnMemoryAsync(profile, userSharedImp.getUserID() + "_profile");
                 }
-                view.hideLoading();
-                view.showSuccess();
-                navigator.navigateToBack();
+
+                if (!userSharedImp.isBackgroundChanged() && !userSharedImp.isProfileChanged()) {
+                    view.hideLoading();
+                    view.showSuccess();
+                    navigator.navigateToBack();
+                }
             }
 
             @Override
@@ -105,7 +120,8 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
             }
         });
     }
-    private void uploadBackground(){
+
+    private void uploadBackground() {
         new Thread(new Runnable() {
             public void run() {
                 FTPClient ftpClient = null;
@@ -119,8 +135,12 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         String backgroundName = userSharedImp.getUserID() + "_background";
                         boolean result = ftpClient.storeFile(backgroundName, in);
                         in.close();
-                        if (result)
+                        if (result) {
                             Log.v("upload result", "succeeded");
+                            userSharedImp.saveBackgroundChanges("false");
+                        }else{
+                            uploadBackground();
+                        }
                         ftpClient.logout();
                         ftpClient.disconnect();
                     }
@@ -130,13 +150,14 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                 }
                 ((EditProfileActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
-
+//                        view.showLoading();
                     }
                 });
             }
         }).start();
     }
-    private void uploadProfile(){
+
+    private void uploadProfile() {
         new Thread(new Runnable() {
             public void run() {
                 FTPClient ftpClient = null;
@@ -150,8 +171,12 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         FileInputStream in = new FileInputStream(userSharedImp.getProfile());
                         boolean result = ftpClient.storeFile(photoname, in);
                         in.close();
-                        if (result)
+                        if (result) {
                             Log.v("upload result", "succeeded");
+                            userSharedImp.saveProfileChanges("false");
+                        }else{
+                           uploadProfile();
+                        }
                         ftpClient.logout();
                         ftpClient.disconnect();
                     }
@@ -159,14 +184,16 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                     Log.v("count", "error");
                     e.printStackTrace();
                 }
+
                 ((EditProfileActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
-
+//                        view.showLoading();
                     }
                 });
             }
         }).start();
     }
+
     @Override
     public void onProfileClicked() {
         view.showProfileDialog();
@@ -186,5 +213,61 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                     .build();
         }
         return component;
+    }
+
+    public void saveProfileOnMemoryAsync(final Bitmap b, final String name) {
+        new Thread(new Runnable() {
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+                File directory = new File(context.getFilesDir() + "/user_pictures");
+                directory.mkdirs();
+                File mypath = new File(directory, name);
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                userSharedImp.saveProfile(mypath.getAbsolutePath());
+                ((EditProfileActivity) context).finish();
+                uploadProfile();
+            }
+        }).start();
+    }
+
+    public void saveBackgroundOnMemoryAsync(final Bitmap b, final String name) {
+        new Thread(new Runnable() {
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+                File directory = new File(context.getFilesDir() + "/user_pictures");
+                directory.mkdirs();
+                File mypath = new File(directory, name);
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                userSharedImp.saveBackground(mypath.getAbsolutePath());
+                ((EditProfileActivity) context).finish();
+                uploadBackground();
+            }
+        }).start();
     }
 }

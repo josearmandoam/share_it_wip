@@ -16,9 +16,6 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
     public abstract void onEditClicked();
 
-    public abstract void saveProfileOnMemory(Bitmap bitmap);
-
-    public abstract void saveBackgroundOnMemory(Bitmap bitmap);
 
     public interface View {
         void showProfile();
@@ -33,9 +30,6 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
         void showPhotos();
 
-        void checkProfile();
-
-        void checkBackground();
     }
 
     public interface Navigator {

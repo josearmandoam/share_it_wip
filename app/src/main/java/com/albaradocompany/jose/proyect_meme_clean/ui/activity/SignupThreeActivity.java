@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -148,6 +150,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
         uriReceived = null;
         bitmapReceived = null;
 
+        getExtras();
+    }
+
+    private void getExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             Uri uri = (Uri) bundle.get("uri");
@@ -160,14 +166,6 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
             }
         }
     }
-
-//    private void checkUserImage() {
-//        if (userSharedImp.isAvatarTaken()) {
-//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
-//        } else {
-//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
-//        }
-//    }
 
     private void initializePrensenter() {
         presenter = new SignupThreePresenter(this, questionsInteractor);
@@ -304,6 +302,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void navigateToLogin() {
+        userSharedImp.removeSignInformation();
         this.finish();
         openLogin(this);
     }
@@ -322,6 +321,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        saveExtras();
+    }
+
+    private void saveExtras() {
         Intent intent = new Intent();
         if (uriReceived != null) {
             intent.putExtra("uri", uriReceived);

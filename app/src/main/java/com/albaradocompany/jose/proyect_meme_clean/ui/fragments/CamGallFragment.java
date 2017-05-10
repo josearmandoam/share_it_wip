@@ -1,12 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -24,20 +20,12 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.CamGalPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsCamGalPresenter;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -52,6 +40,9 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View, AbsCamGalPresenter.Navigator {
+    private static final int ACTION_SIGNUP = 0;
+    private static final int ACTION_EDIT_PROFILE = 1;
+    private static final int ACTION_EDIT_BACKGROUND = 2;
     int action;
     @BindView(R.id.cam_gall_layout_camera)
     RelativeLayout layout;
@@ -88,6 +79,10 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
 
     private void initialize() {
         component().inject(this);
+        intializePresenter();
+    }
+
+    private void intializePresenter() {
         presenter = new CamGalPresenter();
         presenter.setView(this);
         presenter.setNavigator(this);
@@ -138,141 +133,131 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BuildConfig.ACTION_GALERY) {
             if (resultCode == RESULT_OK) {
-                SignupOneActivity.bitmapReceived = null;
-                SignupTwoActivity.bitmapReceived = null;
-                SignupThreeActivity.bitmapReceived = null;
-                hideOptions();
-//                savePhotoFromGalery(data);
-                switch (action) {
-                    case 0:
-                        userSharedImp.deleteImageProfile();
-                        SignupOneActivity.uriReceived = data.getData();
-                        SignupTwoActivity.uriReceived = data.getData();
-                        SignupThreeActivity.uriReceived = data.getData();
-                        userSharedImp.photoStateTaken("true");
-                        activity.finish();
-                        break;
-                }
-
+                updateProfileImageFromGallery(data);
             }
         } else {
             if (requestCode == BuildConfig.ACTION_CAMERA) {
                 if (resultCode == RESULT_OK) {
-                    SignupOneActivity.uriReceived= null;
-                    SignupTwoActivity.uriReceived= null;
-                    SignupThreeActivity.uriReceived= null;
-                    hideOptions();
-//                    savePhotoFromCamera(data);
-                    switch (action) {
-                        case 0:
-                            userSharedImp.deleteImageProfile();
-                            Bundle extras = data.getExtras();
-                            SignupOneActivity.bitmapReceived = (Bitmap) extras.get("data");
-                            SignupTwoActivity.bitmapReceived = (Bitmap) extras.get("data");
-                            SignupThreeActivity.bitmapReceived = (Bitmap) extras.get("data");
-                            userSharedImp.photoStateTaken("true");
-                            activity.finish();
-                            break;
-                    }
-
+                    updateProfileImageFromCamera(data);
                 }
             }
         }
     }
 
-    private void savePhotoFromCamera(final Intent data) {
-        new Thread(new Runnable() {
-            public void run() {
-                Bitmap bm = (Bitmap) data.getExtras().get("data");
-                String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
-                if (bm != null) {
-                    String dirFotos = guardarImagen(activity, bm, photoName);
-                    switch (action) {
-                        case 0:
-                            userSharedImp.savePhotoTaken(dirFotos);
-                            userSharedImp.saveUserpPath(dirFotos);
-                            break;
-                        case 1: /*Profile Case*/
-                            userSharedImp.saveProfile(dirFotos);
-                            userSharedImp.saveProfileChanges("true");
-                            break;
-                        case 2: /*Background Case*/
-                            userSharedImp.saveBackground(dirFotos);
-                            userSharedImp.saveBackgroundChanges("true");
-                            break;
-                    }
-                }
-                activity.finish();
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        hideOptions();
-                    }
-                });
-            }
-
-
-        }).start();
-    }
-
-    private void savePhotoFromGalery(final Intent data) {
-        new Thread(new Runnable() {
-            public void run() {
-                Uri fotoGaleria = data.getData();
-                try {
-                    InputStream is = activity.getContentResolver().openInputStream(fotoGaleria);
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    Bitmap bm = BitmapFactory.decodeStream(bis);
-                    String photoName = "imagen" + getCurrentDateAndTime() + ".jpg";
-                    if (bm != null) {
-                        String dirFotos = guardarImagen(activity, bm, photoName);
-                        switch (action) {
-                            case 0:
-                                userSharedImp.savePhotoTaken(dirFotos);
-                                userSharedImp.saveUserpPath(dirFotos);
-                                break;
-                            case 1:/*Profile case*/
-                                userSharedImp.saveProfile(dirFotos);
-                                userSharedImp.saveProfileChanges("true");
-                                break;
-                            case 2:/*Backgrund case*/
-                                userSharedImp.saveBackground(dirFotos);
-                                userSharedImp.saveBackgroundChanges("true");
-                                break;
-                        }
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                activity.finish();
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        layout.setVisibility(View.GONE);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    public String guardarImagen(Context context, Bitmap b, String name) {
-        ContextWrapper cw = new ContextWrapper(activity.getApplicationContext());
-        File directory = new File(context.getFilesDir() + "/user_imagenes");
-        directory.mkdirs();
-        File mypath = new File(directory, name);
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            b.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void updateProfileImageFromGallery(Intent data) {
+        cleanBitmapReceived();
+        hideOptions();
+        switch (action) {
+            case ACTION_SIGNUP:
+                updateProfileSignupFromGallery(data);
+                break;
+            case ACTION_EDIT_PROFILE:
+                updateEditProfileFromGallery(data);
+                break;
+            case ACTION_EDIT_BACKGROUND:
+                updateEditBackgroundFromGallery(data);
+                break;
         }
-        return mypath.getAbsolutePath();
+    }
+
+    private void updateEditBackgroundFromGallery(Intent data) {
+        userSharedImp.deleteImageProfile();
+        EditProfileActivity.backgroundUriReceived = data.getData();
+        userSharedImp.photoStateTaken("true");
+        userSharedImp.saveBackgroundChanges("true");
+        activity.finish();
+    }
+
+    private void updateEditProfileFromGallery(Intent data) {
+        userSharedImp.deleteImageProfile();
+        EditProfileActivity.profileUriReceived = data.getData();
+        userSharedImp.photoStateTaken("true");
+        userSharedImp.saveProfileChanges("true");
+        activity.finish();
+    }
+
+    private void updateProfileSignupFromGallery(Intent data) {
+        userSharedImp.deleteImageProfile();
+        SignupOneActivity.uriReceived = data.getData();
+        SignupTwoActivity.uriReceived = data.getData();
+        SignupThreeActivity.uriReceived = data.getData();
+        userSharedImp.photoStateTaken("true");
+        activity.finish();
+    }
+
+    private void cleanBitmapReceived() {
+        SignupOneActivity.bitmapReceived = null;
+        SignupTwoActivity.bitmapReceived = null;
+        SignupThreeActivity.bitmapReceived = null;
+        EditProfileActivity.backgroundBitmapReceived= null;
+        EditProfileActivity.profileBitmapReceived = null;
+
+        userSharedImp.saveProfileFTPSelected("false");
+        userSharedImp.saveBackgroundFTPSelected("false");
+
+        userSharedImp.saveProfileChanges("false");
+        userSharedImp.saveBackgroundChanges("false");
+
+    }
+
+    private void updateProfileImageFromCamera(Intent data) {
+        cleanUriReceived();
+        hideOptions();
+        switch (action) {
+            case ACTION_SIGNUP:
+                updateSignupFromCamera(data);
+                break;
+            case ACTION_EDIT_PROFILE:
+                updateEditProfileFromCamera(data);
+                break;
+            case ACTION_EDIT_BACKGROUND:
+                updateEditBackgroundFromCamera(data);
+                break;
+        }
+    }
+
+    private void updateEditBackgroundFromCamera(Intent data) {
+        userSharedImp.deleteImageProfile();
+        Bundle extras3 = data.getExtras();
+        EditProfileActivity.backgroundBitmapReceived = (Bitmap) extras3.get("data");
+        userSharedImp.photoStateTaken("true");
+        userSharedImp.saveBackgroundFTPSelected("false");
+        userSharedImp.saveBackgroundChanges("true");
+        activity.finish();
+    }
+
+    private void updateEditProfileFromCamera(Intent data) {
+        userSharedImp.deleteImageProfile();
+        Bundle extras2 = data.getExtras();
+        EditProfileActivity.profileBitmapReceived = (Bitmap) extras2.get("data");
+        userSharedImp.photoStateTaken("true");
+        userSharedImp.saveProfileFTPSelected("false");
+        userSharedImp.saveProfileChanges("true");
+        activity.finish();
+    }
+
+    private void updateSignupFromCamera(Intent data) {
+        userSharedImp.deleteImageProfile();
+        Bundle extras = data.getExtras();
+        SignupOneActivity.bitmapReceived = (Bitmap) extras.get("data");
+        SignupTwoActivity.bitmapReceived = (Bitmap) extras.get("data");
+        SignupThreeActivity.bitmapReceived = (Bitmap) extras.get("data");
+        userSharedImp.photoStateTaken("true");
+        activity.finish();
+    }
+
+    private void cleanUriReceived() {
+        SignupOneActivity.uriReceived = null;
+        SignupTwoActivity.uriReceived = null;
+        SignupThreeActivity.uriReceived = null;
+        EditProfileActivity.backgroundUriReceived = null;
+        EditProfileActivity.profileUriReceived = null;
+
+        userSharedImp.saveProfileFTPSelected("false");
+        userSharedImp.saveBackgroundFTPSelected("false");
+
+        userSharedImp.saveProfileChanges("false");
+        userSharedImp.saveBackgroundChanges("false");
     }
 
     public UIComponent component() {
@@ -286,10 +271,4 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         return component;
     }
 
-    public String getCurrentDateAndTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-­ss");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
-    }
 }

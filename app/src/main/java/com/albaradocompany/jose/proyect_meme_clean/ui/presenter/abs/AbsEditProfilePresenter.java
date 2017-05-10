@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import android.graphics.Bitmap;
+
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateUserInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
@@ -10,7 +12,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 public abstract class AbsEditProfilePresenter extends Presenter<AbsEditProfilePresenter.View, AbsEditProfilePresenter.Navigator> {
     public abstract void onCancelClicked();
 
-    public abstract void onAcceptClicked(UpdateUserInteractor interactor);
+    public abstract void onAcceptClicked(UpdateUserInteractor interactor, Bitmap profile, Bitmap background);
 
     public abstract void onProfileClicked();
 

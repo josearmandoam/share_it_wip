@@ -35,6 +35,7 @@ public class LoginPresenter extends AbsUserLogin {
 
     GetLogin getLogin;
     GetPicturesById getPicturesById;
+    boolean userFinded;
 
     Login user;
     @Inject
@@ -56,19 +57,26 @@ public class LoginPresenter extends AbsUserLogin {
             @Override
             public void onLoginReceived(List<Login> login) {
                 if (login.size() > 0) {
-                    if (login.get(0).getPassword().equals(password)) {
-                        user = login.get(0); // user without photos/photos saved
-                        userSharedImp.saveUserID(login.get(0).getIdUser());
-                        getUserBDImp.removeUserDBData();
-                        getUserBDImp.insertUserDB(user);
-                        userSharedImp.saveUserLogged();
-                        checkForUserPictures();
-                        view.showButtonSignin();
-                    } else {
+                    userFinded = false;
+                    for (int i = 0; i < login.size(); i++) {
+                        if (login.get(i).getPassword().equals(password)) {
+                            user = login.get(i); // user without photos/photos saved
+                            getUserBDImp.removeUserDBData();
+                            userSharedImp.saveUserID(login.get(i).getIdUser());
+                            getUserBDImp.insertUserDB(user);
+                            userSharedImp.saveUserLogged();
+                            checkForUserPictures();
+                            userFinded = true;
+                        }
+                        if (userFinded)
+                            i = login.size() - 1;
+                    }
+                    if (!userFinded) {
                         view.hideLoading();
                         view.showErrorLoginPassword();
                         view.showButtonSignin();
                     }
+
                 } else {
                     view.hideLoading();
                     view.showErrorUserNotFound();
@@ -201,6 +209,7 @@ public class LoginPresenter extends AbsUserLogin {
                 }
                 userSharedImp.saveUserID(user.getIdUser());
                 view.hideLoading();
+                view.showButtonSignin();
                 navigator.navigateToHomePage();
             }
         });

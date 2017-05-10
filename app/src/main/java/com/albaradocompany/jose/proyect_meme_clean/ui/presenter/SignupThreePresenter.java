@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,7 +38,6 @@ import javax.inject.Inject;
 public class SignupThreePresenter extends AbsSignupThree {
     Context context;
     GetQuestions getQuestions;
-    private UIComponent component;
     public String data;
 
     @Inject
@@ -109,8 +109,7 @@ public class SignupThreePresenter extends AbsSignupThree {
 
             @Override
             public void onRegistrationSuccess(GenericResponse response) {
-                saveImageOnMemory(context, bitmap, userSharedImp.getUserID() + "_profile");
-                savePhotoFTP();
+                saveImageOnMemory(context, bitmap, userSharedImp.getUser().getIdUser() + "_profile");
             }
 
             @Override
@@ -176,12 +175,11 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     public void saveImageOnMemory(final Context context, final Bitmap b, final String name) {
-        File mypath = null;
         view.showLoading();
         new Thread(new Runnable() {
             public void run() {
                 ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
-                File directory = new File(context.getFilesDir() + "/user_imagenes");
+                File directory = new File(context.getFilesDir() + "/user_pictures");
                 directory.mkdirs();
                 File mypath = new File(directory, name);
 
@@ -199,27 +197,36 @@ public class SignupThreePresenter extends AbsSignupThree {
                     }
                 }
                 userSharedImp.saveProfile(mypath.getAbsolutePath());
+                savePhotoFTP();
+                Looper.prepare();
+                notificateFinish();
                 ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
-                        /**/
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                view.hideLoading();
-                                view.showSuccess();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        navigator.navigateToLogin();
-                                    }
-                                }, 1500);
-                            }
-                        }, 2500);
+
                     }
                 });
             }
         }).start();
 
+    }
+
+    private void notificateFinish() {
+        new Thread(new Runnable() {
+            public void run() {
+                ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
+                    public void run() {
+                        ((SignupThreeActivity) context).hideLoading();
+                        ((SignupThreeActivity) context).showSuccess();
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((SignupThreeActivity) context).navigateToLogin();
+                            }
+                        }, 1500);
+                    }
+                });
+            }
+        }).start();
     }
 }

@@ -99,6 +99,16 @@
             android:background="@drawable/roundedbutton"
             android:src="@drawable/next" />
 
+        <ProgressBar
+            android:id="@+id/signup_pbr"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_alignEnd="@+id/signup_button_next"
+            android:background="@drawable/progress"
+            android:layout_alignTop="@+id/signup_button_next"
+            android:layout_alignBottom="@+id/signup_button_next"
+            android:layout_height="wrap_content" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/signup_image_user"
             android:layout_width="100dp"

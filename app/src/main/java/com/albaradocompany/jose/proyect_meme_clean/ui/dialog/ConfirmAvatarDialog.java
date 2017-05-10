@@ -103,14 +103,14 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
                 activity.finish();
                 break;
             case 1:
-                userSharedImp.saveProfile(avatar.getImagePath());
-                userSharedImp.saveProfileFTPSelected();
+                userSharedImp.saveProfileAvatar(avatar);
+                userSharedImp.saveProfileFTPSelected("true");
                 userSharedImp.saveProfileChanges("true");
                 activity.finish();
                 break;
             case 2:
-                userSharedImp.saveBackground(avatar.getImagePath());
-                userSharedImp.saveBackgroundFTPSelected();
+                userSharedImp.saveBackgroundAvatar(avatar);
+                userSharedImp.saveBackgroundFTPSelected("true");
                 userSharedImp.saveBackgroundChanges("true");
                 activity.finish();
                 break;

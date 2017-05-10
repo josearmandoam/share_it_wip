@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 /**
@@ -20,6 +21,8 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
 
     public abstract void onImageClicked();
 
+    public abstract void chekImageImp(UserByEmailInteractor interactor);
+
     public interface View {
 
         void hideSignupOne();
@@ -31,6 +34,16 @@ public abstract class AbsSignupOne extends Presenter<AbsSignupOne.View, AbsSignu
         void showDatePicker();
 
         void showImage();
+
+        void showLoading();
+
+        void hideLoading();
+
+        void showNoInternetAvailable();
+
+        void showError(Exception e);
+
+        void showEmailRegistredAlready();
     }
 
     public interface Navigator {

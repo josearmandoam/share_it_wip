@@ -5,9 +5,12 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
@@ -19,6 +22,9 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.SignupShared;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.UserShared;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +51,8 @@ public class UserSharedImp implements UserShared, SignupShared {
         deleteSignoneData();
         deleteSigntwoData();
         deleteSignThreeData();
-
+        SignupOneActivity.bitmapReceived = null;
+        SignupOneActivity.uriReceived = null;
         sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear().apply();
@@ -189,7 +196,7 @@ public class UserSharedImp implements UserShared, SignupShared {
     @Override
     public String savePictureOnMemory(Bitmap b, String name) {
         ContextWrapper cw = new ContextWrapper(context);
-        File directory = new File(context.getFilesDir() + "/user_imagenes");
+        File directory = new File(context.getFilesDir() + "/user_pictures");
         directory.mkdirs();
         File mypath = new File(directory, name);
 
@@ -208,10 +215,64 @@ public class UserSharedImp implements UserShared, SignupShared {
         }
         return mypath.getAbsolutePath();
     }
-    public String getPicturesDir(){
+
+    public void saveProfileOnMemoryAsync(final Bitmap b, final String name) {
+        new Thread(new Runnable() {
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+                File directory = new File(context.getFilesDir() + "/user_pictures");
+                directory.mkdirs();
+                File mypath = new File(directory, name);
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                saveProfile(mypath.getAbsolutePath());
+            }
+        }).start();
+    }
+
+    public void saveBackgroundOnMemoryAsync(final Bitmap b, final String name) {
+        new Thread(new Runnable() {
+            public void run() {
+                ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+                File directory = new File(context.getFilesDir() + "/user_pictures");
+                directory.mkdirs();
+                File mypath = new File(directory, name);
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mypath);
+                    b.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                saveBackground(mypath.getAbsolutePath());
+            }
+        }).start();
+    }
+
+    public String getPicturesDir() {
         String dir = context.getFilesDir() + "/user_pictures";
         return dir;
     }
+
     @Override
     public String getUserPasswordSaved() {
         sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
@@ -240,14 +301,75 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public void showUserPhoto(ImageView imageView, String path) {
+    public void showUserPhoto(final ImageView imageView, String path, final UserBD userBD) {
         try {
             File f = new File(path);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             imageView.setImageBitmap(b);
         } catch (FileNotFoundException e) {
-            imageView.setImageResource(R.drawable.user_default_image);
+            /*If something went wrong, it will charge from database*/
+            getProfileFromApi(imageView, userBD);
         }
+    }
+
+    private void getProfileFromApi(final ImageView imageView, final UserBD userBD) {
+        Picasso.with(context).load(userBD.user_profile).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                /**/
+                saveProfileOnMemoryAsync(((BitmapDrawable) imageView.getDrawable()).getBitmap(), userBD.userId + "_profile");
+            }
+
+            @Override
+            public void onError() {
+                imageView.setImageDrawable(context.getDrawable(R.drawable.user_default_image));
+            }
+        });
+    }
+
+    @Override
+    public void showUserBackground(final ImageView imageView, String path, final UserBD userBD) {
+        imageView.setBackground(context.getDrawable(R.drawable.fo3));
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            imageView.setBackground(new BitmapDrawable(context.getResources(), b));
+        } catch (FileNotFoundException e) {
+            /*If something went wrong, it will charge from database*/
+            getBackgroundFromApi(imageView, userBD);
+        }
+    }
+
+    private void getBackgroundFromApi(final ImageView imageView, final UserBD userBD) {
+        Picasso.with(context)
+                .load(userBD.user_background)
+                .placeholder(context.getDrawable(R.drawable.fo3))
+                .error(R.drawable.fo3)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        imageView.setBackground(new BitmapDrawable(context.getResources(), bitmap));
+                        ImageView im = new ImageView(context);
+                        im.setImageBitmap(bitmap);
+                        saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                        imageView.setBackground(errorDrawable);
+                        ImageView im = new ImageView(context);
+                        im.setImageDrawable(errorDrawable);
+                        saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        imageView.setBackground(placeHolderDrawable);
+                        ImageView im = new ImageView(context);
+                        im.setImageDrawable(placeHolderDrawable);
+                        saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");
+                    }
+                });
     }
 
     @Override
@@ -527,18 +649,18 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public void saveProfileFTPSelected() {
+    public void saveProfileFTPSelected(String state) {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_PROFILE_FTP, "true");
+        editor.putString(BuildConfig.IS_PROFILE_FTP, state);
         editor.apply();
     }
 
     @Override
-    public void saveBackgroundFTPSelected() {
+    public void saveBackgroundFTPSelected(String state) {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_BACKGROUND_FTP, "true");
+        editor.putString(BuildConfig.IS_BACKGROUND_FTP, state);
         editor.apply();
     }
 
@@ -568,6 +690,34 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
+    }
+
+    @Override
+    public void saveProfileAvatar(Avatar avatar) {
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.AVATAR_PROFILE_PATH, avatar.getImagePath());
+        editor.apply();
+    }
+
+    @Override
+    public void saveBackgroundAvatar(Avatar avatar) {
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.AVATAR_BACKGROUND_PATH, avatar.getImagePath());
+        editor.apply();
+    }
+
+    @Override
+    public String getProfileAvatar() {
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.AVATAR_PROFILE_PATH, "");
+    }
+
+    @Override
+    public String getBackgroundAvatar() {
+        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.AVATAR_BACKGROUND_PATH, "");
     }
 
     @Override

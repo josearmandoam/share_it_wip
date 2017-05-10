@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -10,6 +11,9 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsProfilePresenter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -43,11 +47,12 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void resume() {
-        view.checkProfile();
-        view.checkBackground();
+        view.showBackground();
         view.showName();
+        view.showProfile();
         view.showUsername();
         view.showDescription();
+        view.showPhotos();
     }
 
     @Override
@@ -75,33 +80,6 @@ public class ProfilePresenter extends AbsProfilePresenter {
         navigator.navigateToEdit();
     }
 
-    @Override
-    public void saveProfileOnMemory(final Bitmap bitmap) {
-        if (!userSharedImp.isSelectedProfile()) {
-            new Thread(new Runnable() {
-                public void run() {
-                    String dirProf = userSharedImp.savePictureOnMemory(bitmap, userSharedImp.getUserID() + getCurrentDateAndTime());
-                    userSharedImp.saveProfile(dirProf);
-                    userSharedImp.saveNewProfile(dirProf);
-                    userSharedImp.saveProfileChanges("false");
-                }
-            }).start();
-        }
-    }
-
-    @Override
-    public void saveBackgroundOnMemory(final Bitmap bitmap) {
-        if (!userSharedImp.isSelectedBackground()) {
-            new Thread(new Runnable() {
-                public void run() {
-                    String dirBack = userSharedImp.savePictureOnMemory(bitmap, userSharedImp.getUserID() + getCurrentDateAndTime());
-                    userSharedImp.saveBackground(dirBack);
-                    userSharedImp.saveNewBackground(dirBack);
-                    userSharedImp.saveBackgroundChanges("false");
-                }
-            }).start();
-        }
-    }
 
     public UIComponent component() {
         if (component == null) {
@@ -112,11 +90,5 @@ public class ProfilePresenter extends AbsProfilePresenter {
                     .build();
         }
         return component;
-    }
-    public String getCurrentDateAndTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-­ss");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
     }
 }

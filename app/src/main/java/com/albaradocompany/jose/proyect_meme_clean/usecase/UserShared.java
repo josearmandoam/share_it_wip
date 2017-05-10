@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.usecase;
 
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 
 /**
@@ -41,9 +42,9 @@ public interface UserShared {
 
     boolean isBackgroundFTPSelected();
 
-    void saveProfileFTPSelected();
+    void saveProfileFTPSelected(String state);
 
-    void saveBackgroundFTPSelected();
+    void saveBackgroundFTPSelected(String state);
 
     boolean isProfileChanged();
 
@@ -62,4 +63,12 @@ public interface UserShared {
     boolean isBackgroundChanged();
 
     void deleteUserData();
+
+    void saveProfileAvatar(Avatar avatar);
+
+    void saveBackgroundAvatar(Avatar avatar);
+
+    String getProfileAvatar();
+    String getBackgroundAvatar();
+
 }

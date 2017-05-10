@@ -26,7 +26,6 @@ public class LoginApiImp implements GetLogin, Callback<LoginApiResponse> {
 
     private String username;
     Listener listener = new NullListener();
-    private String ENDPOINT = "";
 
     public LoginApiImp(String username) {
         this.username = username;

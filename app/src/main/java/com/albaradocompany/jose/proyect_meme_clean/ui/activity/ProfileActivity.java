@@ -2,10 +2,9 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -27,8 +26,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PhotosRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsProfilePresenter;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,6 +54,8 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     RecyclerView recyclerPhotos;
     @BindView(R.id.profile_lyt_container)
     RelativeLayout layout;
+    @BindView(R.id.profile_swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindDrawable(R.drawable.menu_exp)
     Drawable menuExp;
     @BindDrawable(R.drawable.menu)
@@ -93,16 +92,35 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     private void initialize() {
         component().inject(this);
 
+        intializeRepository();
+        intializePresenter();
+        layout.requestFocus();
+        intializeSwipeRefresh();
+    }
+
+    private void intializeSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.initialize();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void intializePresenter() {
         presenter = new ProfilePresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
+        presenter.initialize();
+    }
+
+    private void intializeRepository() {
         List<UserBD> us = getUserBD.getUsers();
         userBD = getUserBD.getUserBD(us.get(0).userId);
         userSharedImp.saveUserID(us.get(0).userId);
         userphotos = getUserBD.getUserPictures(userSharedImp.getUserID());
         usersavedphotos = getUserBD.getUserSavedPictures(userSharedImp.getUserID());
-        presenter.initialize();
-        layout.requestFocus();
     }
 
     @Override
@@ -121,31 +139,11 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         ctx.startActivity(intent);
     }
 
-    private void checkUserImage() {
-        if (userSharedImp.isAvatarTaken()) {
-            Picasso.with(this).load(userSharedImp.getProfile()).into(profile);
-
-        } else {
-            userSharedImp.showUserPhoto(profile, userSharedImp.getUserPhoto());
-        }
-        if (userSharedImp.isSelectedBackground()) {
-            ImageView imageView = new ImageView(this);
-            Picasso.with(this).load(userSharedImp.getBackground()).
-                    into(imageView);
-            background.setBackground(imageView.getDrawable());
-        } else {
-            ImageView imageView = new ImageView(this);
-            userSharedImp.showUserPhoto(imageView, userSharedImp.getBackground());
-            background.setBackground(imageView.getDrawable());
-        }
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         userBD = getUserBD.getUserBD(userSharedImp.getUserID());
-        presenter.initialize();
+        presenter.resume();
     }
 
     @Override
@@ -170,71 +168,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
 
     @Override
     public void showProfile() {
-        if (userSharedImp.isProfileFTPSelected()) {
-            Picasso.with(this)
-                    .load(userBD.user_profile)
-                    .into(profile, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                        /**/
-                            Bitmap prof = ((BitmapDrawable) profile.getDrawable()).getBitmap();
-                            presenter.saveProfileOnMemory(prof);
-                        }
-
-                        @Override
-                        public void onError() {
-                        /**/
-                        }
-                    });
-        } else {
-            if (userSharedImp.isProfileChanged()) {
-                userSharedImp.showUserPhoto(profile, userSharedImp.getNewProfile());
-
-            }else{
-                Picasso.with(this).load(userBD.user_profile).into(profile);
-            }
-        }
-        userSharedImp.saveProfileChanges("false");
+        userSharedImp.showUserPhoto(profile, userSharedImp.getPicturesDir() + "/" + userBD.userId + "_profile", userBD);
     }
 
     @Override
     public void showBackground() {
-        final ImageView imageView = new ImageView(this);
-        if (userSharedImp.isBackgroundFTPSelected()) {
-            Picasso.with(this)
-                    .load(userBD.user_background)
-                    .into(imageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Bitmap back = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                            presenter.saveBackgroundOnMemory(back);
-                            background.setBackground(imageView.getDrawable());
-                        }
-
-                        @Override
-                        public void onError() {
-                        /**/
-                        }
-                    });
-        }else{
-            if (userSharedImp.isBackgroundChanged()){
-                userSharedImp.showUserPhoto(imageView, userSharedImp.getNewBackground());
-                background.setBackground(imageView.getDrawable());
-                userSharedImp.saveBackgroundChanges("false");
-            }else{
-                Picasso.with(this).load(userBD.user_background).into(imageView, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        background.setBackground(imageView.getDrawable());
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
-            }
-        }
+        userSharedImp.showUserBackground(background, userSharedImp.getPicturesDir() + "/" + userBD.userId + "_background", userBD);
     }
 
     @Override
@@ -264,64 +203,6 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         recyclerPhotos.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new PhotosRecyclerAdapter(this, userphotos, onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
-    }
-
-    @Override
-    public void checkProfile() {
-        if (!userSharedImp.getNewProfile().equals("")) {
-            if (userSharedImp.isProfileFTPSelected()) {
-                Picasso.with(this)
-                        .load(userSharedImp.getProfile())
-                        .into(profile);
-            } else {
-                userSharedImp.showUserPhoto(profile, userSharedImp.getNewProfile());
-            }
-        } else {
-            Picasso.with(this)
-                    .load(userBD.user_profile)
-                    .into(profile);
-        }
-    }
-
-    @Override
-    public void checkBackground() {
-        if (!userSharedImp.getNewBackground().equals("")) {
-            if (userSharedImp.isBackgroundFTPSelected()) {
-                final ImageView imageView = new ImageView(this);
-                Picasso.with(this)
-                        .load(userSharedImp.getBackground())
-                        .into(imageView, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                background.setBackground(imageView.getDrawable());
-                            }
-
-                            @Override
-                            public void onError() {
-                                /**/
-                            }
-                        });
-            } else {
-                ImageView imageView = new ImageView(this);
-                userSharedImp.showUserPhoto(imageView, userSharedImp.getNewBackground());
-                background.setBackground(imageView.getDrawable());
-            }
-        } else {
-            final ImageView imageView = new ImageView(this);
-            Picasso.with(this)
-                    .load(userBD.user_background)
-                    .into(imageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            background.setBackground(imageView.getDrawable());
-                        }
-
-                        @Override
-                        public void onError() {
-                            /**/
-                        }
-                    });
-        }
     }
 
     public UIComponent component() {

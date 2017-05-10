@@ -3,6 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.usecase;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 
 /**
@@ -38,7 +39,9 @@ public interface SignupShared {
 
     void saveSigntwoData(String username, String password);
 
-    void showUserPhoto(ImageView imageView, String path);
+    void showUserPhoto(ImageView imageView, String path, UserBD userBD);
+
+    void showUserBackground(ImageView imageView, String path, UserBD userBD);
 
     void saveSignThreeData(String question, String ans1, String asn2);
 

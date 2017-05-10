@@ -114,6 +114,7 @@
             android:layout_below="@+id/signup_two_et_password2"
             android:src="@drawable/next" />
 
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/signup_two_image"
             android:layout_width="100dp"

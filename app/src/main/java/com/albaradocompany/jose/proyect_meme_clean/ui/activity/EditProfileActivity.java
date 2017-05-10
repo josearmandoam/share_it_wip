@@ -1,6 +1,9 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -38,6 +41,8 @@ import butterknife.OnClick;
 
 public class EditProfileActivity extends BaseActivty implements AbsEditProfilePresenter.View, AbsEditProfilePresenter.Navigator {
 
+    private static final int ACTION_BACKGROUND = 2;
+    private static final int ACTION_PROFILE = 1;
     @BindView(R.id.edit_profile_et_name)
     EditText name;
     @BindView(R.id.edit_profile_et_lastname)
@@ -73,6 +78,11 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
     AbsEditProfilePresenter presenter;
     UserBD userBD;
     ShowSnackBar showSnackBar;
+    public static Uri profileUriReceived;
+    public static Bitmap profileBitmapReceived;
+    public static Uri backgroundUriReceived;
+    public static Bitmap backgroundBitmapReceived;
+    int action;
 
     @OnClick(R.id.edit_profile_ibtn_cancel)
     public void onCloseClicked(View view) {
@@ -82,10 +92,8 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
     @OnClick(R.id.edit_profile_ibtn_accept)
     public void onUpdateClicked(View view) {
         UpdateUserInteractor interactor = getInteractor();
-        presenter.onAcceptClicked(interactor);
-        UserBD u1 = getUserBDImp.getUserBD(userSharedImp.getUserID());
+        presenter.onAcceptClicked(interactor, ((BitmapDrawable)profile.getDrawable()).getBitmap(), ((BitmapDrawable)background.getDrawable()).getBitmap());
         updateUserBD();
-        UserBD u2 = getUserBDImp.getUserBD(userSharedImp.getUserID());
     }
 
     @OnClick(R.id.edit_profile_iv_profile)
@@ -120,6 +128,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         layout.requestFocus();
         showSnackBar = new ShowSnackBarImp(this);
 
+
     }
 
     @Override
@@ -134,16 +143,12 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void showProfilePicture() {
-        Picasso.with(this)
-                .load(userBD.user_profile)
-                .into(profile);
+        userSharedImp.showUserPhoto(profile, userSharedImp.getPicturesDir() + "/" + userBD.userId + "_profile", userBD);
     }
 
     @Override
     public void showBackgroundPicture() {
-        Picasso.with(this)
-                .load(userBD.user_background)
-                .into(background);
+        userSharedImp.showUserPhoto(background, userSharedImp.getPicturesDir() + "/" + userBD.userId + "_background", userBD);
     }
 
     @Override
@@ -204,46 +209,51 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void showBackgroundDialog() {
-       new ShowAvatarDialog(this, 4, BuildConfig.ACTION_BACKGROUND);
+        new ShowAvatarDialog(this, 4, ACTION_BACKGROUND);
+        action = ACTION_BACKGROUND;
     }
 
     @Override
     public void showProfileDialog() {
-       new ShowAvatarDialog(this, 4, BuildConfig.ACTION_PROFILE);
+        new ShowAvatarDialog(this, 4, ACTION_PROFILE);
+        action = ACTION_PROFILE;
     }
 
     @Override
     public void checkProfile() {
-        if (userSharedImp.isProfileChanged()) {
-            if (userSharedImp.isProfileFTPSelected()) {
-                Picasso.with(this)
-                        .load(userSharedImp.getProfile())
-                        .into(profile);
-            } else {
-                userSharedImp.showUserPhoto(profile, userSharedImp.getProfile());
-            }
+        if (userSharedImp.isProfileFTPSelected()) {
+            Picasso.with(this).load(userSharedImp.getProfileAvatar()).into(profile);
+            profileUriReceived = null;
+            profileBitmapReceived = null;
         } else {
-            Picasso.with(this)
-                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile)
-                    .into(profile);
+            if (profileUriReceived != null) {
+                profile.setImageURI(profileUriReceived);
+            }
+            if (profileBitmapReceived != null) {
+                profile.setImageBitmap(profileBitmapReceived);
+            }
         }
+        if (!userSharedImp.isProfileFTPSelected() && profileUriReceived == null && profileBitmapReceived == null)
+            showProfilePicture();
+
     }
 
     @Override
     public void checkBaground() {
-        if (userSharedImp.isBackgroundChanged()) {
-            if (userSharedImp.isBackgroundFTPSelected()) {
-                Picasso.with(this)
-                        .load(userSharedImp.getBackground())
-                        .into(background);
-            } else {
-                userSharedImp.showUserPhoto(background, userSharedImp.getBackground());
-            }
+        if (userSharedImp.isBackgroundFTPSelected()) {
+            Picasso.with(this).load(userSharedImp.getBackgroundAvatar()).into(background);
+            backgroundUriReceived = null;
+            backgroundBitmapReceived = null;
         } else {
-            Picasso.with(this)
-                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background)
-                    .into(background);
+            if (backgroundUriReceived != null) {
+                background.setImageURI(backgroundUriReceived);
+            }
+            if (backgroundBitmapReceived != null) {
+                background.setImageBitmap(backgroundBitmapReceived);
+            }
         }
+        if (!userSharedImp.isBackgroundFTPSelected() && backgroundUriReceived == null && backgroundBitmapReceived == null)
+            showBackgroundPicture();
     }
 
     public UIComponent component() {
@@ -302,7 +312,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
                                 description.getText().toString()),
                                 new MainThreadImp(), new ThreadExecutor());
                     }
-                }else{
+                } else {
                     interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), userBD.user_profile, userBD.user_background,
@@ -313,38 +323,21 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         }
         return interactor;
     }
-    private void updateUserBD(){
+
+    private void updateUserBD() {
         Login c = new Login();
         c.setIdUser(userSharedImp.getUserID());
-        if (userSharedImp.isProfileChanged()){
-            if (userSharedImp.isProfileFTPSelected()){
-                c.setImagePath(userSharedImp.getProfile());
-                userSharedImp.saveNewProfile(userSharedImp.getProfile());
-            }else {
-                c.setImagePath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile");
-                userSharedImp.saveNewProfile(userSharedImp.getProfile());
-            }
-        }else{
-            c.setImagePath(userBD.user_profile);
-        }
-        if (userSharedImp.isBackgroundChanged()){
-            if (userSharedImp.isBackgroundFTPSelected()){
-                c.setBackgrundPath(userSharedImp.getBackground());
-                userSharedImp.saveNewBackground(userSharedImp.getBackground());
-            }else {
-                c.setBackgrundPath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_backgrund");
-                userSharedImp.saveNewBackground(userSharedImp.getBackground());
-            }
-        }else{
-            c.setBackgrundPath(userBD.user_background);
-        }
         c.setEmail(email.getText().toString());
         c.setNombre(name.getText().toString());
         c.setApellidos(lastName.getText().toString());
         c.setDescription(description.getText().toString());
         c.setUsername(userName.getText().toString());
+        if (userSharedImp.isProfileChanged()) {
+            c.setImagePath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID()+"_profile");
+        }
+        if (userSharedImp.isBackgroundChanged()) {
+            c.setBackgrundPath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID()+"_background");
+        }
         getUserBDImp.updateUserBD(c);
-
-
     }
 }

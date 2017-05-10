@@ -13,14 +13,19 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupOnePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupOne;
@@ -61,6 +66,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     ImageView image;
     @BindView(R.id.signup_lyt_container)
     RelativeLayout layout;
+    @BindView(R.id.signup_pbr)
+    ProgressBar pbr;
 
     @BindDrawable(R.drawable.user_default_image)
     Drawable defaultUserImage;
@@ -76,8 +83,16 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     String dateErrorMessage;
     @BindString(R.string.error_photo_not_taken)
     String photoErrorMessage;
+    @BindString(R.string.email_registred)
+    String emailRegistred;
     @BindColor(R.color.color_login)
     int colorLogin;
+    @BindString(R.string.noInternetAvailable)
+    String noInternet;
+    @BindColor(android.R.color.white)
+    int white;
+    @BindDrawable(R.drawable.roundedbutton)
+    Drawable round;
 
     AbsSignupOne presenter;
     public static boolean avatar;
@@ -100,7 +115,10 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @OnClick(R.id.signup_button_next)
     public void onNextPageClicked(View view) {
-        presenter.onNextPagePressed();
+        UserByEmailInteractor interactor = new UserByEmailInteractor(new UserByEmailImp(email.getText().toString()), new MainThreadImp(), new ThreadExecutor());
+        if (checkFields()) {
+            presenter.chekImageImp(interactor);
+        }
     }
 
     @OnClick(R.id.signup_button_birthday)
@@ -184,22 +202,49 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
             if (uriReceived != null)
                 image.setImageURI(uriReceived);
             if (bitmapReceived != null)
-                    image.setImageBitmap(bitmapReceived);
+                image.setImageBitmap(bitmapReceived);
 
-            }
+        }
         if (!userSharedImp.isAvatarTaken() && uriReceived == null && bitmapReceived == null)
             image.setImageDrawable(defaultUserImage);
-        }
+    }
 
-        @Override
-        public void showDatePicker () {
-            showDialogDate();
-        }
+    @Override
+    public void showDatePicker() {
+        showDialogDate();
+    }
 
-        @Override
-        public void showImage () {
-            ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 1);
-        }
+    @Override
+    public void showImage() {
+        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 1);
+    }
+
+    @Override
+    public void showLoading() {
+        pbr.setVisibility(View.VISIBLE);
+        bNext.setBackgroundColor(white);
+    }
+
+    @Override
+    public void hideLoading() {
+        pbr.setVisibility(View.GONE);
+        bNext.setBackground(round);
+    }
+
+    @Override
+    public void showNoInternetAvailable() {
+        showSnackBar.show(noInternet, Color.RED);
+    }
+
+    @Override
+    public void showError(Exception e) {
+        showSnackBar.show(e.getMessage(), Color.RED);
+    }
+
+    @Override
+    public void showEmailRegistredAlready() {
+        showSnackBar.show(emailRegistred, Color.RED);
+    }
 
     private void showDialogDate() {
         final Calendar myCalendar = Calendar.getInstance();
@@ -304,16 +349,20 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SIGNUPONE) {
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    Uri uri = (Uri) bundle.get("uri");
-                    if (uri != null)
-                        uriReceived = uri;
-                    Bitmap bm = (Bitmap) bundle.get("bitmap");
-                    if (bm != null)
-                        bitmapReceived = bm;
-                }
+                getExtras(data);
             }
+        }
+    }
+
+    private void getExtras(Intent data) {
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            Uri uri = (Uri) bundle.get("uri");
+            if (uri != null)
+                uriReceived = uri;
+            Bitmap bm = (Bitmap) bundle.get("bitmap");
+            if (bm != null)
+                bitmapReceived = bm;
         }
     }
 }

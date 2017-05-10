@@ -3,8 +3,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.view.Display;
@@ -26,10 +24,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ShowAvatarPresen
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsShowAvatar;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javax.inject.Inject;
 
 import butterknife.BindDrawable;
@@ -43,6 +37,13 @@ import butterknife.OnClick;
 
 public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View, AbsShowAvatar.Navigator {
 
+    private static final int ACTION_SIGNUP = 0;
+    private static final int ACTION_EDIT_PROFILE = 1;
+    private static final int ACTION_EDIT_BACKGROUND = 2;
+    private static final int ACTIVITY_SIGNONE = 1;
+    private static final int ACTIVIVY_SIGNTWO = 2;
+    private static final int ACTIVITY_SIGNTHREE = 3;
+    private static final int ACTIVITY_EDITPROFILE = 4;
     @BindView(R.id.show_avatar_edit)
     ImageButton edit;
     @BindView(R.id.show_avatar_delete)
@@ -121,6 +122,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         this.numberActivity = numberActivity;
         action = 0;
         getComponent().inject(this);
+
         dialog = new AlertDialog.Builder(context)
                 .setView(R.layout.dialog_show_avatar)
                 .create();
@@ -142,46 +144,62 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
 
     private void checkImage() {
         switch (action) {
-            case 0:
-                if (userSharedImp.isAvatarTaken()) {
-                    checkImageFromFTP();
-                } else {
-                    checkImageFromActivity();
-                }
-                    break;
-                    case 1: /* action profile */
-                        if (userSharedImp.isProfileChanged()) {
-                            if (userSharedImp.isProfileFTPSelected()) {
-                                Picasso.with(context)
-                                        .load(userSharedImp.getProfile())
-                                        .into(image);
-                            } else {
-                                loadImage(userSharedImp.getNewProfile());
-                            }
-                        } else {
-                            Picasso.with(context)
-                                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile)
-                                    .into(image);
-                        }
-                        break;
-                    case 2: /* action background */
-                        if (userSharedImp.isBackgroundChanged()) {
-                            if (userSharedImp.isBackgroundFTPSelected()) {
-                                Picasso.with(context)
-                                        .load(userSharedImp.getBackground())
-                                        .into(image);
-                            } else {
-                                loadImage(userSharedImp.getNewBackground());
-                            }
-                        } else {
-                            Picasso.with(context)
-                                    .load(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background)
-                                    .into(image);
-                        }
-                        break;
-                }
-
+            case ACTION_SIGNUP:
+                checkProfileSignup();
+                break;
+            case ACTION_EDIT_PROFILE:
+                checkProfileEditProfile();
+                break;
+            case ACTION_EDIT_BACKGROUND:
+                checkBackgroundEditBackground();
+                break;
         }
+
+    }
+
+    private void checkBackgroundEditBackground() {
+        if (EditProfileActivity.backgroundBitmapReceived != null) {
+            image.setImageBitmap(EditProfileActivity.backgroundBitmapReceived);
+        } else {
+            if (EditProfileActivity.backgroundUriReceived != null) {
+                image.setImageURI(EditProfileActivity.backgroundUriReceived);
+            } else {
+                if (userSharedImp.isBackgroundFTPSelected()) {
+                    Picasso.with(context).load(userSharedImp.getBackgroundAvatar()).into(image);
+                } else {
+                    userSharedImp.showUserPhoto(image, userSharedImp.getPicturesDir() + "/"
+                                    + getUserBDImp.getUserBD(userSharedImp.getUserID()).userId + "_background",
+                            getUserBDImp.getUserBD(userSharedImp.getUserID()));
+                }
+            }
+        }
+    }
+
+    private void checkProfileEditProfile() {
+        if (EditProfileActivity.profileBitmapReceived != null) {
+            image.setImageBitmap(EditProfileActivity.profileBitmapReceived);
+        } else {
+            if (EditProfileActivity.profileUriReceived != null) {
+                image.setImageURI(EditProfileActivity.profileUriReceived);
+            } else {
+                if (userSharedImp.isProfileFTPSelected()) {
+                    Picasso.with(context).load(userSharedImp.getProfileAvatar()).into(image);
+                } else {
+                    userSharedImp.showUserPhoto(image, userSharedImp.getPicturesDir() + "/"
+                                    + getUserBDImp.getUserBD(userSharedImp.getUserID()).userId + "_profile",
+                            getUserBDImp.getUserBD(userSharedImp.getUserID()));
+                }
+            }
+        }
+    }
+
+    private void checkProfileSignup() {
+        if (userSharedImp.isAvatarTaken()) {
+            checkImageFromFTP();
+        } else {
+            checkImageFromActivity();
+        }
+    }
 
     private void checkImageFromFTP() {
         Picasso.with(context)
@@ -192,88 +210,107 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
 
     private void checkImageFromActivity() {
         switch (numberActivity) {
-            case 1:
-                if (SignupOneActivity.bitmapReceived != null) {
-                    image.setImageBitmap(SignupOneActivity.bitmapReceived);
-                } else {
-                    if (SignupOneActivity.uriReceived != null) {
-                        image.setImageURI(SignupOneActivity.uriReceived);
-                    } else {
-                        image.setImageDrawable(defaultImageUser);
-                    }
-                }
+            case ACTIVITY_SIGNONE:
+                updateProfileSignone();
                 break;
-            case 2:
-                if (SignupTwoActivity.bitmapReceived != null) {
-                    image.setImageBitmap(SignupTwoActivity.bitmapReceived);
-                } else {
-                    if (SignupTwoActivity.uriReceived != null) {
-                        image.setImageURI(SignupTwoActivity.uriReceived);
-                    } else {
-                        image.setImageDrawable(defaultImageUser);
-                    }
-                }
+            case ACTIVIVY_SIGNTWO:
+                updateProfileSigntwo();
                 break;
-            case 3:
-                if (SignupThreeActivity.bitmapReceived != null) {
-                    image.setImageBitmap(SignupThreeActivity.bitmapReceived);
-                } else {
-                    if (SignupThreeActivity.uriReceived != null) {
-                        image.setImageURI(SignupThreeActivity.uriReceived);
-                    } else {
-                        image.setImageDrawable(defaultImageUser);
-                    }
-                }
+            case ACTIVITY_SIGNTHREE:
+                updateProfileSignthree();
                 break;
         }
     }
 
-    private void loadImage(String path) {
-        try {
-            File f = new File(path);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            image.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            image.setImageResource(R.drawable.user_default_image);
-            //e.printStackTrace();
+    private void updateProfileSignthree() {
+        if (SignupThreeActivity.bitmapReceived != null) {
+            image.setImageBitmap(SignupThreeActivity.bitmapReceived);
+        } else {
+            if (SignupThreeActivity.uriReceived != null) {
+                image.setImageURI(SignupThreeActivity.uriReceived);
+            } else {
+                image.setImageDrawable(defaultImageUser);
+            }
+        }
+    }
+
+    private void updateProfileSigntwo() {
+        if (SignupTwoActivity.bitmapReceived != null) {
+            image.setImageBitmap(SignupTwoActivity.bitmapReceived);
+        } else {
+            if (SignupTwoActivity.uriReceived != null) {
+                image.setImageURI(SignupTwoActivity.uriReceived);
+            } else {
+                image.setImageDrawable(defaultImageUser);
+            }
+        }
+    }
+
+    private void updateProfileSignone() {
+        if (SignupOneActivity.bitmapReceived != null) {
+            image.setImageBitmap(SignupOneActivity.bitmapReceived);
+        } else {
+            if (SignupOneActivity.uriReceived != null) {
+                image.setImageURI(SignupOneActivity.uriReceived);
+            } else {
+                image.setImageDrawable(defaultImageUser);
+            }
         }
     }
 
     private void deleteUserImage() {
         switch (action) {
-            case 0:
-                userSharedImp.deleteImageProfile();
-                userSharedImp.photoStateTaken("false");
-                invalidatePhotos();
-                dialog.dismiss();
-                switch (numberActivity) {
-                    case 1:
-                        ((SignupOneActivity) context).onResume();
-                        break;
-                    case 2:
-                        ((SignupTwoActivity) context).onResume();
-                        break;
-                    case 3:
-                        ((SignupThreeActivity) context).onResume();
-                        break;
-                    default:
-                        break;
-                }
+            case ACTION_SIGNUP:
+                deleteProfileSignup();
                 break;
-            case 1: /* action profile */
-                userSharedImp.deleteProfile();
-                userSharedImp.saveProfileChanges("false");
-                dialog.dismiss();
-                ((EditProfileActivity) context).onResume();
+            case ACTION_EDIT_PROFILE:
+                deleteProfileEditProfile();
                 break;
-            case 2: /*action background*/
-                userSharedImp.deleteBackground();
-                userSharedImp.saveBackgroundChanges("false");
-                dialog.dismiss();
-                ((EditProfileActivity) context).onResume();
+            case ACTION_EDIT_BACKGROUND:
+                deleteBackgroundEditBackground();
                 break;
         }
 
+    }
+
+    private void deleteBackgroundEditBackground() {
+        userSharedImp.deleteBackground();
+        userSharedImp.saveBackgroundChanges("false");
+        EditProfileActivity.backgroundUriReceived = null;
+        EditProfileActivity.backgroundBitmapReceived = null;
+        userSharedImp.saveBackgroundFTPSelected("false");
+        dialog.dismiss();
+        ((EditProfileActivity) context).onResume();
+    }
+
+    private void deleteProfileEditProfile() {
+        userSharedImp.deleteProfile();
+        userSharedImp.saveProfileChanges("false");
+        dialog.dismiss();
+        EditProfileActivity.profileUriReceived = null;
+        EditProfileActivity.profileBitmapReceived = null;
+        userSharedImp.saveProfileFTPSelected("false");
+        ((EditProfileActivity) context).onResume();
+    }
+
+    private void deleteProfileSignup() {
+        userSharedImp.deleteImageProfile();
+        userSharedImp.photoStateTaken("false");
+        invalidatePhotos();
+        dialog.dismiss();
+        switch (numberActivity) {
+            case 1:
+                ((SignupOneActivity) context).onResume();
+                break;
+            case 2:
+                ((SignupTwoActivity) context).onResume();
+                break;
+            case 3:
+                ((SignupThreeActivity) context).onResume();
+                break;
+            default:
+                break;
+        }
     }
 
     private void invalidatePhotos() {
@@ -281,9 +318,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         SignupTwoActivity.bitmapReceived = null;
         SignupThreeActivity.bitmapReceived = null;
 
-        SignupOneActivity.uriReceived= null;
-        SignupTwoActivity.uriReceived= null;
-        SignupThreeActivity.uriReceived= null;
+        SignupOneActivity.uriReceived = null;
+        SignupTwoActivity.uriReceived = null;
+        SignupThreeActivity.uriReceived = null;
     }
 
     @Override
@@ -300,13 +337,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
 
     protected UIComponent getComponent() {
         switch (numberActivity) {
-            case 1:
+            case ACTIVITY_SIGNONE:
                 return ((SignupOneActivity) context).component();
-            case 2:
+            case ACTIVIVY_SIGNTWO:
                 return ((SignupTwoActivity) context).component();
-            case 3:
+            case ACTIVITY_SIGNTHREE:
                 return ((SignupThreeActivity) context).component();
-            case 4:
+            case ACTIVITY_EDITPROFILE:
                 return ((EditProfileActivity) context).component();
             default:
                 return null;

@@ -111,17 +111,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         uriReceived = null;
         bitmapReceived = null;
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            Uri uri = (Uri) bundle.get("uri");
-            if (uri != null) {
-                uriReceived = uri;
-            }
-            Bitmap bm = (Bitmap) bundle.get("bitmap");
-            if (bm != null) {
-                bitmapReceived = bm;
-            }
-        }
+        getExtras(getIntent());
     }
 
     private void checkDataSaved() {
@@ -129,14 +119,6 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         password.setText(userSharedImp.getUserPasswordSaved());
         password2.setText(userSharedImp.getUserPassword2Saved());
     }
-
-//    private void checkUserImage() {
-//        if (userSharedImp.isAvatarTaken()) {
-//            Picasso.with(this).load(userSharedImp.getUserAvatar()).into(image);
-//        } else {
-//            userSharedImp.showUserPhoto(image, userSharedImp.getUserPhoto());
-//        }
-//    }
 
     @Override
     protected int getLayoutId() {
@@ -276,16 +258,20 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SIGNUPTWO) {
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    Uri uri = (Uri) bundle.get("uri");
-                    if (uri != null)
-                        uriReceived = uri;
-                    Bitmap bm = (Bitmap) bundle.get("bitmap");
-                    if (bm != null)
-                        bitmapReceived = bm;
-                }
+                getExtras(data);
             }
+        }
+    }
+
+    private void getExtras(Intent data) {
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            Uri uri = (Uri) bundle.get("uri");
+            if (uri != null)
+                uriReceived = uri;
+            Bitmap bm = (Bitmap) bundle.get("bitmap");
+            if (bm != null)
+                bitmapReceived = bm;
         }
     }
 }

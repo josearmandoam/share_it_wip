@@ -52,4 +52,6 @@ public final class BuildConfig {
     public static final String NEW_BACKGROUND = "NEW_BACKGROUND";
     public static final String NEW_PROFILE = "NEW_PROFILE";
     public static final String BACKGROUND_CHANGES = "BACKGROUND_CHANGES";
+    public static final String AVATAR_PROFILE_PATH = "AVATAR_PROFILE_PATH";
+    public static final String AVATAR_BACKGROUND_PATH = "AVATAR_BACKGROUND_PATH";
 }
