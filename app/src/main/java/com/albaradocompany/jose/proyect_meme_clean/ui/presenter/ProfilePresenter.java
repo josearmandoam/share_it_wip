@@ -43,6 +43,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showUsername();
         view.showDescription();
         view.showPhotos();
+        view.checkSocialPrivacity();
     }
 
     @Override
@@ -53,6 +54,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showUsername();
         view.showDescription();
         view.showPhotos();
+        view.checkSocialPrivacity();
     }
 
     @Override

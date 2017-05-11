@@ -51,6 +51,12 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
         view.showProfilePicture();
         view.showName();
         view.showUserName();
+        view.showSocialFacebook();
+        view.showSocialInstagram();
+        view.showSocialWhatsapp();
+        view.showSocialWebsite();
+        view.showSocialTwitter();
+        view.showSocialEmail();
         userSharedImp.saveBackgroundChanges("false");
         userSharedImp.saveProfileChanges("false");
     }
@@ -59,11 +65,6 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
     public void resume() {
         view.checkProfile();
         view.checkBaground();
-        view.showDescription();
-        view.showEmail();
-        view.showLastName();
-        view.showName();
-        view.showUserName();
     }
 
     @Override
@@ -202,6 +203,11 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
     @Override
     public void onBackgroundClicked() {
         view.showBackgroundDialog();
+    }
+
+    @Override
+    public void onSocialSettingsClicked() {
+        view.showSocialSettingsDialog();
     }
 
     public UIComponent component() {

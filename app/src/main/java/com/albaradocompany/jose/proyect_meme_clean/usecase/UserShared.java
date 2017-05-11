@@ -16,8 +16,6 @@ public interface UserShared {
 
     Login getUser();
 
-    void saveUser(Login user);
-
     String getBackground();
 
     String getProfile();
@@ -26,15 +24,11 @@ public interface UserShared {
 
     void saveBackground(String background);
 
-    boolean isSelectedBackground();
-
     void deleteBackground();
 
     void saveUserID(String id);
 
     String getUserID();
-
-    boolean isSelectedProfile();
 
     void deleteProfile();
 
@@ -50,14 +44,6 @@ public interface UserShared {
 
     void saveProfileChanges(String cond);
 
-    void saveNewBackground(String dir);
-
-    void saveNewProfile(String dir);
-
-    String getNewProfile();
-
-    String getNewBackground();
-
     void saveBackgroundChanges(String cond);
 
     boolean isBackgroundChanged();
@@ -69,6 +55,34 @@ public interface UserShared {
     void saveBackgroundAvatar(Avatar avatar);
 
     String getProfileAvatar();
+
     String getBackgroundAvatar();
+
+    void saveFacebookPrivacity(String status);
+
+    void saveTwitterPrivacity(String status);
+
+    void saveInstagramPrivacity(String status);
+
+    void saveWhatsappPrivacity(String status);
+
+    void saveWebsitePrivacity(String status);
+
+    void saveEmailPrivacity(String status);
+
+    boolean getFacebookPrivacity();
+
+    boolean getTwitterPrivacity();
+
+    boolean getInstagramPrivacity();
+
+    boolean getWhatsappPrivacity();
+
+    boolean getWebsitePrivacity();
+
+    boolean getEmailPrivacity();
+
+    void updateSocialMedia(String socialTwitter, String socialFacebook, String socialWhatsapp,
+                           String socialEmail, String socialInstagram, String socialWebsite);
 
 }

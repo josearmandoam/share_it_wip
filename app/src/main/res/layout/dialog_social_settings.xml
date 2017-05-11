@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/social_settings_tv_title"
+                android:layout_width="match_parent"
+                android:text="@string/social_settings"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold"
+                android:fontFamily="@string/default_font"
+                android:padding="16dp"
+                android:background="@color/color_login"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content" />
+            <ImageButton
+                android:id="@+id/social_settings_ibtn_eye"
+                android:layout_width="wrap_content"
+                android:layout_alignTop="@+id/social_settings_tv_title"
+                android:layout_alignBottom="@+id/social_settings_tv_title"
+                android:src="@drawable/check"
+                android:background="@null"
+                android:layout_alignEnd="@+id/social_settings_tv_title"
+                android:layout_marginRight="16dp"
+                android:padding="16dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_facebook"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/facebook_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_title"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/facebook"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_facebook"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_facebook"
+                android:layout_alignBottom="@+id/social_settings_tv_facebook"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_twitter"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/twitter_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_facebook"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/twitter"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_twitter"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_twitter"
+                android:layout_alignBottom="@+id/social_settings_tv_twitter"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_instagram"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/instagram_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_twitter"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/instagram"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_instagram"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_instagram"
+                android:layout_alignBottom="@+id/social_settings_tv_instagram"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_whatsapp"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/whatsapp_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_instagram"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/whatsapp"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_whatsapp"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_whatsapp"
+                android:layout_alignBottom="@+id/social_settings_tv_whatsapp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_email"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/email_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_whatsapp"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/email_ic"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_email"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_email"
+                android:layout_alignBottom="@+id/social_settings_tv_email"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/social_settings_tv_website"
+                android:layout_alignStart="@+id/social_settings_tv_title"
+                android:layout_marginStart="24dp"
+                android:text="@string/website_so"
+                android:padding="16dp"
+                android:textColor="@color/color_login"
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/social_settings_tv_email"
+                android:fontFamily="@string/default_font"
+                android:drawableLeft="@drawable/internet"
+                android:textStyle="bold"
+                android:drawablePadding="24dp"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/social_settings_sw_website"
+                android:layout_width="wrap_content"
+                android:layout_alignStart="@+id/social_settings_ibtn_eye"
+                android:layout_alignEnd="@+id/social_settings_ibtn_eye"
+                android:layout_alignTop="@+id/social_settings_tv_website"
+                android:layout_alignBottom="@+id/social_settings_tv_website"
+                android:layout_height="wrap_content" />
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_below="@+id/social_settings_tv_website"-->
+                <!--android:gravity="center"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:background="@color/color_login"-->
+                <!--android:textStyle="bold"-->
+                <!--android:fontFamily="@string/default_font"-->
+                <!--android:padding="8dp"-->
+                <!--android:text="@string/privacity"-->
+                <!--android:layout_height="wrap_content" />-->
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

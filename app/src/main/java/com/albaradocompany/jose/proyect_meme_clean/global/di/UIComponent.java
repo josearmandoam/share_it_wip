@@ -10,6 +10,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePresenter;
@@ -58,4 +59,6 @@ public interface UIComponent {
     void inject(EditProfilePresenter editProfilePresenter);
 
     void inject(ProfilePresenter profilePresenter);
+
+    void inject(SocialSettingsDialog socialSettingsDialog);
 }

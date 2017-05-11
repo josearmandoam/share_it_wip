@@ -54,4 +54,11 @@ public final class BuildConfig {
     public static final String BACKGROUND_CHANGES = "BACKGROUND_CHANGES";
     public static final String AVATAR_PROFILE_PATH = "AVATAR_PROFILE_PATH";
     public static final String AVATAR_BACKGROUND_PATH = "AVATAR_BACKGROUND_PATH";
+    public static final String PRIVACITY = "PRIVACITY";
+    public static final String PRIVACITY_FACEBOOK = "PRIVACITY_FACEBOOK";
+    public static final String PRIVACITY_TWITTER = "PRIVACITY_TWITTER";
+    public static final String PRIVACITY_INSTAGRAM = "PRIVACITY_INSTAGRAM";
+    public static final String PRIVACITY_WHATSAPP = "PRIVACITY_WHATSAPP";
+    public static final String PRIVACITY_WEBSITE = "PRIVACITY_WEBSITE";
+    public static final String PRIVACITY_EMAIL = "PRIVACITY_EMAIL";
 }

@@ -134,6 +134,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
         initialize();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
     private void initialize() {
         showSnackBar = new ShowSnackBarImp(this);
     }

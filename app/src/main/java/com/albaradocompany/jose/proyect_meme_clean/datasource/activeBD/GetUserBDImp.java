@@ -37,6 +37,12 @@ public class GetUserBDImp implements GetUserBD {
         userBD.user_date = user.getFechaNacimiento();
         userBD.user_lastname = user.getApellidos();
         userBD.userId = user.getIdUser();
+        userBD.social_email = user.getSocialEmail();
+        userBD.social_facebook = user.getSocialFacebook();
+        userBD.social_instagram = user.getSocialInstagram();
+        userBD.social_twitter = user.getSocialTwitter();
+        userBD.social_whatsapp = user.getSocialWhatsapp();
+        userBD.social_website = user.getSocialWebsite();
         long n = userBD.save();
     }
 
@@ -105,6 +111,12 @@ public class GetUserBDImp implements GetUserBD {
         new Update(UserBD.class).set("user_email = ?", user.getEmail()).where("userId = ?", user.getIdUser()).execute();
         new Update(UserBD.class).set("user_lastname = ?", user.getApellidos()).where("userId = ?", user.getIdUser()).execute();
         new Update(UserBD.class).set("user_name = ?", user.getNombre()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_email = ?", user.getSocialEmail()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_whatsapp = ?", user.getSocialWhatsapp()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_website = ?", user.getSocialWebsite()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_instagram = ?", user.getSocialInstagram()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_facebook = ?", user.getSocialFacebook()).where("userId = ?", user.getIdUser()).execute();
+        new Update(UserBD.class).set("social_twitter = ?", user.getSocialTwitter()).where("userId = ?", user.getIdUser()).execute();
 //        new Update(UserBD.class).set("user_profile = ?, user_description = ?, user_username = ?," +
 //                        " user_background = ?, user_email = ?, user_lastname = ?, user_name = ?", user.getImagePath(),
 //                user.getDescription(), user.getUsername(), user.getBackgrundPath(), user.getEmail(), user.getApellidos(),

@@ -18,6 +18,8 @@ public abstract class AbsEditProfilePresenter extends Presenter<AbsEditProfilePr
 
     public abstract void onBackgroundClicked();
 
+    public abstract void onSocialSettingsClicked();
+
     public interface View {
 
         void showProfilePicture();
@@ -53,6 +55,20 @@ public abstract class AbsEditProfilePresenter extends Presenter<AbsEditProfilePr
         void checkProfile();
 
         void checkBaground();
+
+        void showSocialSettingsDialog();
+
+        void showSocialFacebook();
+
+        void showSocialInstagram();
+
+        void showSocialWhatsapp();
+
+        void showSocialWebsite();
+
+        void showSocialTwitter();
+
+        void showSocialEmail();
     }
 
     public interface Navigator {

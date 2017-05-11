@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_login"
-    tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity">
+    tools:activity="com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

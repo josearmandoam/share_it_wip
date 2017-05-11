@@ -56,6 +56,18 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     RelativeLayout layout;
     @BindView(R.id.profile_swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.profile_ibtn_facebook)
+    ImageButton facebook;
+    @BindView(R.id.profile_ibtn_twitter)
+    ImageButton twitter;
+    @BindView(R.id.profile_ibtn_whatsapp)
+    ImageButton whatsapp;
+    @BindView(R.id.profile_ibtn_website)
+    ImageButton website;
+    @BindView(R.id.profile_ibtn_email)
+    ImageButton email;
+    @BindView(R.id.profile_ibtn_instagram)
+    ImageButton instagram;
     @BindDrawable(R.drawable.menu_exp)
     Drawable menuExp;
     @BindDrawable(R.drawable.menu)
@@ -203,6 +215,56 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         recyclerPhotos.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new PhotosRecyclerAdapter(this, userphotos, onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
+    }
+
+    @Override
+    public void checkSocialPrivacity() {
+        updatePrivacity();
+    }
+
+    private void updatePrivacity() {
+        if (userBD.social_instagram.equals("private")) {
+            instagram.setEnabled(false);
+            instagram.setAlpha(70);
+        } else {
+            instagram.setEnabled(true);
+            instagram.setAlpha(255);
+        }
+        if (userBD.social_facebook.equals("private")) {
+            facebook.setEnabled(false);
+            facebook.setAlpha(70);
+        } else {
+            facebook.setEnabled(true);
+            facebook.setAlpha(255);
+        }
+        if (userBD.social_twitter.equals("private")) {
+            twitter.setEnabled(false);
+            twitter.setAlpha(70);
+        } else {
+            twitter.setEnabled(true);
+            twitter.setAlpha(255);
+        }
+        if (userBD.social_whatsapp.equals("private")) {
+            whatsapp.setEnabled(false);
+            whatsapp.setAlpha(70);
+        } else {
+            whatsapp.setEnabled(true);
+            whatsapp.setAlpha(255);
+        }
+        if (userBD.social_website.equals("private")) {
+            website.setEnabled(false);
+            website.setAlpha(70);
+        } else {
+            website.setEnabled(true);
+            website.setAlpha(255);
+        }
+        if (userBD.social_email.equals("private")) {
+            email.setEnabled(false);
+            email.setAlpha(70);
+        } else {
+            email.setEnabled(true);
+            email.setAlpha(255);
+        }
     }
 
     public UIComponent component() {

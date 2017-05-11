@@ -1,7 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
-import java.util.List;
-
 /**
  * Created by jose on 21/04/2017.
  */
@@ -20,10 +18,18 @@ public class Login {
     private String imagePath;
     private String backgrundPath;
     private String description;
+    private String socialEmail;
+    private String socialFacebook;
+    private String socialTwitter;
+    private String socialInstagram;
+    private String socialWhatsapp;
+    private String socialWebsite;
 
     public Login(String idUser, String username, String password, String preguntaSeguridad,
                  String respuestaSeguridad, String respuestaSeguridad2, String email, String fechaNacimiento,
-                 String nombre, String apellidos, String imagePath, String backgrundPath, String description) {
+                 String nombre, String apellidos, String imagePath, String backgrundPath, String description,
+                 String socialEmail, String socialFacebook, String socialTwitter, String socialInstagram,
+                 String socialWhatsapp, String socialWebsite) {
         this.idUser = idUser;
         this.username = username;
         this.password = password;
@@ -37,6 +43,12 @@ public class Login {
         this.imagePath = imagePath;
         this.backgrundPath = backgrundPath;
         this.description = description;
+        this.socialEmail = socialEmail;
+        this.socialFacebook = socialFacebook;
+        this.socialTwitter = socialTwitter;
+        this.socialInstagram = socialInstagram;
+        this.socialWhatsapp = socialWhatsapp;
+        this.socialWebsite = socialWebsite;
     }
 
     public Login() {
@@ -53,6 +65,12 @@ public class Login {
         imagePath = "";
         backgrundPath = "";
         description = "";
+        socialEmail = "";
+        socialFacebook = "";
+        socialTwitter = "";
+        socialInstagram = "";
+        socialWhatsapp = "";
+        socialWebsite = "";
     }
 
     public String getIdUser() {
@@ -161,5 +179,53 @@ public class Login {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSocialEmail() {
+        return socialEmail;
+    }
+
+    public void setSocialEmail(String socialEmail) {
+        this.socialEmail = socialEmail;
+    }
+
+    public String getSocialFacebook() {
+        return socialFacebook;
+    }
+
+    public void setSocialFacebook(String socialFacebook) {
+        this.socialFacebook = socialFacebook;
+    }
+
+    public String getSocialTwitter() {
+        return socialTwitter;
+    }
+
+    public void setSocialTwitter(String socialTwitter) {
+        this.socialTwitter = socialTwitter;
+    }
+
+    public String getSocialInstagram() {
+        return socialInstagram;
+    }
+
+    public void setSocialInstagram(String socialInstagram) {
+        this.socialInstagram = socialInstagram;
+    }
+
+    public String getSocialWhatsapp() {
+        return socialWhatsapp;
+    }
+
+    public void setSocialWhatsapp(String socialWhatsapp) {
+        this.socialWhatsapp = socialWhatsapp;
+    }
+
+    public String getSocialWebsite() {
+        return socialWebsite;
+    }
+
+    public void setSocialWebsite(String socialWebsite) {
+        this.socialWebsite = socialWebsite;
     }
 }

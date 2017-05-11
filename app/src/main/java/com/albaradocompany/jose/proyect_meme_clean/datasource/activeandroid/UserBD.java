@@ -27,6 +27,18 @@ public class UserBD extends Model {
     public String user_date;
     @Column(name = "user_lastname")
     public String user_lastname;
+    @Column(name = "social_whatsapp")
+    public String social_whatsapp;
+    @Column(name = "social_email")
+    public String social_email;
+    @Column(name = "social_website")
+    public String social_website;
+    @Column(name = "social_facebook")
+    public String social_facebook;
+    @Column(name = "social_instagram")
+    public String social_instagram;
+    @Column(name = "social_twitter")
+    public String social_twitter;
 
     public UserBD() {
         super();
@@ -34,7 +46,8 @@ public class UserBD extends Model {
 
     public UserBD(String userId, String user_name, String user_username, String user_profile,
                   String user_background, String user_description, String user_email, String user_date,
-                  String user_lastname) {
+                  String user_lastname, String social_whatsapp, String social_email, String social_website,
+                  String social_facebook, String social_instagram, String social_twitter) {
         this.userId = userId;
         this.user_name = user_name;
         this.user_username = user_username;
@@ -44,5 +57,11 @@ public class UserBD extends Model {
         this.user_email = user_email;
         this.user_date = user_date;
         this.user_lastname = user_lastname;
+        this.social_whatsapp = social_whatsapp;
+        this.social_email = social_email;
+        this.social_website = social_website;
+        this.social_facebook = social_facebook;
+        this.social_instagram = social_instagram;
+        this.social_twitter = social_twitter;
     }
 }

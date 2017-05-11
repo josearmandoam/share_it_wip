@@ -20,6 +20,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.SignupShared;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.UserShared;
 import com.squareup.picasso.Callback;
@@ -527,44 +528,44 @@ public class UserSharedImp implements UserShared, SignupShared {
         return c;
     }
 
-    @Override
-    public void saveUser(Login user) {
-        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_NAME, user.getNombre());
-        editor.putString(BuildConfig.USER_LAST_NAME, user.getApellidos());
-        editor.putString(BuildConfig.USER_EMAIL, user.getEmail());
-        editor.putString(BuildConfig.USER_AVATAR, user.getImagePath());
-        editor.putString(BuildConfig.USER_BACKGROUND, user.getBackgrundPath());
-        editor.putString(BuildConfig.USER_ID, user.getIdUser());
-        editor.putString(BuildConfig.USER_DATE_BIRTHDAY, user.getFechaNacimiento());
-        editor.putString(BuildConfig.USER_DESCRIPTION, user.getDescription());
-        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "true");
-        editor.apply();
-
-        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_USERNAME, user.getUsername());
-        editor.putString(BuildConfig.USER_PASSWORD, user.getPassword());
-        editor.apply();
-
-        sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.USER_QUESTION, user.getPreguntaSeguridad());
-        editor.putString(BuildConfig.USER_ANSWER1, user.getRespuestaSeguridad());
-        editor.putString(BuildConfig.USER_ANSWER2, user.getRespuestaSeguridad2());
-        editor.apply();
-
-        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "true");
-        editor.apply();
-
-        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.AVATAR_IMAGE_PATH, user.getImagePath());
-        editor.apply();
-    }
+//    @Override
+//    public void saveUser(Login user) {
+//        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString(BuildConfig.USER_NAME, user.getNombre());
+//        editor.putString(BuildConfig.USER_LAST_NAME, user.getApellidos());
+//        editor.putString(BuildConfig.USER_EMAIL, user.getEmail());
+//        editor.putString(BuildConfig.USER_AVATAR, user.getImagePath());
+//        editor.putString(BuildConfig.USER_BACKGROUND, user.getBackgrundPath());
+//        editor.putString(BuildConfig.USER_ID, user.getIdUser());
+//        editor.putString(BuildConfig.USER_DATE_BIRTHDAY, user.getFechaNacimiento());
+//        editor.putString(BuildConfig.USER_DESCRIPTION, user.getDescription());
+//        editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "true");
+//        editor.apply();
+//
+//        sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString(BuildConfig.USER_USERNAME, user.getUsername());
+//        editor.putString(BuildConfig.USER_PASSWORD, user.getPassword());
+//        editor.apply();
+//
+//        sharedPreferences = context.getSharedPreferences(SignupThreeActivity.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString(BuildConfig.USER_QUESTION, user.getPreguntaSeguridad());
+//        editor.putString(BuildConfig.USER_ANSWER1, user.getRespuestaSeguridad());
+//        editor.putString(BuildConfig.USER_ANSWER2, user.getRespuestaSeguridad2());
+//        editor.apply();
+//
+//        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString(BuildConfig.IS_SELECTED_AVATAR, "true");
+//        editor.apply();
+//
+//        sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//        editor.putString(BuildConfig.AVATAR_IMAGE_PATH, user.getImagePath());
+//        editor.apply();
+//    }
 
     @Override
     public String getBackground() {
@@ -589,16 +590,6 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
-    public boolean isSelectedProfile() {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public void saveBackground(String background) {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -606,16 +597,6 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor.putString(BuildConfig.IS_SELECTED_BACKGROUND, "true");
         editor.putString(BuildConfig.IS_BACKGROUND_FTP, "false");
         editor.apply();
-    }
-
-    @Override
-    public boolean isSelectedBackground() {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_BACKGROUND, "false").equals("true")) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -721,39 +702,129 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
+    public void saveFacebookPrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_FACEBOOK, status);
+        editor.apply();
+    }
+
+    @Override
+    public void saveTwitterPrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_TWITTER, status);
+        editor.apply();
+    }
+
+    @Override
+    public void saveInstagramPrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_INSTAGRAM, status);
+        editor.apply();
+    }
+
+    @Override
+    public void saveWhatsappPrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_WHATSAPP, status);
+        editor.apply();
+    }
+
+    @Override
+    public void saveWebsitePrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_WEBSITE, status);
+        editor.apply();
+    }
+
+    @Override
+    public void saveEmailPrivacity(String status) {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.PRIVACITY_EMAIL, status);
+        editor.apply();
+    }
+
+    @Override
+    public boolean getFacebookPrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_FACEBOOK, "false").equals("true");
+    }
+
+    @Override
+    public boolean getTwitterPrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_TWITTER, "false").equals("true");
+    }
+
+    @Override
+    public boolean getInstagramPrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_INSTAGRAM, "false").equals("true");
+    }
+
+    @Override
+    public boolean getWhatsappPrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_WHATSAPP, "false").equals("true");
+    }
+
+    @Override
+    public boolean getWebsitePrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_WEBSITE, "false").equals("true");
+    }
+
+    @Override
+    public boolean getEmailPrivacity() {
+        sharedPreferences = context.getSharedPreferences(SocialSettingsDialog.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.PRIVACITY_EMAIL, "false").equals("true");
+    }
+
+    @Override
+    public void updateSocialMedia(String socialTwitter, String socialFacebook, String socialWhatsapp, String socialEmail, String socialInstagram, String socialWebsite) {
+        if (socialEmail.equals("private")){
+            saveEmailPrivacity("false");
+        }else{
+            saveEmailPrivacity("true");
+        }
+        if (socialFacebook.equals("private")){
+            saveFacebookPrivacity("false");
+        }else{
+            saveFacebookPrivacity("true");
+        }
+        if (socialWebsite.equals("private")){
+            saveWebsitePrivacity("false");
+        }else{
+            saveWebsitePrivacity("true");
+        }
+        if (socialWhatsapp.equals("private")){
+            saveWhatsappPrivacity("false");
+        }else{
+            saveWhatsappPrivacity("true");
+        }
+        if (socialInstagram.equals("private")){
+            saveInstagramPrivacity("false");
+        }else{
+            saveInstagramPrivacity("true");
+        }
+        if (socialWebsite.equals("private")){
+            saveWebsitePrivacity("false");
+        }else{
+            saveWebsitePrivacity("true");
+        }
+    }
+
+    @Override
     public void saveBackgroundChanges(String cond) {
         sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString(BuildConfig.BACKGROUND_CHANGES, cond);
         editor.apply();
-    }
-
-    @Override
-    public void saveNewBackground(String dir) {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.NEW_BACKGROUND, dir);
-        editor.apply();
-    }
-
-    @Override
-    public void saveNewProfile(String dir) {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString(BuildConfig.NEW_PROFILE, dir);
-        editor.apply();
-    }
-
-    @Override
-    public String getNewProfile() {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        return sharedPreferences.getString(BuildConfig.NEW_PROFILE, "");
-    }
-
-    @Override
-    public String getNewBackground() {
-        sharedPreferences = context.getSharedPreferences(EditProfileActivity.class.getName(), Context.MODE_PRIVATE);
-        return sharedPreferences.getString(BuildConfig.NEW_BACKGROUND, "");
     }
 
     @Override

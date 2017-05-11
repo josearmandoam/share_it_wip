@@ -20,6 +20,13 @@ public class LoginApiEntry {
     String imagePath = "";
     String backgrundPath = "";
     String description = "";
+    String socialWebsite = "";
+    String socialEmail = "";
+    String socialFacebook = "";
+    String socialInstagram = "";
+    String socialTwitter = "";
+    String socialWhatsapp = "";
+
 
     public Login parseLogin() {
         Login obj = new Login();
@@ -36,6 +43,12 @@ public class LoginApiEntry {
         obj.setImagePath(imagePath);
         obj.setBackgrundPath(backgrundPath);
         obj.setDescription(description);
+        obj.setSocialWebsite(socialWebsite);
+        obj.setSocialWhatsapp(socialWhatsapp);
+        obj.setSocialEmail(socialEmail);
+        obj.setSocialFacebook(socialFacebook);
+        obj.setSocialInstagram(socialInstagram);
+        obj.setSocialTwitter(socialTwitter);
         return obj;
     }
 }

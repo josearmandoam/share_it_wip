@@ -30,6 +30,7 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
         void showPhotos();
 
+        void checkSocialPrivacity();
     }
 
     public interface Navigator {

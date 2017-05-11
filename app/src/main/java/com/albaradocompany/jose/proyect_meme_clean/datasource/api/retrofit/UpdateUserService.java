@@ -14,7 +14,13 @@ import retrofit2.http.POST;
 public interface UpdateUserService {
     @FormUrlEncoded
     @POST("updateUser.php")
-    Call<GenericApiResponse> updateUser(@Field("idUser") String userId, @Field("name") String name, @Field("lastName") String lastName,
-                                        @Field("email") String email, @Field("description") String description, @Field("username") String username,
-                                        @Field("profile") String profile, @Field("background") String background);
+    Call<GenericApiResponse> updateUser(@Field("idUser") String userId, @Field("name") String name,
+                                        @Field("lastName") String lastName,
+                                        @Field("email") String email, @Field("description") String description,
+                                        @Field("username") String username,
+                                        @Field("profile") String profile, @Field("background") String background,
+                                        @Field("socialWhatsapp") String socialWhatsapp,
+                                        @Field("socialEmail") String socialEmail, @Field("socialWebsite") String socialWebsite,
+                                        @Field("socialFacebook") String socialFacebook, @Field("socialTwitter") String socialTwitter,
+                                        @Field("socialInstagram") String socialInstagram);
 }

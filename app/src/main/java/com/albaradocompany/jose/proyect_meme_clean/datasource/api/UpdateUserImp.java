@@ -26,9 +26,18 @@ public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
     String profile;
     String background;
     String description;
+    String socialWebsite;
+    String socialWhatsapp;
+    String socialEmail;
+    String socialInstagram;
+    String socialFacebook;
+    String socialTwitter;
 
-    public UpdateUserImp(String userId, String name, String lastName, String email, String username,
-                         String profile, String background, String description) {
+    public UpdateUserImp(String userId, String name, String lastName,
+                         String email, String username, String profile, String background,
+                         String description, String socialWebsite, String socialWhatsapp,
+                         String socialEmail, String socialInstagram, String socialFacebook,
+                         String socialTwitter) {
         this.userId = userId;
         this.name = name;
         this.lastName = lastName;
@@ -37,6 +46,12 @@ public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
         this.profile = profile;
         this.background = background;
         this.description = description;
+        this.socialWebsite = socialWebsite;
+        this.socialWhatsapp = socialWhatsapp;
+        this.socialEmail = socialEmail;
+        this.socialInstagram = socialInstagram;
+        this.socialFacebook = socialFacebook;
+        this.socialTwitter = socialTwitter;
     }
 
     @Override
@@ -49,7 +64,8 @@ public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         UpdateUserService service = retrofit.create(UpdateUserService.class);
-        service.updateUser(userId, name, lastName, email, description, username, profile, background).enqueue(this);
+        service.updateUser(userId, name, lastName, email, description, username, profile, background,
+                socialWhatsapp, socialEmail, socialWebsite, socialFacebook, socialTwitter, socialInstagram).enqueue(this);
     }
 
     @Override
