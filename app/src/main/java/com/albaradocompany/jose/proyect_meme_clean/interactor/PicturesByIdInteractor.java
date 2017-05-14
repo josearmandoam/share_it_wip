@@ -1,7 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetPicturesById;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 
 import java.util.List;
 

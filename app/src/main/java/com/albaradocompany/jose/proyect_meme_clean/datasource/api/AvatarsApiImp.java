@@ -3,7 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.AvatarService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetAvatars;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetAvatars;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

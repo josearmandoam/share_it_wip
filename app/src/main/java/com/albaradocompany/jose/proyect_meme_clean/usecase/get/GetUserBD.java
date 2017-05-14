@@ -1,4 +1,4 @@
-package com.albaradocompany.jose.proyect_meme_clean.usecase;
+package com.albaradocompany.jose.proyect_meme_clean.usecase.get;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.SavedPicturesBD;
@@ -36,4 +36,10 @@ public interface GetUserBD {
     void removeUserDBData();
 
     List<UserBD> getUsers();
+
+    Login parseUserBD(UserBD userBD);
+
+    Picture parsePictureBD(PicturesBD picturesBD);
+
+    boolean isPhotoSaved(String imageId);
 }

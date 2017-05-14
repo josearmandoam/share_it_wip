@@ -16,8 +16,8 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetQuestions;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;

@@ -5,20 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:activity="com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/edit_profile_lyt_container"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <View
                 android:id="@+id/edit_profile_view_tab"
                 android:background="@color/color_login"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"/>
+                android:layout_height="?actionBarSize" />
+
             <TextView
                 android:id="@+id/edit_profile_tv_title"
                 android:text="@string/edit_profile"
@@ -32,6 +36,7 @@
                 android:fontFamily="@string/default_font"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <ImageButton
                 android:id="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignTop="@id/edit_profile_view_tab"
@@ -41,6 +46,7 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <ImageButton
                 android:id="@+id/edit_profile_ibtn_accept"
                 android:padding="10dp"
@@ -51,12 +57,14 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignBottom="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignParentEnd="true" />
+
             <View
                 android:id="@+id/edit_profile_view_sep"
                 android:layout_below="@id/edit_profile_view_tab"
                 android:background="@color/color_login"
                 android:layout_width="wrap_content"
-                android:layout_height="0.5dp"/>
+                android:layout_height="0.5dp" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/edit_profile_iv_profile"
                 android:src="@drawable/face"
@@ -68,6 +76,7 @@
                 app:civ_fill_color="@color/color_login"
                 android:layout_width="100dp"
                 android:layout_height="100dp" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/edit_profile_iv_backgrund"
                 android:src="@drawable/face"
@@ -104,6 +113,7 @@
                 android:layout_below="@id/edit_profile_tv_personal_info"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:hint="@string/name"
                 android:singleLine="true"
                 android:textColor="@color/color_login"
@@ -115,6 +125,7 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/edit_profile_et_lastname"
                 android:layout_alignStart="@+id/edit_profile_iv_profile"
@@ -128,11 +139,13 @@
                 android:drawableLeft="@drawable/last_name_dark"
                 android:gravity="center"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:padding="10dp"
                 android:fontFamily="@string/default_font"
                 android:textSize="@dimen/text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/edit_profile_et_email"
                 android:layout_alignStart="@+id/edit_profile_iv_profile"
@@ -146,11 +159,13 @@
                 android:drawableLeft="@drawable/email_dark"
                 android:gravity="center"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:padding="10dp"
                 android:fontFamily="@string/default_font"
                 android:textSize="@dimen/text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/edit_profile_et_username"
                 android:layout_alignStart="@+id/edit_profile_iv_profile"
@@ -166,9 +181,11 @@
                 android:drawableLeft="@drawable/user_dark"
                 android:gravity="center"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <EditText
                 android:id="@+id/edit_profile_et_description"
                 android:layout_alignStart="@+id/edit_profile_iv_profile"
@@ -181,6 +198,7 @@
                 android:drawableLeft="@drawable/description_dark"
                 android:gravity="center"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:padding="10dp"
                 android:maxLines="3"
                 android:fontFamily="@string/default_font"
@@ -188,10 +206,12 @@
                 android:layout_width="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_height="100dp" />
+
             <ProgressBar
                 android:id="@+id/edit_profile_pbr"
                 android:layout_width="wrap_content"
                 android:background="@drawable/progress"
+                android:textCursorDrawable="@null"
                 android:layout_alignTop="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignBottom="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignParentEnd="true"
@@ -199,6 +219,7 @@
                 android:visibility="gone"
                 android:layout_below="@id/edit_profile_iv_profile"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/edit_profile_tv_social_info"
                 android:layout_alignStart="@+id/edit_profile_tv_personal_info"
@@ -213,11 +234,13 @@
                 android:textStyle="bold"
                 android:layout_below="@+id/edit_profile_et_description"
                 android:layout_height="wrap_content" />
+
             <ImageButton
                 android:id="@+id/edit_profile_ibtn_settings"
                 android:layout_width="wrap_content"
                 android:src="@drawable/settings_light"
                 android:background="@null"
+                android:textCursorDrawable="@null"
                 android:padding="16dp"
                 android:layout_alignEnd="@+id/edit_profile_tv_personal_info"
                 android:layout_alignTop="@+id/edit_profile_tv_social_info"
@@ -231,6 +254,7 @@
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size"
@@ -241,8 +265,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_tv_social_info"
-                />
+                android:layout_below="@+id/edit_profile_tv_social_info" />
 
             <EditText
                 android:id="@+id/edit_profile_et_twitter"
@@ -251,6 +274,7 @@
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size"
@@ -261,8 +285,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_et_facebook"
-                />
+                android:layout_below="@+id/edit_profile_et_facebook" />
 
             <EditText
                 android:id="@+id/edit_profile_et_instagram"
@@ -271,6 +294,7 @@
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size"
@@ -281,8 +305,8 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_et_twitter"
-                />
+                android:layout_below="@+id/edit_profile_et_twitter" />
+
             <EditText
                 android:id="@+id/edit_profile_et_whatsapp"
                 android:hint="@string/whatsapp_so"
@@ -290,6 +314,7 @@
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size"
@@ -300,14 +325,15 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_et_instagram"
-                />
+                android:layout_below="@+id/edit_profile_et_instagram" />
+
             <EditText
                 android:id="@+id/edit_profile_et_email_social"
                 android:hint="@string/email"
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:drawableLeft="@mipmap/email"
@@ -319,16 +345,16 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_et_whatsapp"
-                />
+                android:layout_below="@+id/edit_profile_et_whatsapp" />
 
             <EditText
                 android:id="@+id/edit_profile_et_website"
                 android:hint="@string/website"
-                android:drawableLeft="@mipmap/browser"
+                android:drawableLeft="@mipmap/internet"
                 android:textColor="@color/color_login"
                 android:textColorHint="@color/color_login"
                 android:background="@drawable/border_text"
+                android:textCursorDrawable="@null"
                 android:gravity="center"
                 android:singleLine="true"
                 android:textSize="@dimen/text_size"
@@ -340,9 +366,7 @@
                 android:padding="10dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/edit_profile_et_email_social"
-                />
-
+                android:layout_below="@+id/edit_profile_et_email_social" />
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>

@@ -1,4 +1,4 @@
-package com.albaradocompany.jose.proyect_meme_clean.usecase;
+package com.albaradocompany.jose.proyect_meme_clean.usecase.get;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 

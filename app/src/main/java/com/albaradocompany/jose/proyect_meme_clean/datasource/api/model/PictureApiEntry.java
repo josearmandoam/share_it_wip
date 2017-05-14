@@ -12,8 +12,7 @@ public class PictureApiEntry {
     String description = "";
     String fechaSubida = "";
     String imageId = "";
-    String comentarios = "";
-    String likes = "";
+    String time = "";
 
     public Picture parsePicture() {
         Picture obj = new Picture();
@@ -22,8 +21,7 @@ public class PictureApiEntry {
         obj.setDescription(description);
         obj.setDate(fechaSubida);
         obj.setImageId(imageId);
-        obj.setComents(comentarios);
-        obj.setLikes(likes);
+        obj.setTime(time);
         return obj;
     }
 }

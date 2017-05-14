@@ -4,7 +4,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.api.model.Question
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.QuestionsService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetQuestions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

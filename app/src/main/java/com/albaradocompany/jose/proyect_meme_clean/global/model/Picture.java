@@ -1,27 +1,29 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by jose on 05/05/2017.
  */
 
-public class Picture {
+public class Picture implements Serializable {
     String userId;
     String imagePath;
     String description;
     String date;
     String imageId;
-    String coments;
-    String likes;
+    String time;
 
     public Picture(String userId, String imagePath, String description, String date, String imageId,
-                   String coments, String likes) {
+                   String time) {
         this.userId = userId;
         this.imagePath = imagePath;
         this.description = description;
         this.date = date;
         this.imageId = imageId;
-        this.coments = coments;
-        this.likes = likes;
+        this.time = time;
     }
 
     public Picture() {
@@ -30,8 +32,7 @@ public class Picture {
         description = "";
         date = "";
         imageId = "";
-        coments = "";
-        likes = "";
+        time = "";
     }
 
     public String getUserId() {
@@ -74,19 +75,12 @@ public class Picture {
         this.imageId = imageId;
     }
 
-    public String getComents() {
-        return coments;
+    public String getTime() {
+        return time;
     }
 
-    public void setComents(String coments) {
-        this.coments = coments;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getLikes() {
-        return likes;
-    }
-
-    public void setLikes(String likes) {
-        this.likes = likes;
-    }
 }

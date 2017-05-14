@@ -5,226 +5,240 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:activity="com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity">
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/profile_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:id="@+id/profile_lyt_container"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/profile_iv_background"
-                android:background="@drawable/fo3"
-                android:layout_width="match_parent"
-                android:alpha="0.75"
-                android:layout_height="200dp" />
-            <View
-                android:layout_below="@id/profile_iv_background"
-                android:layout_alignBottom="@+id/profile_tv_user_description"
-                android:alpha="0.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_iv_photo"
-                android:src="@drawable/face"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="@android:color/white"
-                android:layout_marginTop="150dp"
-                android:layout_centerHorizontal="true"
-                />
+            android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/profile_btn_edit"
-                android:background="@drawable/roundedbutton"
-                android:layout_marginTop="170dp"
-                android:layout_marginRight="50dp"
-                android:src="@drawable/edit_light"
-                android:layout_alignParentEnd="true"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                />
-            <ImageButton
-                android:id="@+id/profile_btn_saved"
-                android:background="@drawable/roundedbutton"
-                android:layout_marginTop="170dp"
-                android:layout_marginLeft="50dp"
-                android:src="@drawable/saved_light"
-                android:layout_alignParentStart="true"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                />
+            <RelativeLayout
+                android:id="@+id/profile_lyt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
-            <TextView
-                android:id="@+id/profile_tv_user_description"
-                android:layout_below="@+id/profile_ibtn_facebook"
-                android:layout_centerHorizontal="true"
-                android:text="@string/text_large"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="@dimen/text_size"
-                android:fontFamily="@string/default_font"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/profile_tv_user_name"
-                android:layout_below="@+id/profile_iv_photo"
-                android:layout_centerHorizontal="true"
-                android:textColor="@android:color/background_dark"
-                android:layout_marginTop="10dp"
-                android:textSize="@dimen/text_size_title"
-                android:textStyle="bold"
-                android:fontFamily="@string/default_font"
-                android:text="@string/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/profile_tv_user_username"
-                android:layout_below="@+id/profile_tv_user_name"
-                android:layout_centerHorizontal="true"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="@dimen/text_size"
-                android:textStyle="italic"
-                android:fontFamily="@string/default_font"
-                android:text="@string/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <View
-                android:id="@+id/profile_vw_sep3"
-                android:layout_width="0dp"
-                android:layout_marginTop="16dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/profile_tv_user_username"
-                android:layout_height="wrap_content"/>
-            <ImageButton
-                android:id="@+id/profile_ibtn_facebook"
-                android:src="@mipmap/facebook"
-                android:layout_below="@+id/profile_tv_user_username"
-                android:layout_toLeftOf="@+id/profile_ibtn_twitter"
-                android:layout_alignTop="@+id/profile_vw_sep3"
-                android:background="@null"
-                android:layout_marginLeft="16dp"
-                android:padding="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_twitter"
-                android:layout_alignTop="@+id/profile_ibtn_facebook"
-                android:layout_toLeftOf="@+id/profile_ibtn_instagram"
-                android:src="@mipmap/twitter"
-                android:background="@null"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_instagram"
-                android:layout_width="wrap_content"
-                android:layout_alignTop="@+id/profile_ibtn_facebook"
-                android:layout_toLeftOf="@+id/profile_vw_sep3"
-                android:layout_marginRight="8dp"
-                android:src="@mipmap/instagram"
-                android:background="@null"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_whatsapp"
-                android:layout_alignTop="@+id/profile_ibtn_facebook"
-                android:layout_toRightOf="@id/profile_ibtn_instagram"
-                android:layout_width="wrap_content"
-                android:src="@mipmap/whatsapp"
-                android:background="@null"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_email"
-                android:layout_alignTop="@+id/profile_ibtn_facebook"
-                android:layout_toRightOf="@id/profile_ibtn_whatsapp"
-                android:src="@mipmap/email"
-                android:background="@null"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_website"
-                android:layout_alignTop="@+id/profile_ibtn_facebook"
-                android:layout_toRightOf="@id/profile_ibtn_email"
-                android:src="@mipmap/browser"
-                android:background="@null"
-                android:padding="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_ibtn_back"
-                android:background="@null"
-                android:src="@drawable/back"
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <ImageButton
-                android:id="@+id/profile_btn_menu"
-                android:layout_alignTop="@+id/profile_ibtn_back"
-                android:layout_alignBottom="@+id/profile_ibtn_back"
-                android:layout_marginRight="10dp"
-                android:layout_alignParentEnd="true"
-                android:background="@null"
-                android:src="@drawable/exit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <View
-                android:id="@+id/profile_vw_sep2"
-                android:layout_width="match_parent"
-                android:layout_below="@id/profile_tv_user_description"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@color/color_login"
-                android:layout_height="0.5dp"/>
-            <TextView
-                android:id="@+id/profile_tv_title_posts"
-                android:text="@string/posts"
-                android:layout_below="@id/profile_vw_sep2"
-                android:textStyle="bold"
-                android:textColor="@color/color_login"
-                android:padding="10dp"
-                android:textSize="@dimen/text_size_title"
-                android:fontFamily="@string/default_font"
-                android:layout_alignStart="@+id/profile_vw_sep1"
-                android:layout_alignEnd="@+id/profile_vw_sep1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <View
-                android:id="@+id/profile_vw_sep1"
-                android:layout_width="match_parent"
-                android:layout_below="@id/profile_tv_title_posts"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/color_login"
-                android:layout_height="0.5dp"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/profile_recyclerview_photos"
-                android:layout_below="@id/profile_vw_sep1"
-                android:layout_width="match_parent"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
-        </RelativeLayout>
-    </ScrollView>
+                <ImageView
+                    android:id="@+id/profile_iv_background"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_height="200dp"
+                    android:src="@drawable/fo3" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/profile_tv_user_description"
+                    android:layout_below="@id/profile_iv_background"
+                    android:alpha="0.7" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_iv_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="150dp"
+                    android:src="@drawable/face"
+                    app:civ_border_color="@android:color/white"
+                    app:civ_border_width="2dp" />
+
+                <ImageButton
+                    android:id="@+id/profile_btn_edit"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="170dp"
+                    android:background="@drawable/roundedbutton"
+                    android:src="@drawable/edit_light" />
+
+                <ImageButton
+                    android:id="@+id/profile_btn_saved"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="170dp"
+                    android:background="@drawable/roundedbutton"
+                    android:src="@drawable/saved_light" />
+
+                <TextView
+                    android:id="@+id/profile_tv_user_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_ibtn_facebook"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp"
+                    android:text="@string/text_large"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profile_tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_iv_photo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@string/default_font"
+                    android:text="@string/loading"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profile_tv_user_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_tv_user_name"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@string/default_font"
+                    android:text="@string/loading"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="italic" />
+
+                <View
+                    android:id="@+id/profile_vw_sep3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile_tv_user_username"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_vw_sep3"
+                    android:layout_below="@+id/profile_tv_user_username"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toLeftOf="@+id/profile_ibtn_twitter"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/facebook" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_twitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toLeftOf="@+id/profile_ibtn_instagram"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/twitter" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_instagram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@+id/profile_vw_sep3"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/instagram" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_whatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/profile_ibtn_instagram"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/whatsapp" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/profile_ibtn_whatsapp"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/email" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/profile_ibtn_email"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/internet" />
+
+                <ImageButton
+                    android:id="@+id/profile_ibtn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@null"
+                    android:src="@drawable/back" />
+
+                <ImageButton
+                    android:id="@+id/profile_btn_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/profile_ibtn_back"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/profile_ibtn_back"
+                    android:layout_marginRight="10dp"
+                    android:background="@null"
+                    android:src="@drawable/exit" />
+
+                <View
+                    android:id="@+id/profile_vw_sep2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/profile_tv_user_description"
+                    android:background="@color/color_login" />
+
+                <TextView
+                    android:id="@+id/profile_tv_title_posts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/profile_vw_sep1"
+                    android:layout_alignStart="@+id/profile_vw_sep1"
+                    android:layout_below="@id/profile_vw_sep2"
+                    android:fontFamily="@string/default_font"
+                    android:padding="10dp"
+                    android:text="@string/posts"
+                    android:textColor="@color/color_login"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/profile_vw_sep1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/profile_tv_title_posts"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/color_login" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/profile_recyclerview_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profile_vw_sep1"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

@@ -1,7 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
-import android.content.DialogInterface;
-
 /**
  * Created by jose on 21/04/2017.
  */
@@ -61,4 +59,7 @@ public final class BuildConfig {
     public static final String PRIVACITY_WHATSAPP = "PRIVACITY_WHATSAPP";
     public static final String PRIVACITY_WEBSITE = "PRIVACITY_WEBSITE";
     public static final String PRIVACITY_EMAIL = "PRIVACITY_EMAIL";
+    public static final String FACEBOOK_PAGE = "https://www.facebook.com/";
+    public static final String INSTAGRAM_PAGE = "https://www.instagram.com/";
+    public static final String TWITTER_PAGE = "https://twitter.com/";
 }

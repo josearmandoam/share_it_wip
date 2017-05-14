@@ -1,7 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetAvatars;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetAvatars;
 
 import java.util.List;
 

@@ -23,17 +23,17 @@
         android:layout_marginBottom="@dimen/default_margin"
         android:background="@android:color/white"
         android:layout_height="match_parent">
+
         <android.support.design.widget.TabLayout
             android:id="@+id/add_photo_tablayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.design.widget.TabLayout>
+            android:layout_height="wrap_content"></android.support.design.widget.TabLayout>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/add_photo_pageviewer"
             android:layout_below="@id/add_photo_tablayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v4.view.ViewPager>
+            android:layout_height="wrap_content"></android.support.v4.view.ViewPager>
     </RelativeLayout>
 
 </FrameLayout>

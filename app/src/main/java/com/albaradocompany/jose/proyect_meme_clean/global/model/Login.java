@@ -1,10 +1,12 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import java.io.Serializable;
+
 /**
  * Created by jose on 21/04/2017.
  */
 
-public class Login {
+public class Login implements Serializable{
     private String idUser;
     private String username;
     private String password;

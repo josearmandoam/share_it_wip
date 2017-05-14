@@ -4,7 +4,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.api.model.PictureR
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.PicturesService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetPicturesById;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

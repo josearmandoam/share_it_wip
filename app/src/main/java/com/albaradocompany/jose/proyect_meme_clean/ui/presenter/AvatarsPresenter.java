@@ -2,7 +2,7 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsAvatarsPresenter;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetAvatars;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetAvatars;
 
 import java.util.List;
 

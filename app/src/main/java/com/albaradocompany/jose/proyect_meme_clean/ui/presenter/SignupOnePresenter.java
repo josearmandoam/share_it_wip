@@ -5,7 +5,7 @@ import android.content.Context;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupOne;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserByEmail;
 
 /**
  * Created by jose on 19/04/2017.

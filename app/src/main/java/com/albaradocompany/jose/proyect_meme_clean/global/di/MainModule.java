@@ -10,8 +10,6 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.AvatarInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserBD;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import dagger.Module;
 import dagger.Provides;

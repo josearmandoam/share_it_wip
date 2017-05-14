@@ -10,7 +10,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.Save
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserBD;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserBD;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class GetUserBDImp implements GetUserBD {
         userBD.social_twitter = user.getSocialTwitter();
         userBD.social_whatsapp = user.getSocialWhatsapp();
         userBD.social_website = user.getSocialWebsite();
-        long n = userBD.save();
+        userBD.save();
     }
 
     @Override
@@ -64,8 +64,7 @@ public class GetUserBDImp implements GetUserBD {
         picturesBD.description = picture.getDescription();
         picturesBD.date = picture.getDate();
         picturesBD.imageId = picture.getImageId();
-        picturesBD.coments = picture.getComents();
-        picturesBD.likes = picture.getLikes();
+        picturesBD.time = picture.getTime();
         picturesBD.save();
     }
 
@@ -77,8 +76,7 @@ public class GetUserBDImp implements GetUserBD {
         picturesBD.description = picture.getDescription();
         picturesBD.date = picture.getDate();
         picturesBD.imageId = picture.getImageId();
-        picturesBD.coments = picture.getComents();
-        picturesBD.likes = picture.getLikes();
+        picturesBD.time = picture.getTime();
         picturesBD.save();
     }
 
@@ -117,10 +115,6 @@ public class GetUserBDImp implements GetUserBD {
         new Update(UserBD.class).set("social_instagram = ?", user.getSocialInstagram()).where("userId = ?", user.getIdUser()).execute();
         new Update(UserBD.class).set("social_facebook = ?", user.getSocialFacebook()).where("userId = ?", user.getIdUser()).execute();
         new Update(UserBD.class).set("social_twitter = ?", user.getSocialTwitter()).where("userId = ?", user.getIdUser()).execute();
-//        new Update(UserBD.class).set("user_profile = ?, user_description = ?, user_username = ?," +
-//                        " user_background = ?, user_email = ?, user_lastname = ?, user_name = ?", user.getImagePath(),
-//                user.getDescription(), user.getUsername(), user.getBackgrundPath(), user.getEmail(), user.getApellidos(),
-//                user.getNombre()).where("userId = ?", user.getIdUser()).execute();
     }
 
     @Override
@@ -131,5 +125,37 @@ public class GetUserBDImp implements GetUserBD {
     @Override
     public List<UserBD> getUsers() {
         return new Select().from(UserBD.class).execute();
+    }
+
+    @Override
+    public Login parseUserBD(UserBD userBD) {
+        Login c = new Login();
+        c.setIdUser(userBD.userId);
+        c.setImagePath(userBD.user_profile);
+        c.setNombre(userBD.user_name);
+        c.setApellidos(userBD.user_lastname);
+        return c;
+    }
+
+    @Override
+    public Picture parsePictureBD(PicturesBD picture) {
+        Picture pic = new Picture();
+        pic.setUserId(picture.userId);
+        pic.setDate(picture.date);
+        pic.setTime(picture.time);
+        pic.setImageId(picture.imageId);
+        pic.setImagePath(picture.imagePath);
+        pic.setDescription(picture.description);
+        pic.setUserId(picture.userId);
+        return pic;
+    }
+
+    @Override
+    public boolean isPhotoSaved(String imageId) {
+        List a = new Select().from(SavedPicturesBD.class).where("imageId = ?", imageId).execute();
+        if (a.size() > 0)
+            return true;
+        else
+            return false;
     }
 }

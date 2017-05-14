@@ -1,21 +1,24 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.Bitmap;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsProfilePresenter;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,6 +32,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
     private UIComponent component;
     @Inject
     UserSharedImp userSharedImp;
+    @Inject
+    GetUserBDImp getUserBDImp;
 
     public ProfilePresenter(Context context) {
         this.context = context;
@@ -53,7 +58,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showProfile();
         view.showUsername();
         view.showDescription();
-        view.showPhotos();
+        view.updateRecycler();
         view.checkSocialPrivacity();
     }
 
@@ -80,6 +85,121 @@ public class ProfilePresenter extends AbsProfilePresenter {
     @Override
     public void onEditClicked() {
         navigator.navigateToEdit();
+    }
+
+    @Override
+    public void onFacebookClicked() {
+        view.showFacebookDialog();
+    }
+
+    @Override
+    public void onWhastappClicked() {
+        view.showWhastappDialog();
+    }
+
+    @Override
+    public void onInstagramClicked() {
+        view.showInstagramDialog();
+    }
+
+    @Override
+    public void onWebsiteClicked() {
+        view.showWebsiteDialog();
+    }
+
+    @Override
+    public void onTwitterClicked() {
+        view.showTwitterDialog();
+    }
+
+    @Override
+    public void onEmailClicked() {
+        view.showEmailDialog();
+    }
+
+    @Override
+    public void onFacebookDialogAccepted() {
+        navigator.openFacebookPage();
+    }
+
+    @Override
+    public void onWhatsappDialogAccepted() {
+        navigator.openWhatsapp();
+    }
+
+    @Override
+    public void onInstagramDialogAccepted() {
+        navigator.openInstagramPage();
+    }
+
+    @Override
+    public void onWebsiteDialogAccepted() {
+        navigator.openWebsitePage();
+    }
+
+    @Override
+    public void onTwitterDialogAccepted() {
+        navigator.openTwitterPage();
+    }
+
+    @Override
+    public void onEmailDialogAccepted() {
+        navigator.openEmailSelector();
+    }
+
+    @Override
+    public void onPictureClicked(PicturesBD picture) {
+        navigator.navigateToPicture(picture);
+    }
+
+    @Override
+    public void updatePictures() {
+        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesByIdImp(userSharedImp.getUserID()),
+                new MainThreadImp(), new ThreadExecutor());
+        getPicturesById.getPictures(new GetPicturesById.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+                view.showNoInternetAvailable();
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e);
+            }
+
+            @Override
+            public void onPicturesReceived(List<Picture> pictures) {
+                getUserBDImp.deleteUserPictures(userSharedImp.getUserID());
+                for (Picture picture : pictures) {
+                    getUserBDImp.insertUserPicture(picture);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void updateSavedPictures() {
+        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesSavedImp(userSharedImp.getUserID()), new MainThreadImp(), new ThreadExecutor());
+        getPicturesById.getPictures(new GetPicturesById.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+                view.showNoInternetAvailable();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e);
+            }
+
+            @Override
+            public void onPicturesReceived(List<Picture> pictures) {
+                getUserBDImp.deleteUserSavedPictures(userSharedImp.getUserID());
+                for (Picture picture : pictures) {
+                    getUserBDImp.insertUserSavedPicture(picture);
+                }
+            }
+        });
     }
 
 

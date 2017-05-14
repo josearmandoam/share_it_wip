@@ -3,7 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.datasource.api;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.GetUserByEmailService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetUserByEmail;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserByEmail;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

@@ -16,8 +16,8 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetLogin;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetPicturesById;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLogin;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 
 import java.util.ArrayList;
 import java.util.List;

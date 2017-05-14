@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
 
 import java.util.List;
 

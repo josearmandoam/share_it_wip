@@ -6,238 +6,251 @@
     android:layout_height="match_parent"
     android:background="@color/color_login"
     tools:activity="com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <RelativeLayout
-        android:id="@+id/signup_lyt_container"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:src="@color/color_login"
-            android:layout_width="match_parent"
-            android:layout_alignBottom="@+id/signup_background"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/signup_background"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/signup_button_pageone"
-            android:layout_marginBottom="-20dp"
-            android:background="@drawable/fo2"
-            android:alpha="0.3" />
-        <ImageView
-            android:id="@+id/signup_image_lyt"
-            android:layout_alignBottom="@+id/signup_button_next"
-            android:background="@drawable/textrounded2"
-            android:layout_width="match_parent"
-            android:layout_alignTop="@+id/signup_title_ly"
-            android:layout_marginLeft="30dp"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginRight="30dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/signup_title_pp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@string/default_font"
-            android:text="@string/sign_up"
-            android:textColor="@android:color/white"
-            android:layout_alignTop="@+id/signup_view"
-            android:layout_alignBottom="@+id/signup_view"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textSize="@dimen/text_size_title"
-            android:textStyle="bold" />
-        <View
-            android:id="@+id/signup_view"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"/>
-        <ImageButton
-            android:id="@+id/signup_button_birthday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/signup_image_user"
-            android:layout_below="@+id/signup_title_ly"
-            android:layout_alignEnd="@+id/signup_title_ly"
-            android:layout_toRightOf="@+id/signup_image_user"
-            android:background="@null"
-            android:clickable="true"
-            android:focusable="false"
-            android:src="@drawable/date"
-             />
-        <EditText
-            android:id="@+id/signup_et_lastName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_et_name"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/textrounded"
-            android:padding="10dp"
-            android:drawableLeft="@drawable/last_name"
-            android:fontFamily="@string/default_font"
-            android:layout_alignEnd="@+id/signup_title_ly"
-            android:layout_alignStart="@+id/signup_title_ly"
-            android:hint="@string/lastName"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:textSize="@dimen/text_size" />
-        <ImageButton
-            android:id="@+id/signup_button_next"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/signup_et_email"
-            android:layout_margin="20dp"
-            android:background="@drawable/roundedbutton"
-            android:src="@drawable/next" />
 
-        <ProgressBar
-            android:id="@+id/signup_pbr"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_alignEnd="@+id/signup_button_next"
-            android:background="@drawable/progress"
-            android:layout_alignTop="@+id/signup_button_next"
-            android:layout_alignBottom="@+id/signup_button_next"
-            android:layout_height="wrap_content" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/signup_image_user"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/user_default_image"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/signup_title_ly" />
-
-        <ImageButton
-            android:id="@+id/signup_button_addPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/signup_image_user"
-            android:layout_toLeftOf="@+id/signup_image_user"
-            android:layout_alignStart="@+id/signup_title_ly"
-            android:background="@null"
-            android:src="@drawable/add_photo"
-            android:layout_below="@+id/signup_title_ly" />
-        <TextView
-            android:id="@+id/signup_title_ly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_view"
-            android:layout_alignEnd="@+id/signup_image_lyt"
-            android:layout_alignStart="@+id/signup_image_lyt"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:padding="15dp"
-            android:fontFamily="@string/default_font"
-            android:text="@string/personal_info"
-            android:textAlignment="center"
-            android:textColor="@color/text_color_signup"
-            android:textSize="@dimen/text_size_title"
-            android:textStyle="bold" />
-        <EditText
-            android:id="@+id/signup_et_name"
+        <RelativeLayout
+            android:id="@+id/signup_lyt_container"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_image_user"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
-            android:background="@drawable/textrounded"
-            android:layout_centerHorizontal="true"
-            android:layout_alignEnd="@+id/signup_title_ly"
-            android:layout_alignStart="@+id/signup_title_ly"
-            android:fontFamily="@string/default_font"
-            android:hint="@string/name"
-            android:textAlignment="center"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:padding="10dp"
-            android:drawableLeft="@drawable/name"
-            android:textSize="@dimen/text_size" />
-        <EditText
-            android:id="@+id/signup_et_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_et_lastName"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_alignEnd="@+id/signup_title_ly"
-            android:layout_alignStart="@+id/signup_title_ly"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@string/default_font"
-            android:background="@drawable/textrounded"
-            android:padding="10dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:imeOptions="actionDone"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:drawableLeft="@drawable/email"
-            android:textSize="@dimen/text_size" />
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/signup_button_pageone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_below="@+id/signup_image_lyt"
-            android:layout_marginTop="30dp"
-            android:background="@null"
-            android:src="@drawable/page_one_light" />
+            <ImageView
+                android:src="@color/color_login"
+                android:layout_width="match_parent"
+                android:layout_alignBottom="@+id/signup_background"
+                android:layout_height="wrap_content" />
 
-        <ImageButton
-            android:id="@+id/signup_button_pagetwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_image_lyt"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/default_margin_x2"
-            android:background="@null"
-            android:src="@drawable/page_two_dark" />
+            <ImageView
+                android:id="@+id/signup_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/signup_button_pageone"
+                android:layout_marginBottom="-20dp"
+                android:background="@drawable/fo2"
+                android:alpha="0.3" />
 
-        <ImageButton
-            android:id="@+id/signup_button_pagethree"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/signup_image_lyt"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="100dp"
-            android:background="@null"
-            android:src="@drawable/page_trhee_dark" />
+            <ImageView
+                android:id="@+id/signup_image_lyt"
+                android:layout_alignBottom="@+id/signup_button_next"
+                android:background="@drawable/textrounded2"
+                android:layout_width="match_parent"
+                android:layout_alignTop="@+id/signup_title_ly"
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="-5dp"
+                android:layout_marginRight="30dp"
+                android:layout_height="wrap_content" />
 
-        <ImageButton
-            android:id="@+id/signup_button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/signup_image_lyt"
-            android:layout_alignTop="@+id/signup_view"
-            android:layout_alignBottom="@+id/signup_view"
-            android:padding="10dp"
-            android:background="@null"
-            android:src="@drawable/back" />
-        <ImageButton
-            android:id="@+id/signup_btn_clean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_image_lyt"
-            android:layout_alignTop="@+id/signup_view"
-            android:layout_alignBottom="@+id/signup_view"
-            android:padding="10dp"
-            android:background="@null"
-            android:src="@drawable/delete" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/signup_title_pp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@string/default_font"
+                android:text="@string/sign_up"
+                android:textColor="@android:color/white"
+                android:layout_alignTop="@+id/signup_view"
+                android:layout_alignBottom="@+id/signup_view"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/signup_view"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize" />
+
+            <ImageButton
+                android:id="@+id/signup_button_birthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/signup_image_user"
+                android:layout_below="@+id/signup_title_ly"
+                android:layout_alignEnd="@+id/signup_title_ly"
+                android:layout_toRightOf="@+id/signup_image_user"
+                android:background="@null"
+                android:clickable="true"
+                android:focusable="false"
+                android:src="@drawable/date" />
+
+            <EditText
+                android:id="@+id/signup_et_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_et_name"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/textrounded"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/last_name"
+                android:fontFamily="@string/default_font"
+                android:layout_alignEnd="@+id/signup_title_ly"
+                android:layout_alignStart="@+id/signup_title_ly"
+                android:hint="@string/lastName"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="@dimen/text_size" />
+
+            <ImageButton
+                android:id="@+id/signup_button_next"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/signup_et_email"
+                android:layout_margin="20dp"
+                android:background="@drawable/roundedbutton"
+                android:src="@drawable/next" />
+
+            <ProgressBar
+                android:id="@+id/signup_pbr"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_alignEnd="@+id/signup_button_next"
+                android:background="@drawable/progress"
+                android:layout_alignTop="@+id/signup_button_next"
+                android:layout_alignBottom="@+id/signup_button_next"
+                android:layout_height="wrap_content" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/signup_image_user"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_default_image"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/signup_title_ly" />
+
+            <ImageButton
+                android:id="@+id/signup_button_addPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/signup_image_user"
+                android:layout_toLeftOf="@+id/signup_image_user"
+                android:layout_alignStart="@+id/signup_title_ly"
+                android:background="@null"
+                android:src="@drawable/add_photo"
+                android:layout_below="@+id/signup_title_ly" />
+
+            <TextView
+                android:id="@+id/signup_title_ly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_view"
+                android:layout_alignEnd="@+id/signup_image_lyt"
+                android:layout_alignStart="@+id/signup_image_lyt"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:fontFamily="@string/default_font"
+                android:text="@string/personal_info"
+                android:textAlignment="center"
+                android:textColor="@color/text_color_signup"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/signup_et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_image_user"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin"
+                android:background="@drawable/textrounded"
+                android:layout_centerHorizontal="true"
+                android:layout_alignEnd="@+id/signup_title_ly"
+                android:layout_alignStart="@+id/signup_title_ly"
+                android:fontFamily="@string/default_font"
+                android:hint="@string/name"
+                android:textAlignment="center"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:padding="10dp"
+                android:drawableLeft="@drawable/name"
+                android:textSize="@dimen/text_size" />
+
+            <EditText
+                android:id="@+id/signup_et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_et_lastName"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginRight="@dimen/default_margin"
+                android:layout_alignEnd="@+id/signup_title_ly"
+                android:layout_alignStart="@+id/signup_title_ly"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@string/default_font"
+                android:background="@drawable/textrounded"
+                android:padding="10dp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:imeOptions="actionDone"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:drawableLeft="@drawable/email"
+                android:textSize="@dimen/text_size" />
+
+            <ImageButton
+                android:id="@+id/signup_button_pageone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_below="@+id/signup_image_lyt"
+                android:layout_marginTop="30dp"
+                android:background="@null"
+                android:src="@drawable/page_one_light" />
+
+            <ImageButton
+                android:id="@+id/signup_button_pagetwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_image_lyt"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/default_margin_x2"
+                android:background="@null"
+                android:src="@drawable/page_two_dark" />
+
+            <ImageButton
+                android:id="@+id/signup_button_pagethree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signup_image_lyt"
+                android:layout_marginTop="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="100dp"
+                android:background="@null"
+                android:src="@drawable/page_trhee_dark" />
+
+            <ImageButton
+                android:id="@+id/signup_button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/signup_image_lyt"
+                android:layout_alignTop="@+id/signup_view"
+                android:layout_alignBottom="@+id/signup_view"
+                android:padding="10dp"
+                android:background="@null"
+                android:src="@drawable/back" />
+
+            <ImageButton
+                android:id="@+id/signup_btn_clean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signup_image_lyt"
+                android:layout_alignTop="@+id/signup_view"
+                android:layout_alignBottom="@+id/signup_view"
+                android:padding="10dp"
+                android:background="@null"
+                android:src="@drawable/delete" />
+        </RelativeLayout>
     </ScrollView>
 </FrameLayout>

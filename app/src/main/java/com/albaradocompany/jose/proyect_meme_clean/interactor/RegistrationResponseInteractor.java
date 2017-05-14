@@ -1,7 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
 
 /**
  * Created by jose on 24/04/2017.

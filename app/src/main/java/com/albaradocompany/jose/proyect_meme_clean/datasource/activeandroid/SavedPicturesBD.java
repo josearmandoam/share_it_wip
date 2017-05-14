@@ -19,23 +19,20 @@ public class SavedPicturesBD extends Model{
     public String date;
     @Column(name = "imageId")
     public String imageId;
-    @Column(name = "coments")
-    public String coments;
-    @Column(name = "likes")
-    public String likes;
+    @Column(name = "time")
+    public String time;
+
 
     public SavedPicturesBD() {
         super();
     }
 
-    public SavedPicturesBD(String userId, String imagePath, String description, String date,
-                           String imageId, String coments, String likes) {
+    public SavedPicturesBD(String userId, String imagePath, String description, String date, String imageId, String time) {
         this.userId = userId;
         this.imagePath = imagePath;
         this.description = description;
         this.date = date;
         this.imageId = imageId;
-        this.coments = coments;
-        this.likes = likes;
+        this.time = time;
     }
 }

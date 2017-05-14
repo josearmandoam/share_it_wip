@@ -1,7 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.interactor;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetQuestions;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetQuestions;
 
 import java.util.List;
 

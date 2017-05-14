@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/comments_vw_header"
+        android:layout_width="wrap_content"
+        android:background="@color/color_login"
+        android:layout_height="?actionBarSize"/>
+    <TextView
+        android:id="@+id/comments_tv_title_header"
+        android:layout_alignTop="@+id/comments_vw_header"
+        android:layout_alignBottom="@+id/comments_vw_header"
+        android:layout_centerHorizontal="true"
+        android:text="@string/comments"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_title"
+        android:fontFamily="@string/default_font"
+        android:textColor="@android:color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/comments_ibtn_back"
+        android:layout_alignTop="@+id/comments_vw_header"
+        android:layout_alignBottom="@+id/comments_vw_header"
+        android:src="@drawable/back"
+        android:background="@null"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comments_rv_list_comments"
+        android:layout_below="@+id/comments_vw_header"
+        android:layout_above="@+id/comments_vw_coments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+    <View
+        android:id="@+id/comments_vw_coments"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/border_text"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"/>
+    <EditText
+        android:layout_alignTop="@+id/comments_vw_coments"
+        android:layout_alignBottom="@+id/comments_vw_coments"
+        android:layout_alignStart="@+id/comments_vw_coments"
+        android:layout_toLeftOf="@+id/comments_ibtn_send"
+        android:background="@null"
+        android:padding="8dp"
+        android:textSize="@dimen/text_size"
+        android:fontFamily="@string/default_font"
+        android:hint="@string/write_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/comments_ibtn_send"
+        android:src="@drawable/send_dark"
+        android:layout_alignTop="@+id/comments_vw_coments"
+        android:layout_alignBottom="@+id/comments_vw_coments"
+        android:layout_alignEnd="@+id/comments_vw_coments"
+        android:background="@null"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

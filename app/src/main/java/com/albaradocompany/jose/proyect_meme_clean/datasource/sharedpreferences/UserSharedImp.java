@@ -330,11 +330,11 @@ public class UserSharedImp implements UserShared, SignupShared {
 
     @Override
     public void showUserBackground(final ImageView imageView, String path, final UserBD userBD) {
-        imageView.setBackground(context.getDrawable(R.drawable.fo3));
+        imageView.setImageDrawable(context.getDrawable(R.drawable.fo3));
         try {
             File f = new File(path);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            imageView.setBackground(new BitmapDrawable(context.getResources(), b));
+            imageView.setImageBitmap(b);
         } catch (FileNotFoundException e) {
             /*If something went wrong, it will charge from database*/
             getBackgroundFromApi(imageView, userBD);
@@ -349,7 +349,7 @@ public class UserSharedImp implements UserShared, SignupShared {
                 .into(new Target() {
                     @Override
                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        imageView.setBackground(new BitmapDrawable(context.getResources(), bitmap));
+                        imageView.setImageBitmap(bitmap);
                         ImageView im = new ImageView(context);
                         im.setImageBitmap(bitmap);
                         saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");
@@ -357,7 +357,7 @@ public class UserSharedImp implements UserShared, SignupShared {
 
                     @Override
                     public void onBitmapFailed(Drawable errorDrawable) {
-                        imageView.setBackground(errorDrawable);
+                        imageView.setImageDrawable(errorDrawable);
                         ImageView im = new ImageView(context);
                         im.setImageDrawable(errorDrawable);
                         saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");
@@ -365,7 +365,7 @@ public class UserSharedImp implements UserShared, SignupShared {
 
                     @Override
                     public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        imageView.setBackground(placeHolderDrawable);
+                        imageView.setImageDrawable(placeHolderDrawable);
                         ImageView im = new ImageView(context);
                         im.setImageDrawable(placeHolderDrawable);
                         saveBackgroundOnMemoryAsync(((BitmapDrawable) im.getDrawable()).getBitmap(), userBD.userId + "_background");

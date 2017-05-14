@@ -91,4 +91,16 @@
     <string name="demail_empty">Email can not be empty</string>
     <string name="username_empty">Username can not be empty</string>
     <string name="description_empty">Description can not be empty</string>
+    <string name="open_facebook">Open Facebook\'s page</string>
+    <string name="open_instagram">Open Instagram\'s page</string>
+    <string name="open_website">Open Website</string>
+    <string name="open_twitter">Open Twitter\'s page</string>
+    <string name="open_email">Write an email</string>
+    <string name="open_whatsapp">Send a message</string>
+    <string name="go">Go</string>
+    <string name="send">Send</string>
+    <string name="facebook">Facebook</string>
+    <string name="picture">Picture</string>
+    <string name="comments">Comments</string>
+    <string name="write_comment">Write a comment</string>
 </resources>

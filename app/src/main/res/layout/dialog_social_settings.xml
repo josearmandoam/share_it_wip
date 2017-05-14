@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/social_settings_tv_title"
                 android:layout_width="match_parent"
@@ -19,6 +23,7 @@
                 android:background="@color/color_login"
                 android:textColor="@android:color/white"
                 android:layout_height="wrap_content" />
+
             <ImageButton
                 android:id="@+id/social_settings_ibtn_eye"
                 android:layout_width="wrap_content"
@@ -30,6 +35,7 @@
                 android:layout_marginRight="16dp"
                 android:padding="16dp"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_facebook"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -45,6 +51,7 @@
                 android:drawablePadding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_facebook"
                 android:layout_width="wrap_content"
@@ -53,6 +60,7 @@
                 android:layout_alignTop="@+id/social_settings_tv_facebook"
                 android:layout_alignBottom="@+id/social_settings_tv_facebook"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_twitter"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -68,6 +76,7 @@
                 android:drawablePadding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_twitter"
                 android:layout_width="wrap_content"
@@ -76,6 +85,7 @@
                 android:layout_alignTop="@+id/social_settings_tv_twitter"
                 android:layout_alignBottom="@+id/social_settings_tv_twitter"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_instagram"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -91,6 +101,7 @@
                 android:drawablePadding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_instagram"
                 android:layout_width="wrap_content"
@@ -99,6 +110,7 @@
                 android:layout_alignTop="@+id/social_settings_tv_instagram"
                 android:layout_alignBottom="@+id/social_settings_tv_instagram"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_whatsapp"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -114,6 +126,7 @@
                 android:drawablePadding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_whatsapp"
                 android:layout_width="wrap_content"
@@ -122,6 +135,7 @@
                 android:layout_alignTop="@+id/social_settings_tv_whatsapp"
                 android:layout_alignBottom="@+id/social_settings_tv_whatsapp"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_email"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -137,6 +151,7 @@
                 android:drawablePadding="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_email"
                 android:layout_width="wrap_content"
@@ -145,6 +160,7 @@
                 android:layout_alignTop="@+id/social_settings_tv_email"
                 android:layout_alignBottom="@+id/social_settings_tv_email"
                 android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/social_settings_tv_website"
                 android:layout_alignStart="@+id/social_settings_tv_title"
@@ -161,6 +177,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_height="wrap_content" />
+
             <Switch
                 android:id="@+id/social_settings_sw_website"
                 android:layout_width="wrap_content"
@@ -170,17 +187,17 @@
                 android:layout_alignBottom="@+id/social_settings_tv_website"
                 android:layout_height="wrap_content" />
             <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_below="@+id/social_settings_tv_website"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:background="@color/color_login"-->
-                <!--android:textStyle="bold"-->
-                <!--android:fontFamily="@string/default_font"-->
-                <!--android:padding="8dp"-->
-                <!--android:text="@string/privacity"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_below="@+id/social_settings_tv_website"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:background="@color/color_login"-->
+            <!--android:textStyle="bold"-->
+            <!--android:fontFamily="@string/default_font"-->
+            <!--android:padding="8dp"-->
+            <!--android:text="@string/privacity"-->
+            <!--android:layout_height="wrap_content" />-->
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>

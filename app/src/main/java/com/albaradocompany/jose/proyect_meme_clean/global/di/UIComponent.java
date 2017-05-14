@@ -3,6 +3,7 @@ package com.albaradocompany.jose.proyect_meme_clean.global.di;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
@@ -61,4 +62,6 @@ public interface UIComponent {
     void inject(ProfilePresenter profilePresenter);
 
     void inject(SocialSettingsDialog socialSettingsDialog);
+
+    void inject(PictureActivity pictureActivity);
 }

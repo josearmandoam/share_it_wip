@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
@@ -50,7 +49,7 @@ public class AvatarsRecyclerAdapter extends RecyclerView.Adapter<AvatarsRecycler
 
     @Override
     public AvatarsRecyclerAdapter.ListAvatarAdapter onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.avatar_recycler_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_row_avatar, parent, false);
         return new ListAvatarAdapter(view);
     }
 

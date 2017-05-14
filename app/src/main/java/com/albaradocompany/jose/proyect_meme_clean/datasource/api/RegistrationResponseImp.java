@@ -4,7 +4,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.api.retrofit.Regis
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
