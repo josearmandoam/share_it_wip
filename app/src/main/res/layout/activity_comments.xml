@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/comments_swipe_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <View
         android:id="@+id/comments_vw_header"
         android:layout_width="wrap_content"
         android:background="@color/color_login"
-        android:layout_height="?actionBarSize"/>
+        android:layout_height="?actionBarSize" />
+
     <TextView
         android:id="@+id/comments_tv_title_header"
         android:layout_alignTop="@+id/comments_vw_header"
@@ -22,6 +29,7 @@
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <ImageButton
         android:id="@+id/comments_ibtn_back"
         android:layout_alignTop="@+id/comments_vw_header"
@@ -31,21 +39,26 @@
         android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comments_rv_list_comments"
         android:layout_below="@+id/comments_vw_header"
         android:layout_above="@+id/comments_vw_coments"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     </android.support.v7.widget.RecyclerView>
+
     <View
         android:id="@+id/comments_vw_coments"
         android:layout_margin="5dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/border_text"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"/>
+        android:layout_height="?actionBarSize" />
+
     <EditText
+        android:id="@+id/comments_tv_comment"
         android:layout_alignTop="@+id/comments_vw_coments"
         android:layout_alignBottom="@+id/comments_vw_coments"
         android:layout_alignStart="@+id/comments_vw_coments"
@@ -57,6 +70,7 @@
         android:hint="@string/write_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <ImageButton
         android:id="@+id/comments_ibtn_send"
         android:src="@drawable/send_dark"
@@ -67,4 +81,16 @@
         android:padding="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</RelativeLayout>
+    <ProgressBar
+        android:id="@+id/comments_pbr"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/progress"
+        android:layout_alignTop="@+id/comments_ibtn_send"
+        android:layout_alignBottom="@+id/comments_ibtn_send"
+        android:layout_alignEnd="@+id/comments_ibtn_send"
+        android:layout_alignStart="@+id/comments_ibtn_send"
+        android:layout_height="wrap_content" />
+    </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

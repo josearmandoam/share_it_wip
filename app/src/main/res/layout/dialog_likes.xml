@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/likes_vw_header"
+        android:layout_width="match_parent"
+        android:background="@color/color_login"
+        android:layout_height="?actionBarSize" />
+
+    <TextView
+        android:id="@+id/likes_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/likes_title"
+        android:textColor="@android:color/white"
+        android:layout_alignBottom="@+id/likes_vw_header"
+        android:layout_alignTop="@+id/likes_vw_header"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_title"
+        android:fontFamily="@string/default_font"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/likes_ibtn_back"
+        android:src="@drawable/back"
+        android:background="@null"
+        android:layout_alignTop="@+id/likes_vw_header"
+        android:layout_alignBottom="@+id/likes_vw_header"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/likes_rv"
+        android:layout_below="@+id/likes_vw_header"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
-</FrameLayout>
+</RelativeLayout>

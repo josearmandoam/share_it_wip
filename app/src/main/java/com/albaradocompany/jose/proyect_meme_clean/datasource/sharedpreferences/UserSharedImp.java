@@ -111,6 +111,12 @@ public class UserSharedImp implements UserShared, SignupShared {
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
         return userID;
     }
+    public String createCommentID() {
+        Calendar calendar = Calendar.getInstance();
+        String commentID = "comment" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
+                + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
+        return commentID;
+    }
 
     @Override
     public void saveDateBirthday(int i, int i1, int i2) {
@@ -787,34 +793,34 @@ public class UserSharedImp implements UserShared, SignupShared {
 
     @Override
     public void updateSocialMedia(String socialTwitter, String socialFacebook, String socialWhatsapp, String socialEmail, String socialInstagram, String socialWebsite) {
-        if (socialEmail.equals("private")){
+        if (socialEmail.equals("private")) {
             saveEmailPrivacity("false");
-        }else{
+        } else {
             saveEmailPrivacity("true");
         }
-        if (socialFacebook.equals("private")){
+        if (socialFacebook.equals("private")) {
             saveFacebookPrivacity("false");
-        }else{
+        } else {
             saveFacebookPrivacity("true");
         }
-        if (socialWebsite.equals("private")){
+        if (socialWebsite.equals("private")) {
             saveWebsitePrivacity("false");
-        }else{
+        } else {
             saveWebsitePrivacity("true");
         }
-        if (socialWhatsapp.equals("private")){
+        if (socialWhatsapp.equals("private")) {
             saveWhatsappPrivacity("false");
-        }else{
+        } else {
             saveWhatsappPrivacity("true");
         }
-        if (socialInstagram.equals("private")){
+        if (socialInstagram.equals("private")) {
             saveInstagramPrivacity("false");
-        }else{
+        } else {
             saveInstagramPrivacity("true");
         }
-        if (socialWebsite.equals("private")){
+        if (socialWebsite.equals("private")) {
             saveWebsitePrivacity("false");
-        }else{
+        } else {
             saveWebsitePrivacity("true");
         }
     }

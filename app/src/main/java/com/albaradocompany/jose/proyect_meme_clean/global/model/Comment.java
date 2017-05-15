@@ -6,12 +6,13 @@ import java.io.Serializable;
  * Created by jose on 14/05/2017.
  */
 
-public class Comment implements Serializable{
+public class Comment implements Serializable {
     String imageId;
     String commentId;
     String username;
     String profile;
     String comment;
+    String userId;
     String date;
     String time;
 
@@ -23,15 +24,17 @@ public class Comment implements Serializable{
         date = "";
         time = "";
         comment = "";
+        userId = "";
     }
 
     public Comment(String imageId, String commentId, String username, String profile, String comment,
-                   String date, String time) {
+                   String userId, String date, String time) {
         this.imageId = imageId;
         this.commentId = commentId;
         this.username = username;
         this.profile = profile;
         this.comment = comment;
+        this.userId = userId;
         this.date = date;
         this.time = time;
     }
@@ -90,5 +93,13 @@ public class Comment implements Serializable{
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

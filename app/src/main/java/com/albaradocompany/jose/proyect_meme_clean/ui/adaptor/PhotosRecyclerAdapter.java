@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
@@ -63,9 +62,10 @@ public class PhotosRecyclerAdapter extends RecyclerView.Adapter<PhotosRecyclerAd
         ImageView picture;
 
         @OnClick(R.id.photo_recycler_iv_picture)
-        public void onPictureClicked(View view){
+        public void onPictureClicked(View view) {
             listener.onPictureClicked(list.get(getAdapterPosition()));
         }
+
         public ListPhotosAdapter(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

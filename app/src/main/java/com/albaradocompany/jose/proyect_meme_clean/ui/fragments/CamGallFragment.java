@@ -189,7 +189,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         SignupOneActivity.bitmapReceived = null;
         SignupTwoActivity.bitmapReceived = null;
         SignupThreeActivity.bitmapReceived = null;
-        EditProfileActivity.backgroundBitmapReceived= null;
+        EditProfileActivity.backgroundBitmapReceived = null;
         EditProfileActivity.profileBitmapReceived = null;
 
         userSharedImp.saveProfileFTPSelected("false");

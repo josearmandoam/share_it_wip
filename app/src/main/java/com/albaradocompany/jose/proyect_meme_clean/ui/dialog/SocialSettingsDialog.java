@@ -2,7 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.view.Display;

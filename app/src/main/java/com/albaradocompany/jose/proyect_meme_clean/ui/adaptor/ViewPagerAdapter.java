@@ -13,13 +13,14 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.UserSavedPhotosF
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     String fragments[] = {"Fragment 1", "Fragment 2"};
+
     public ViewPagerAdapter(FragmentManager supportFragmentManager) {
         super(supportFragmentManager);
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 return new UserPhotosFragment();
             case 1:

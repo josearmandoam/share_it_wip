@@ -103,4 +103,11 @@
     <string name="picture">Picture</string>
     <string name="comments">Comments</string>
     <string name="write_comment">Write a comment</string>
+    <string name="likes">Likes</string>
+    <string name="likes_title">People who liked this</string>
+    <string name="random_name">Joan Manuel Serrat</string>
+    <string name="commento_couldnt_send">Could not send comment, try it later</string>
+    <string name="drop_comment">DROP COMMENT</string>
+    <string name="error_drop_comment">Could not drop comment, try it later!</string>
+    <string name="error_update_comments">Could not update comments, check your internet connection</string>
 </resources>

@@ -25,6 +25,7 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
         component().inject(this);
         initializePresenter();
     }
+
     private void initializePresenter() {
         presenter = new SplashPresenter(this);
         presenter.setView(this);

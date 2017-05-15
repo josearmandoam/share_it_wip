@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
  * Created by jose on 06/05/2017.
  */
 @Table(name = "SavedPictures")
-public class SavedPicturesBD extends Model{
+public class SavedPicturesBD extends Model {
     @Column(name = "userId")
     public String userId;
     @Column(name = "imagePath")

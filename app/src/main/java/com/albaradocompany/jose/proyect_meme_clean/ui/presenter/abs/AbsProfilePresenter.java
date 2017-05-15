@@ -1,9 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
-import android.graphics.Bitmap;
-
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
 /**

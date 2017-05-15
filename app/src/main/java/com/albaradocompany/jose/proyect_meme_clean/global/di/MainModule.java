@@ -50,5 +50,7 @@ public class MainModule {
     }
 
     @Provides
-    public GetUserBDImp provideGetUserBDImp() { return getUserBDImp; }
+    public GetUserBDImp provideGetUserBDImp() {
+        return getUserBDImp;
+    }
 }

@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/likes_row_iv_profile"
-        android:src="@drawable/face"
-        android:layout_margin="5dp"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:src="@drawable/face" />
+
     <TextView
         android:id="@+id/likes_row_tv_username"
-        android:layout_toRightOf="@+id/likes_row_iv_profile"
-        android:padding="8dp"
-        android:text="Joan Manuel Serrat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/likes_row_iv_profile"
         android:layout_alignTop="@+id/likes_row_iv_profile"
-        android:gravity="center"
-        android:textStyle="bold"
+        android:layout_toRightOf="@+id/likes_row_iv_profile"
         android:fontFamily="@string/default_font"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/random_name"
+        android:textStyle="bold" />
+
     <View
         android:id="@+id/likes_row_vw_separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:layout_alignStart="@+id/likes_row_tv_username"
         android:layout_below="@+id/likes_row_tv_username"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="8dp"
-        android:background="@android:color/darker_gray"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"/>
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray" />
 </RelativeLayout>

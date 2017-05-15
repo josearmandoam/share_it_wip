@@ -18,64 +18,64 @@
             android:src="@drawable/fo3" />
 
         <!--<View-->
-            <!--android:id="@+id/photo_recycler_view"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@+id/photo_recycler_iv_like"-->
-            <!--android:layout_alignEnd="@id/photo_recycler_iv_picture"-->
-            <!--android:layout_alignStart="@id/photo_recycler_iv_picture"-->
-            <!--android:layout_alignTop="@+id/photo_recycler_iv_like"-->
-            <!--android:alpha="0.2"-->
-            <!--android:background="@color/color_login" />-->
+        <!--android:id="@+id/photo_recycler_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/photo_recycler_iv_like"-->
+        <!--android:layout_alignEnd="@id/photo_recycler_iv_picture"-->
+        <!--android:layout_alignStart="@id/photo_recycler_iv_picture"-->
+        <!--android:layout_alignTop="@+id/photo_recycler_iv_like"-->
+        <!--android:alpha="0.2"-->
+        <!--android:background="@color/color_login" />-->
 
         <!--<ImageButton-->
-            <!--android:id="@+id/photo_recycler_iv_like"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@+id/photo_recycler_iv_picture"-->
-            <!--android:layout_alignStart="@id/photo_recycler_view"-->
-            <!--android:background="@null"-->
-            <!--android:padding="5dp"-->
-            <!--android:src="@drawable/like" />-->
+        <!--android:id="@+id/photo_recycler_iv_like"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/photo_recycler_iv_picture"-->
+        <!--android:layout_alignStart="@id/photo_recycler_view"-->
+        <!--android:background="@null"-->
+        <!--android:padding="5dp"-->
+        <!--android:src="@drawable/like" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/photo_recycler_tv_number_likes"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@+id/photo_recycler_view"-->
-            <!--android:layout_alignTop="@+id/photo_recycler_view"-->
-            <!--android:layout_toRightOf="@+id/photo_recycler_iv_like"-->
-            <!--android:fontFamily="@string/default_font"-->
-            <!--android:gravity="center"-->
-            <!--android:padding="5dp"-->
-            <!--android:text="@string/default_likes"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="15sp"-->
-            <!--android:textStyle="bold" />-->
+        <!--android:id="@+id/photo_recycler_tv_number_likes"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/photo_recycler_view"-->
+        <!--android:layout_alignTop="@+id/photo_recycler_view"-->
+        <!--android:layout_toRightOf="@+id/photo_recycler_iv_like"-->
+        <!--android:fontFamily="@string/default_font"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="5dp"-->
+        <!--android:text="@string/default_likes"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textStyle="bold" />-->
 
         <!--<ImageButton-->
-            <!--android:id="@+id/photo_recycler_iv_comments"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignTop="@+id/photo_recycler_iv_like"-->
-            <!--android:layout_toLeftOf="@+id/photo_recycler_tv_number_comments"-->
-            <!--android:background="@null"-->
-            <!--android:padding="5dp"-->
-            <!--android:src="@drawable/comment" />-->
+        <!--android:id="@+id/photo_recycler_iv_comments"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/photo_recycler_iv_like"-->
+        <!--android:layout_toLeftOf="@+id/photo_recycler_tv_number_comments"-->
+        <!--android:background="@null"-->
+        <!--android:padding="5dp"-->
+        <!--android:src="@drawable/comment" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/photo_recycler_tv_number_comments"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignBottom="@+id/photo_recycler_view"-->
-            <!--android:layout_alignEnd="@+id/photo_recycler_iv_picture"-->
-            <!--android:layout_alignTop="@+id/photo_recycler_view"-->
-            <!--android:fontFamily="@string/default_font"-->
-            <!--android:gravity="center"-->
-            <!--android:padding="5dp"-->
-            <!--android:text="@string/default_likes"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="15sp"-->
-            <!--android:textStyle="bold" />-->
+        <!--android:id="@+id/photo_recycler_tv_number_comments"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/photo_recycler_view"-->
+        <!--android:layout_alignEnd="@+id/photo_recycler_iv_picture"-->
+        <!--android:layout_alignTop="@+id/photo_recycler_view"-->
+        <!--android:fontFamily="@string/default_font"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="5dp"-->
+        <!--android:text="@string/default_likes"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="15sp"-->
+        <!--android:textStyle="bold" />-->
     </RelativeLayout>
 </FrameLayout>

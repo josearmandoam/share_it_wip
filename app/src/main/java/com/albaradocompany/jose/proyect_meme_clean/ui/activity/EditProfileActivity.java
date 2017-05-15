@@ -34,8 +34,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindString;
@@ -397,6 +395,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     private UpdateUserInteractor getInteractor() {
         UpdateUserInteractor interactor = null;
+        userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
         if (userSharedImp.isProfileChanged() && userSharedImp.isBackgroundChanged()) {
             interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
                     name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
@@ -457,9 +456,14 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         c.setUsername(userName.getText().toString());
         if (userSharedImp.isProfileChanged()) {
             c.setImagePath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile");
+        } else {
+            c.setImagePath(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_profile);
         }
+
         if (userSharedImp.isBackgroundChanged()) {
             c.setBackgrundPath(BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background");
+        } else {
+            c.setBackgrundPath(getUserBDImp.getUserBD(userSharedImp.getUserID()).user_background);
         }
         c.setSocialTwitter(getSocialTwitter());
         c.setSocialFacebook(getSocialFacebook());

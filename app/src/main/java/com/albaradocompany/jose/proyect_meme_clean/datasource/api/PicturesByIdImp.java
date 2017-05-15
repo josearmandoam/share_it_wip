@@ -30,7 +30,7 @@ public class PicturesByIdImp implements GetPicturesById, Callback<PictureRespons
 
     @Override
     public void getPictures(Listener listener) {
-        if (listener!=null){
+        if (listener != null) {
             this.listener = listener;
         }
         Gson gson = new GsonBuilder()
@@ -46,9 +46,9 @@ public class PicturesByIdImp implements GetPicturesById, Callback<PictureRespons
 
     @Override
     public void onResponse(Call<PictureResponse> call, Response<PictureResponse> response) {
-        if (response.isSuccessful()){
+        if (response.isSuccessful()) {
             listener.onPicturesReceived(response.body().parsePictures());
-        }else{
+        } else {
             listener.onError(new Exception("Body failed"));
         }
     }

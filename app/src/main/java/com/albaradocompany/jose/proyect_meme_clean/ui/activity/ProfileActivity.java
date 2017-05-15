@@ -41,8 +41,8 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.View, AbsProfilePresenter.Navigator {
 
-    private static final float LOW_VISIVILITY = 70;
-    private static final float HIGHT_VISIVILITY = 255;
+    private final int LOW_VISIVILITY = 50;
+    private final int HIGHT_VISIVILITY = 255;
 
     @BindView(R.id.profile_btn_menu)
     ImageButton menu;
@@ -125,7 +125,6 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     AbsProfilePresenter presenter;
     UserBD userBD;
     AlertDialog alertDialog;
-
 
     @Inject
     UserSharedImp userSharedImp;
@@ -492,6 +491,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         if (userBD.social_instagram.equals("private")) {
             instagram.setEnabled(false);
             instagram.setAlpha(LOW_VISIVILITY);
+            instagram.setBackgroundColor(android.R.color.transparent);
         } else {
             instagram.setEnabled(true);
             instagram.setAlpha(HIGHT_VISIVILITY);

@@ -13,6 +13,7 @@ public class CommentsApiEntry {
     String time = "";
     String commentId = "";
     String comment = "";
+    String userId = "";
     String profile = "";
 
     public Comment parseComment() {
@@ -24,6 +25,7 @@ public class CommentsApiEntry {
         obj.setCommentId(commentId);
         obj.setComment(comment);
         obj.setProfile(profile);
+        obj.setUserId(userId);
         return obj;
     }
 }

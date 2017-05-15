@@ -139,7 +139,7 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         if (result) {
                             Log.v("upload result", "succeeded");
                             userSharedImp.saveBackgroundChanges("false");
-                        }else{
+                        } else {
                             uploadBackground();
                         }
                         ftpClient.logout();
@@ -175,8 +175,8 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         if (result) {
                             Log.v("upload result", "succeeded");
                             userSharedImp.saveProfileChanges("false");
-                        }else{
-                           uploadProfile();
+                        } else {
+                            uploadProfile();
                         }
                         ftpClient.logout();
                         ftpClient.disconnect();

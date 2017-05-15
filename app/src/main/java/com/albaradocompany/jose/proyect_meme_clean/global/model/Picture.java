@@ -1,7 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**

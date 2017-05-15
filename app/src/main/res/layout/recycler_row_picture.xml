@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity">
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/picture_row_swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,13 +28,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?actionBarSize"
                 android:layout_below="@+id/picture_row_iv_photo" />
+
             <View
                 android:layout_below="@+id/picture_row_vw_social"
                 android:background="@android:color/darker_gray"
                 android:layout_alignStart="@+id/picture_row_vw_social"
                 android:layout_alignEnd="@+id/picture_row_vw_social"
                 android:layout_width="wrap_content"
-                android:layout_height="0.5dp"/>
+                android:layout_height="0.5dp" />
 
             <ImageButton
                 android:id="@+id/picture_row_ibtn_like"
@@ -102,11 +106,10 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/picture_row_iv_user_profile"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:src="@drawable/face"
                 android:layout_alignTop="@+id/picture_row_vw_user_info"
                 android:layout_alignBottom="@+id/picture_row_vw_user_info"
-                android:layout_alignEnd="@+id/picture_row_tv_likes"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
                 android:layout_height="wrap_content" />
@@ -119,7 +122,7 @@
                 android:layout_toRightOf="@id/picture_row_iv_user_profile"
                 android:text="JOAN MANUEL SERRAT"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="4dp"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold"
                 android:fontFamily="@string/default_font"
@@ -148,4 +151,5 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
@@ -10,6 +11,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivi
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.DropCommentDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
@@ -64,4 +66,7 @@ public interface UIComponent {
     void inject(SocialSettingsDialog socialSettingsDialog);
 
     void inject(PictureActivity pictureActivity);
+
+    void inject(CommentsActivity commentsActivity);
+
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * Created by jose on 14/05/2017.
@@ -28,9 +30,10 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
 
     CommentsRecyclerAdapter.onCommentClicked commentClicked;
 
-    public CommentsRecyclerAdapter(Context context, List<Comment> comments) {
+    public CommentsRecyclerAdapter(Context context, List<Comment> comments, onCommentClicked commentClicked) {
         this.context = context;
         this.comments = comments;
+        this.commentClicked = commentClicked;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         holder.comment.setText(comments.get(position).getComment());
         Picasso.with(context).load(comments.get(position).getProfile()).into(holder.profile);
         holder.username.setText(comments.get(position).getUsername());
-        holder.time.setText(comments.get(position).getTime());
+        holder.time.setText(DateUtil.timeAgo(comments.get(position).getDate(), comments.get(position).getTime()));
     }
 
     @Override
@@ -72,6 +75,12 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
             commentClicked.onUsernameClicked();
         }
 
+        @OnLongClick(R.id.comment_row_comment)
+        public boolean onCommentLongClickd(View view) {
+            commentClicked.onLongClick(comments.get(getAdapterPosition()));
+            return true;
+        }
+
         public CommentsView(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -82,5 +91,7 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         void onPictureClicked();
 
         void onUsernameClicked();
+
+        void onLongClick(Comment comment);
     }
 }

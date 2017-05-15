@@ -50,6 +50,6 @@ public class SplashPresenter extends AbsSplash {
     }
 
     protected UIComponent getComponent() {
-            return ((SplashActivity) context).component();
+        return ((SplashActivity) context).component();
     }
 }

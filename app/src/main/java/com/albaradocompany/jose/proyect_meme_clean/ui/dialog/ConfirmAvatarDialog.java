@@ -97,7 +97,7 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     @Override
     public void closeConfirmAvatar() {
         dialog.dismiss();
-        switch (action){
+        switch (action) {
             case 0:
                 userSharedImp.saveUserAvatar(avatar);
                 activity.finish();

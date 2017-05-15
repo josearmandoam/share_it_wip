@@ -7,6 +7,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetComments;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLikes;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateLike;
 
 import java.util.List;
 
@@ -15,15 +16,21 @@ import java.util.List;
  */
 
 public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.View, AbsPicturePresenter.Navigator> {
-    public abstract void getPictureLikes(GetLikes getLikes,String imageId);
+    public abstract void getPictureLikes(GetLikes getLikes, String imageId);
 
     public abstract void getPictureComments(GetComments commentsInteractor, String imageId);
 
-    public abstract void initializeData(Login user, Picture pic);
+    public abstract void initializeData(Login user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor);
 
     public abstract void onCommentsClicked();
 
     public abstract void onLikesClicked();
+
+    public abstract void onUserLikePhoto(UpdateLike updateLike, List<Like> likeList);
+
+    public abstract void onUserUnLikePhoto(UpdateLike updateLike, List<Like> likeList);
+
+    public abstract void onBackClicked();
 
     public interface View {
         void showLoading();
@@ -51,9 +58,15 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
         void showSaved(String imagePath);
 
         void showLikesDialog();
+
+        void showUnLikePicture();
+
+        void showLikePicture();
     }
 
     public interface Navigator {
         void navigateToComments();
+
+        void navigateToBack();
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -13,8 +14,10 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.CommentsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LikesApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateLikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
@@ -26,6 +29,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.CommentsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LikesInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateLikesInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
@@ -48,6 +52,8 @@ import butterknife.OnClick;
 
 public class PictureActivity extends BaseActivty implements AbsPicturePresenter.View, AbsPicturePresenter.Navigator {
 
+    private static final String DELETE = "delete";
+    private static final String INSERT = "insert";
     @BindView(R.id.picture_row_iv_photo)
     ImageView image;
     @BindView(R.id.picture_row_iv_user_profile)
@@ -70,6 +76,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     ImageButton btnSave;
     @BindView(R.id.picture_row_ibtn_like)
     ImageButton btnLike;
+    @BindView(R.id.picture_row_swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindString(R.string.noInternetAvailable)
     String noInternet;
@@ -81,7 +89,10 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     Drawable heartBorder;
     @BindDrawable(R.drawable.heart_fill)
     Drawable heartFill;
-
+    @BindString(R.string.likes)
+    String likes_title;
+    @BindString(R.string.comments)
+    String comments_title;
 
     List<Like> listLikes;
     List<Comment> listComments;
@@ -90,6 +101,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     GetComments commentsInteractor;
     ShowSnackBarImp showSnackBarImp;
     UIComponent component;
+    String imageId;
+    UserBD userBD;
     @Inject
     GetUserBDImp getUserBD;
     @Inject
@@ -104,9 +117,15 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     public void onTVCommentClicked(View view) {
         presenter.onCommentsClicked();
     }
+
     @OnClick(R.id.picture_row_ibtn_like)
     public void onLikesClicked(View view) {
-        presenter.onLikesClicked();
+        updateUserLikePictureApi();
+    }
+
+    @OnClick(R.id.picture_ibtn_back)
+    public void onBackClicked(View view) {
+        presenter.onBackClicked();
     }
 
     @OnClick(R.id.picture_row_tv_likes)
@@ -120,14 +139,34 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         initialize();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.resume();
+    }
+
     private void initialize() {
         component().inject(this);
+
+        userBD = getUserBD.getUserBD(userSharedImp.getUserID());
 
         showSnackBarImp = new ShowSnackBarImp(this);
         presenter = new PicturePresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
         getDataReceived();
+        initializeSwipeRefresh();
+
+    }
+
+    private void initializeSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.resume();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -143,10 +182,10 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     public void getDataReceived() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            String imageId = (String) bundle.get("imageId");
+            imageId = (String) bundle.get("imageId");
             Login user = (Login) bundle.get("user");
             Picture pic = (Picture) bundle.get("image");
-            presenter.initializeData(user, pic);
+            presenter.initializeData(user, pic, getLikesInteractor(imageId), getCommentsInteractor(imageId));
             presenter.getPictureLikes(getLikesInteractor(imageId), imageId);
             presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
         }
@@ -181,7 +220,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @Override
     public void showLikes(List<Like> likesList) {
         this.listLikes = likesList;
-        likes.setText("" + likesList.size());
+        likes.setText("" + likesList.size() + " " + likes_title);
         if (likesList.size() > 0) {
             checkLiked(likesList);
         } else {
@@ -192,7 +231,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @Override
     public void showComments(List<Comment> commentsList) {
         this.listComments = commentsList;
-        comments.setText("" + commentsList.size());
+        comments.setText("" + commentsList.size() + " " + comments_title);
 
     }
 
@@ -204,12 +243,14 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     @Override
     public void showPicture(String imagePath) {
-        Picasso.with(this).load(imagePath).into(image);
+        if (!imagePath.isEmpty())
+            Picasso.with(this).load(imagePath).into(image);
     }
 
     @Override
     public void showUserProfile(String imagePath) {
-        Picasso.with(this).load(imagePath).into(profile);
+        if (!imagePath.isEmpty())
+            Picasso.with(this).load(imagePath).into(profile);
     }
 
     @Override
@@ -235,6 +276,16 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @Override
     public void showLikesDialog() {
         new LikesDialog(this, listLikes);
+    }
+
+    @Override
+    public void showUnLikePicture() {
+        btnLike.setImageDrawable(heartBorder);
+    }
+
+    @Override
+    public void showLikePicture() {
+        btnLike.setImageDrawable(heartFill);
     }
 
     private void checkSaved(String imageId) {
@@ -274,9 +325,33 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         openCommentsActivity();
     }
 
+    @Override
+    public void navigateToBack() {
+        onBackPressed();
+    }
+
     public void openCommentsActivity() {
         Intent intent = new Intent(this, CommentsActivity.class);
         intent.putExtra("comments", (Serializable) listComments);
+        intent.putExtra("imageId", imageId);
         startActivity(intent);
+    }
+
+    private void updateUserLikePictureApi() {
+        if (btnLike.getDrawable().equals(heartFill)) {
+            presenter.onUserUnLikePhoto(getUpdateDELLikeInteractor(), listLikes);
+        } else {
+            presenter.onUserLikePhoto(getUpdateINSLikeInteractor(), listLikes);
+        }
+    }
+
+    public UpdateLikesInteractor getUpdateDELLikeInteractor() {
+        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
+                userBD.user_name, userBD.user_lastname, userBD.user_profile, DELETE), new MainThreadImp(), new ThreadExecutor());
+    }
+
+    public UpdateLikesInteractor getUpdateINSLikeInteractor() {
+        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
+                userBD.user_name, userBD.user_lastname, userBD.user_profile, INSERT), new MainThreadImp(), new ThreadExecutor());
     }
 }
