@@ -2,16 +2,17 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UserActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.LikesRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LikesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsLikesPresenter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
 
 import java.util.List;
 
@@ -34,9 +35,21 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
     AbsLikesPresenter presenter;
 
     @OnClick(R.id.likes_ibtn_back)
-    public void onBackClicked(View view){
+    public void onBackClicked(View view) {
         presenter.onBackClicked();
     }
+
+    LikesRecyclerAdapter.onUserClicked onUserClicked = new LikesRecyclerAdapter.onUserClicked() {
+        @Override
+        public void onPictureClicked(Like like) {
+            presenter.onPictureClicked(like);
+        }
+
+        @Override
+        public void onUserNameClicked(Like like) {
+            presenter.onUsernameClicked(like);
+        }
+    };
 
     public LikesDialog(Context context, List<Like> likes) {
         super(context);
@@ -49,7 +62,7 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
         initializeDialog();
         ButterKnife.bind(this, dialog);
 
-        adapter = new LikesRecyclerAdapter(getContext(), listLikes);
+        adapter = new LikesRecyclerAdapter(getContext(), listLikes, onUserClicked);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -69,5 +82,16 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
     @Override
     public void hideDialog() {
         dialog.dismiss();
+    }
+
+    @Override
+    public void navigateToUserDetail(Like like) {
+        openUserDetail(getContext(), like);
+    }
+
+    public static void openUserDetail(Context ctx, Like like) {
+        Intent intent = new Intent(ctx, UserActivity.class);
+        intent.putExtra("userId", like.getUserId());
+        ctx.startActivity(intent);
     }
 }

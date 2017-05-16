@@ -4,6 +4,8 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateSavedPictureInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetComments;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLikes;
@@ -20,7 +22,7 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
 
     public abstract void getPictureComments(GetComments commentsInteractor, String imageId);
 
-    public abstract void initializeData(Login user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor);
+    public abstract void initializeData(User user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor);
 
     public abstract void onCommentsClicked();
 
@@ -31,6 +33,10 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
     public abstract void onUserUnLikePhoto(UpdateLike updateLike, List<Like> likeList);
 
     public abstract void onBackClicked();
+
+    public abstract void onDeleteSavedPicture(UpdateSavedPictureInteractor updateDELSaveInteractor);
+
+    public abstract void onInsertSavePicture(UpdateSavedPictureInteractor updateINSSaveInteractor);
 
     public interface View {
         void showLoading();
@@ -62,6 +68,10 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
         void showUnLikePicture();
 
         void showLikePicture();
+
+        void showPictureNotSaved();
+
+        void showPictureSaved();
     }
 
     public interface Navigator {

@@ -13,4 +13,8 @@ public class GenericApiResponse {
     public GenericResponse parseResponse() {
         return response.parseResponse();
     }
+
+    public  boolean isSuccessful(){
+        return response.parseResponse().getCode().equals("1");
+    }
 }

@@ -16,5 +16,5 @@ public interface UpdateLikeService {
     @POST("updateUserLike.php")
     Call<GenericApiResponse> updateLike(@Field("userId") String userId, @Field("imageId") String imageId,
                                         @Field("profile") String profile, @Field("username") String username,
-                                        @Field("action") String action);
+                                        @Field("likeId") String likeId, @Field("action") String action);
 }

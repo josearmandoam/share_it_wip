@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by jose on 14/05/2017.
@@ -24,10 +25,12 @@ import butterknife.ButterKnife;
 public class LikesRecyclerAdapter extends RecyclerView.Adapter<LikesRecyclerAdapter.LikesView> {
     Context context;
     List<Like> listLikes;
+    LikesRecyclerAdapter.onUserClicked onClickListener = new NullListener();
 
-    public LikesRecyclerAdapter(Context context, List<Like> listLikes) {
+    public LikesRecyclerAdapter(Context context, List<Like> listLikes, onUserClicked onClickListener) {
         this.context = context;
         this.listLikes = listLikes;
+        this.onClickListener = onClickListener;
     }
 
     @Override
@@ -53,6 +56,15 @@ public class LikesRecyclerAdapter extends RecyclerView.Adapter<LikesRecyclerAdap
         @BindView(R.id.likes_row_tv_username)
         TextView username;
 
+        @OnClick(R.id.likes_row_iv_profile)
+        public void onProfileClicked(View view) {
+            onClickListener.onPictureClicked(listLikes.get(getAdapterPosition()));
+        }
+        @OnClick(R.id.likes_row_tv_username)
+        public void onUsernameClicked(View view) {
+            onClickListener.onUserNameClicked(listLikes.get(getAdapterPosition()));
+        }
+
         public LikesView(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -60,8 +72,21 @@ public class LikesRecyclerAdapter extends RecyclerView.Adapter<LikesRecyclerAdap
     }
 
     public interface onUserClicked {
-        void onPictureClicked();
+        void onPictureClicked(Like like);
 
-        void onUserNameClicked();
+        void onUserNameClicked(Like like);
+    }
+
+    private class NullListener implements onUserClicked {
+
+        @Override
+        public void onPictureClicked(Like like) {
+
+        }
+
+        @Override
+        public void onUserNameClicked(Like like) {
+
+        }
     }
 }

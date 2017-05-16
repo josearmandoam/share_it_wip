@@ -2,6 +2,7 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
 
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsLikesPresenter;
 
 /**
@@ -38,5 +39,15 @@ public class LikesPresenter extends AbsLikesPresenter {
     @Override
     public void onBackClicked() {
         view.hideDialog();
+    }
+
+    @Override
+    public void onPictureClicked(Like like) {
+        navigator.navigateToUserDetail(like);
+    }
+
+    @Override
+    public void onUsernameClicked(Like like) {
+        navigator.navigateToUserDetail(like);
     }
 }

@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.util;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 
 import java.util.List;
 
@@ -23,5 +24,19 @@ public class RecyclerHelper {
             }
         }
         return newComments;
+    }
+    public static boolean hasNewLikes(List<Like> oldList, List<Like> newList) {
+        boolean newLikes = false;
+        if (newList.size() != oldList.size()) {
+            newLikes = true;
+        }
+        if (newList.size() == oldList.size()) {
+            for (int i = 0; i < newList.size(); i++) {
+                if (!newList.get(i).getLikeId().equals(oldList.get(i).getLikeId())) {
+                    newLikes = true;
+                }
+            }
+        }
+        return newLikes;
     }
 }

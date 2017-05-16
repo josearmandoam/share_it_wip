@@ -102,4 +102,14 @@ public class CommentPresenter extends AbsCommentPresenter {
     public void onBackClicked() {
         navigator.navigateToBack();
     }
+
+    @Override
+    public void onPictureClicked(Comment comment) {
+        navigator.navigateToUserDetail(comment);
+    }
+
+    @Override
+    public void onUsernameClicked(Comment comment) {
+        navigator.navigateToUserDetail(comment);
+    }
 }

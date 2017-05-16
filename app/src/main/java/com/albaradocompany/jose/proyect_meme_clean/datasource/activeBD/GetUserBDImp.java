@@ -10,8 +10,10 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.Save
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserBD;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -96,8 +98,18 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
+    public void deleteUserPicture(String imageId) {
+        new Delete().from(PicturesBD.class).where("imageId = ?", imageId).execute();
+    }
+
+    @Override
     public void deleteUserSavedPictures(String id) {
         new Delete().from(SavedPicturesBD.class).where("userId = ?", id).execute();
+    }
+
+    @Override
+    public void deleteUserSavedPicture(String imageId) {
+        new Delete().from(SavedPicturesBD.class).where("imageId = ?", imageId).execute();
     }
 
     @Override
@@ -128,12 +140,12 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
-    public Login parseUserBD(UserBD userBD) {
-        Login c = new Login();
-        c.setIdUser(userBD.userId);
-        c.setImagePath(userBD.user_profile);
-        c.setNombre(userBD.user_name);
-        c.setApellidos(userBD.user_lastname);
+    public User parseUserBD(UserBD userBD) {
+        User c = new User();
+        c.setUserId(userBD.userId);
+        c.setProfile(userBD.user_profile);
+        c.setName(userBD.user_name);
+        c.setLastname(userBD.user_lastname);
         return c;
     }
 
@@ -148,6 +160,37 @@ public class GetUserBDImp implements GetUserBD {
         pic.setDescription(picture.description);
         pic.setUserId(picture.userId);
         return pic;
+    }
+
+    @Override
+    public List<Picture> parseSavedPicturesBDList(List<SavedPicturesBD> savedPicturesBDs) {
+        List<Picture> list = new ArrayList<Picture>();
+        for (SavedPicturesBD picture : savedPicturesBDs) {
+            Picture c = new Picture();
+            c.setImageId(picture.imageId);
+            c.setUserId(picture.userId);
+            c.setDescription(picture.description);
+            c.setImagePath(picture.imagePath);
+            c.setDate(picture.date);
+            c.setTime(picture.time);
+            list.add(c);
+        }
+        return list;
+    }
+    @Override
+    public List<Picture> parsePicturesBDList(List<PicturesBD> PicturesBDs) {
+        List<Picture> list = new ArrayList<Picture>();
+        for (PicturesBD picture : PicturesBDs) {
+            Picture c = new Picture();
+            c.setImageId(picture.imageId);
+            c.setUserId(picture.userId);
+            c.setDescription(picture.description);
+            c.setImagePath(picture.imagePath);
+            c.setDate(picture.date);
+            c.setTime(picture.time);
+            list.add(c);
+        }
+        return list;
     }
 
     @Override

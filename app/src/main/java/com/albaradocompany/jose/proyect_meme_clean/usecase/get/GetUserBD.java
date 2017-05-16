@@ -5,6 +5,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.Save
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 
 import java.util.List;
 
@@ -29,7 +30,11 @@ public interface GetUserBD {
 
     void deleteUserPictures(String id);
 
+    void deleteUserPicture(String imageId);
+
     void deleteUserSavedPictures(String id);
+
+    void deleteUserSavedPicture(String imageId);
 
     void updateUserBD(Login user);
 
@@ -37,9 +42,13 @@ public interface GetUserBD {
 
     List<UserBD> getUsers();
 
-    Login parseUserBD(UserBD userBD);
+    User parseUserBD(UserBD userBD);
 
     Picture parsePictureBD(PicturesBD picturesBD);
+
+    List<Picture> parseSavedPicturesBDList(List<SavedPicturesBD> savedPicturesBDs);
+
+    List<Picture> parsePicturesBDList(List<PicturesBD> PicturesBDs);
 
     boolean isPhotoSaved(String imageId);
 }

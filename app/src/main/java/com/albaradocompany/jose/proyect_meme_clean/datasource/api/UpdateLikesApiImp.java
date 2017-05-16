@@ -23,16 +23,18 @@ public class UpdateLikesApiImp implements UpdateLike, Callback<GenericApiRespons
     String name;
     String lastname;
     String profile;
+    String likeId;
     String action;
 
     UpdateLike.Listener listener = new NullListener();
 
-    public UpdateLikesApiImp(String userId, String imageId, String name, String lastname, String profile, String action) {
+    public UpdateLikesApiImp(String userId, String imageId, String name, String lastname, String profile, String likeId, String action) {
         this.userId = userId;
         this.imageId = imageId;
         this.name = name;
         this.lastname = lastname;
         this.profile = profile;
+        this.likeId = likeId;
         this.action = action;
     }
 
@@ -47,7 +49,7 @@ public class UpdateLikesApiImp implements UpdateLike, Callback<GenericApiRespons
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         UpdateLikeService service = retrofit.create(UpdateLikeService.class);
-        service.updateLike(userId, imageId, profile, name + " " + lastname, action).enqueue(this);
+        service.updateLike(userId, imageId, profile, name + " " + lastname, likeId, action).enqueue(this);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,11 +24,11 @@ import butterknife.OnClick;
 
 public class PhotosRecyclerAdapter extends RecyclerView.Adapter<PhotosRecyclerAdapter.ListPhotosAdapter> {
     Context context;
-    List<PicturesBD> list;
+    List<Picture> list;
 
     PhotosRecyclerAdapter.Listener listener = new NullListener();
 
-    public PhotosRecyclerAdapter(Context context, List<PicturesBD> list, Listener listener) {
+    public PhotosRecyclerAdapter(Context context, List<Picture> list, Listener listener) {
         this.context = context;
         this.list = list;
         this.listener = listener;
@@ -44,7 +45,7 @@ public class PhotosRecyclerAdapter extends RecyclerView.Adapter<PhotosRecyclerAd
 //        holder.comments.setText(list.get(position).coments);
 //        holder.likes.setText(list.get(position).likes);
         Picasso.with(context)
-                .load(list.get(position).imagePath)
+                .load(list.get(position).getImagePath())
                 .into(holder.picture);
     }
 
@@ -54,7 +55,7 @@ public class PhotosRecyclerAdapter extends RecyclerView.Adapter<PhotosRecyclerAd
     }
 
     public interface Listener {
-        void onPictureClicked(PicturesBD picture);
+        void onPictureClicked(Picture picture);
     }
 
     public class ListPhotosAdapter extends RecyclerView.ViewHolder {
@@ -74,7 +75,7 @@ public class PhotosRecyclerAdapter extends RecyclerView.Adapter<PhotosRecyclerAd
 
     private class NullListener implements Listener {
         @Override
-        public void onPictureClicked(PicturesBD picture) {
+        public void onPictureClicked(Picture picture) {
 
         }
     }

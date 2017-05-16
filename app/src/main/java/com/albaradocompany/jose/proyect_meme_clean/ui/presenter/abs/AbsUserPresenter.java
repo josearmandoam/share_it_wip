@@ -1,20 +1,17 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
+import java.util.List;
+
 /**
- * Created by jose on 04/05/2017.
+ * Created by jose on 16/05/2017.
  */
 
-public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.View, AbsProfilePresenter.Navigator> {
-
-    public abstract void onLogOutClicked();
-
-    public abstract void onBackClicked();
-
-    public abstract void onEditClicked();
+public abstract class AbsUserPresenter extends Presenter<AbsUserPresenter.View, AbsUserPresenter.Navigator> {
+    public abstract void onPictureClicked(Picture picture);
 
     public abstract void onFacebookClicked();
 
@@ -40,29 +37,44 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
     public abstract void onEmailDialogAccepted();
 
-    public abstract void onPictureClicked(Picture picture);
-
-    public abstract void updatePictures();
-
-    public abstract void updateSavedPictures();
-
-    public abstract void onSaveClicked();
-
+    public abstract void onBackClicked();
 
     public interface View {
-        void showProfile();
+        void hideLoading();
 
-        void showBackground();
+        void showLoading();
 
-        void showName();
+        void showNoInternetAvailable();
 
-        void showUsername();
+        void showError(Exception e);
 
-        void showDescription();
+        void showPhotosLoading();
 
-        void showPhotos();
+        void hidePhotosLoading();
 
-        void checkSocialPrivacity();
+        void showPictures(List<Picture> pictures);
+
+        void showBackground(String background);
+
+        void showProfile(String profile);
+
+        void showUsername(String s);
+
+        void showName(String s);
+
+        void showDescription(String description);
+
+        void showWhatsapp(String socialWhatsapp);
+
+        void showInstagram(String socialInstagram);
+
+        void showFacebook(String socialFacebook);
+
+        void showWebsite(String socialWebsite);
+
+        void showTwitter(String socialTwitter);
+
+        void showEmail(String socialEmail);
 
         void showFacebookDialog();
 
@@ -76,18 +88,10 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
         void showEmailDialog();
 
-        void showNoInternetAvailable();
-
-        void showError(Exception e);
-
-        void updateRecycler();
+        void showUser(User user);
     }
 
     public interface Navigator {
-        void navigateToLogin();
-
-        void navigateToEdit();
-
         void openFacebookPage();
 
         void openWhatsapp();
@@ -102,6 +106,6 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
         void navigateToPicture(Picture picture);
 
-        void navigateToPicturesSaved();
+        void navigateToBack();
     }
 }

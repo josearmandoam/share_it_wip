@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:activity="com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/user_swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/user_lyt_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <ImageView
+                    android:id="@+id/user_iv_background"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_height="200dp"
+                    android:src="@drawable/fo3" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/user_tv_user_description"
+                    android:layout_below="@id/user_iv_background"
+                    android:alpha="0.7" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/user_iv_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="150dp"
+                    android:src="@drawable/face"
+                    app:civ_border_color="@android:color/white"
+                    app:civ_border_width="2dp" />
+
+                <ImageButton
+                    android:id="@+id/user_btn_edit"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="170dp"
+                    android:background="@drawable/roundedbutton"
+                    android:src="@drawable/follow" />
+
+                <ImageButton
+                    android:id="@+id/user_btn_saved"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="170dp"
+                    android:background="@drawable/roundedbutton"
+                    android:src="@drawable/message" />
+
+                <TextView
+                    android:id="@+id/user_tv_user_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_ibtn_facebook"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@string/default_font"
+                    android:padding="10dp"
+                    android:text="@string/text_large"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_iv_photo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@string/default_font"
+                    android:text="@string/loading"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/user_tv_user_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_tv_user_name"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@string/default_font"
+                    android:text="@string/loading"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="italic" />
+
+                <View
+                    android:id="@+id/user_vw_sep3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_tv_user_username"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_vw_sep3"
+                    android:layout_below="@+id/user_tv_user_username"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toLeftOf="@+id/user_ibtn_twitter"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/facebook" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_twitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:layout_toLeftOf="@+id/user_ibtn_instagram"
+                    android:padding="8dp"
+                    android:src="@mipmap/twitter" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_instagram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@+id/user_vw_sep3"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/instagram" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_whatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/user_ibtn_instagram"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/whatsapp" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/user_ibtn_whatsapp"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/email" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user_ibtn_facebook"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/user_ibtn_email"
+                    android:background="@null"
+                    android:padding="8dp"
+                    android:src="@mipmap/internet" />
+
+                <ImageButton
+                    android:id="@+id/user_ibtn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@null"
+                    android:src="@drawable/back" />
+
+                <ImageButton
+                    android:id="@+id/user_btn_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_alignBottom="@+id/user_ibtn_back"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/user_ibtn_back"
+                    android:layout_marginRight="10dp"
+                    android:background="@null"
+                    android:src="@drawable/exit" />
+
+                <View
+                    android:id="@+id/user_vw_sep2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/user_tv_user_description"
+                    android:background="@color/color_login" />
+
+                <TextView
+                    android:id="@+id/user_tv_title_posts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/user_vw_sep1"
+                    android:layout_alignStart="@+id/user_vw_sep1"
+                    android:layout_below="@id/user_vw_sep2"
+                    android:fontFamily="@string/default_font"
+                    android:padding="10dp"
+                    android:text="@string/posts"
+                    android:textColor="@color/color_login"
+                    android:textSize="@dimen/text_size_title"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/user_vw_sep1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_below="@id/user_tv_title_posts"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/color_login" />
+                <ProgressBar
+                    android:id="@+id/user_pbr_header"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="gone"
+                    android:background="@drawable/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <ProgressBar
+                    android:id="@+id/user_pbr_picture"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/user_vw_sep1"
+                    android:visibility="gone"
+                    android:background="@drawable/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/user_recyclerview_photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/user_vw_sep1">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

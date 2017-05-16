@@ -6,6 +6,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivi
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SavedPicturesActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -18,7 +19,9 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.PicturePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SplashPresenter;
 
@@ -69,4 +72,9 @@ public interface UIComponent {
 
     void inject(CommentsActivity commentsActivity);
 
+    void inject(PicturePresenter picturePresenter);
+
+    void inject(SavedPicturesActivity savedPicturesActivity);
+
+    void inject(SavedPicturesPresenter savedPicturesPresenter);
 }

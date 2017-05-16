@@ -28,4 +28,10 @@ public class DateUtil {
         String time = ""+calendar.get(calendar.HOUR_OF_DAY) +calendar.get(calendar.MINUTE)+ calendar.get(calendar.SECOND);
         return time;
     }
+    public static String getCurrentDateTime(){
+        Calendar calendar = Calendar.getInstance();
+        String datetime = "" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
+                + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
+        return datetime;
+    }
 }

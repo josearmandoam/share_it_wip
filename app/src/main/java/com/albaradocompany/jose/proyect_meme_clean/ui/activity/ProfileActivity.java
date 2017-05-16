@@ -25,6 +25,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.ActivityHelper;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PhotosRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
@@ -144,12 +145,6 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         presenter.onEditClicked();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initialize();
-    }
-
     @OnClick(R.id.profile_ibtn_facebook)
     public void onFacebookClicked(View view) {
         presenter.onFacebookClicked();
@@ -178,6 +173,24 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     @OnClick(R.id.profile_ibtn_email)
     public void onEmailClicked(View view) {
         presenter.onEmailClicked();
+    }
+
+    @OnClick(R.id.profile_btn_saved)
+    public void onSaveClicked(View view) {
+        presenter.onSaveClicked();
+    }
+
+    PhotosRecyclerAdapter.Listener onPictureClicked = new PhotosRecyclerAdapter.Listener() {
+        @Override
+        public void onPictureClicked(Picture picture) {
+            presenter.onPictureClicked(picture);
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initialize();
     }
 
     private void initialize() {
@@ -285,15 +298,25 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     }
 
     @Override
-    public void navigateToPicture(PicturesBD picture) {
+    public void navigateToPicture(Picture picture) {
         openPictureDetail(this, picture);
     }
 
-    public void openPictureDetail(Context ctx, PicturesBD picture) {
+    @Override
+    public void navigateToPicturesSaved() {
+        openSavedPictures(this);
+    }
+
+    public static void openSavedPictures(Context ctx) {
+        Intent intent = new Intent(ctx, SavedPicturesActivity.class);
+        ctx.startActivity(intent);
+    }
+
+    public void openPictureDetail(Context ctx, Picture picture) {
         Intent intent = new Intent(ctx, PictureActivity.class);
-        intent.putExtra("imageId", picture.imageId);
-        UserBD userBD = getUserBD.getUserBD(picture.userId);
-        intent.putExtra("image", getUserBD.parsePictureBD(picture));
+        intent.putExtra("imageId", picture.getImageId());
+        UserBD userBD = getUserBD.getUserBD(picture.getUserId());
+        intent.putExtra("image", picture);
         intent.putExtra("user", getUserBD.parseUserBD(userBD));
         ctx.startActivity(intent);
     }
@@ -328,18 +351,11 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         description.setText(userBD.user_description);
     }
 
-    PhotosRecyclerAdapter.Listener onPictureClicked = new PhotosRecyclerAdapter.Listener() {
-        @Override
-        public void onPictureClicked(PicturesBD picture) {
-            presenter.onPictureClicked(picture);
-        }
-    };
-
     @Override
     public void showPhotos() {
         recyclerPhotos.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerPhotos.setHasFixedSize(true);
-        adapter = new PhotosRecyclerAdapter(this, userphotos, onPictureClicked);
+        adapter = new PhotosRecyclerAdapter(this, getUserBD.parsePicturesBDList(userphotos), onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
     }
 
@@ -467,7 +483,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     public void updateRecycler() {
         userphotos = getUserBD.getUserPictures(userSharedImp.getUserID());
         usersavedphotos = getUserBD.getUserSavedPictures(userSharedImp.getUserID());
-        adapter = new PhotosRecyclerAdapter(this, userphotos, onPictureClicked);
+        adapter = new PhotosRecyclerAdapter(this, getUserBD.parsePicturesBDList(userphotos), onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

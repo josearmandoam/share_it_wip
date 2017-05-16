@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +19,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnLongClick;
 
 /**
  * Created by jose on 14/05/2017.
@@ -27,13 +27,15 @@ import butterknife.OnLongClick;
 public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecyclerAdapter.CommentsView> {
     Context context;
     List<Comment> comments;
+    String userId;
 
     CommentsRecyclerAdapter.onCommentClicked commentClicked;
 
-    public CommentsRecyclerAdapter(Context context, List<Comment> comments, onCommentClicked commentClicked) {
+    public CommentsRecyclerAdapter(Context context, List<Comment> comments, onCommentClicked commentClicked, String userId) {
         this.context = context;
         this.comments = comments;
         this.commentClicked = commentClicked;
+        this.userId = userId;
     }
 
     @Override
@@ -48,11 +50,26 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         Picasso.with(context).load(comments.get(position).getProfile()).into(holder.profile);
         holder.username.setText(comments.get(position).getUsername());
         holder.time.setText(DateUtil.timeAgo(comments.get(position).getDate(), comments.get(position).getTime()));
+        if (comments.get(position).getUserId().equals(userId)){
+            holder.delete.setVisibility(View.VISIBLE);
+        }else{
+            holder.delete.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public int getItemCount() {
         return comments.size();
+    }
+
+    public void clear() {
+        this.comments.clear();
+    }
+
+    public void setList(List<Comment> list) {
+        for (Comment comment : list) {
+            comments.add(comment);
+        }
     }
 
     public class CommentsView extends RecyclerView.ViewHolder {
@@ -64,21 +81,22 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         TextView time;
         @BindView(R.id.comment_row_username)
         TextView username;
+        @BindView(R.id.comment_row_ibtn_delete)
+        ImageButton delete;
 
         @OnClick(R.id.comment_row_profile)
         public void onPictureCliclek(View view) {
-            commentClicked.onPictureClicked();
+            commentClicked.onPictureClicked(comments.get(getAdapterPosition()));
         }
 
         @OnClick(R.id.comment_row_username)
         public void onUsernameClicked(View view) {
-            commentClicked.onUsernameClicked();
+            commentClicked.onUsernameClicked(comments.get(getAdapterPosition()));
         }
 
-        @OnLongClick(R.id.comment_row_comment)
-        public boolean onCommentLongClickd(View view) {
-            commentClicked.onLongClick(comments.get(getAdapterPosition()));
-            return true;
+        @OnClick(R.id.comment_row_ibtn_delete)
+        public void onDeleteClicked(View view) {
+            commentClicked.onDeleteClicked(comments.get(getAdapterPosition()));
         }
 
         public CommentsView(View itemView) {
@@ -88,10 +106,10 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
     }
 
     public interface onCommentClicked {
-        void onPictureClicked();
+        void onPictureClicked(Comment comment);
 
-        void onUsernameClicked();
+        void onUsernameClicked(Comment comment);
 
-        void onLongClick(Comment comment);
+        void onDeleteClicked(Comment comment);
     }
 }

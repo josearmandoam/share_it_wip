@@ -148,7 +148,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
     }
 
     @Override
-    public void onPictureClicked(PicturesBD picture) {
+    public void onPictureClicked(Picture picture) {
         navigator.navigateToPicture(picture);
     }
 
@@ -200,6 +200,11 @@ public class ProfilePresenter extends AbsProfilePresenter {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSaveClicked() {
+        navigator.navigateToPicturesSaved();
     }
 
 

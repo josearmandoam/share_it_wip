@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -18,6 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.User
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.CommentsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateLikesApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateSavedPictureApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
@@ -27,9 +29,13 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.RecyclerHelper;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.CommentsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LikesInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateLikesInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateSavedPictureInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
@@ -41,6 +47,7 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLikes;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -94,8 +101,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @BindString(R.string.comments)
     String comments_title;
 
-    List<Like> listLikes;
-    List<Comment> listComments;
+    List<Like> listLikes = new ArrayList<>();
+    List<Comment> listComments =  new ArrayList<>();
     AbsPicturePresenter presenter;
     LikesInteractor likesInteractor;
     GetComments commentsInteractor;
@@ -107,6 +114,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     GetUserBDImp getUserBD;
     @Inject
     UserSharedImp userSharedImp;
+    Picture picture;
 
     @OnClick(R.id.picture_row_ibtn_comments)
     public void onCommentClicked(View view) {
@@ -133,16 +141,23 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         presenter.onLikesClicked();
     }
 
+    @OnClick(R.id.picture_row_ibtn_save)
+    public void onSaveClicked(View view) {
+        updateUserSavePictureApi();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
+        Toast.makeText(this, "CREATE", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.resume();
+        Toast.makeText(this, "RESUME", Toast.LENGTH_SHORT).show();
     }
 
     private void initialize() {
@@ -183,9 +198,10 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             imageId = (String) bundle.get("imageId");
-            Login user = (Login) bundle.get("user");
-            Picture pic = (Picture) bundle.get("image");
-            presenter.initializeData(user, pic, getLikesInteractor(imageId), getCommentsInteractor(imageId));
+            User user = (User) bundle.get("user");
+            picture = (Picture) bundle.get("image");
+            presenter.initializeData(user, picture, getLikesInteractor(imageId), getCommentsInteractor(imageId));
+            presenter.initialize();
             presenter.getPictureLikes(getLikesInteractor(imageId), imageId);
             presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
         }
@@ -219,20 +235,32 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     @Override
     public void showLikes(List<Like> likesList) {
-        this.listLikes = likesList;
-        likes.setText("" + likesList.size() + " " + likes_title);
-        if (likesList.size() > 0) {
-            checkLiked(likesList);
-        } else {
-            btnLike.setImageDrawable(heartBorder);
+        if (RecyclerHelper.hasNewLikes(listLikes, likesList)) {
+            listLikes = likesList;
+            likes.setText("" + likesList.size() + " " + likes_title);
+            if (likesList.size() > 0) {
+                checkLiked(likesList);
+            } else {
+                btnLike.setImageDrawable(heartBorder);
+            }
+        }else{
+            likes.setText("" + listLikes.size() + " " + likes_title);
+            if (listLikes.size() > 0) {
+                checkLiked(likesList);
+            } else {
+                btnLike.setImageDrawable(heartBorder);
+            }
         }
     }
 
     @Override
     public void showComments(List<Comment> commentsList) {
-        this.listComments = commentsList;
-        comments.setText("" + commentsList.size() + " " + comments_title);
-
+        if (RecyclerHelper.hasNewComments(listComments, commentsList)) {
+            listComments = commentsList;
+            comments.setText("" + commentsList.size() + " " + comments_title);
+        }else{
+            comments.setText("" + listComments.size() + " " + comments_title);
+        }
     }
 
     @Override
@@ -286,6 +314,16 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @Override
     public void showLikePicture() {
         btnLike.setImageDrawable(heartFill);
+    }
+
+    @Override
+    public void showPictureNotSaved() {
+        btnSave.setImageDrawable(saveUnclicked);
+    }
+
+    @Override
+    public void showPictureSaved() {
+        btnSave.setImageDrawable(saveClicked);
     }
 
     private void checkSaved(String imageId) {
@@ -345,13 +383,32 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         }
     }
 
+    private void updateUserSavePictureApi() {
+        if (btnSave.getDrawable().equals(saveClicked)) {
+            presenter.onDeleteSavedPicture(getUpdateDELSavedPictureInteractor());
+        }else{
+            presenter.onInsertSavePicture(getUpdateINSSavePictureInteractor());
+        }
+    }
+
     public UpdateLikesInteractor getUpdateDELLikeInteractor() {
         return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
-                userBD.user_name, userBD.user_lastname, userBD.user_profile, DELETE), new MainThreadImp(), new ThreadExecutor());
+                userBD.user_name, userBD.user_lastname, userBD.user_profile, userSharedImp.createLikeID(), DELETE), new MainThreadImp(), new ThreadExecutor());
     }
 
     public UpdateLikesInteractor getUpdateINSLikeInteractor() {
         return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
-                userBD.user_name, userBD.user_lastname, userBD.user_profile, INSERT), new MainThreadImp(), new ThreadExecutor());
+                userBD.user_name, userBD.user_lastname, userBD.user_profile, userSharedImp.createLikeID(), INSERT), new MainThreadImp(), new ThreadExecutor());
+    }
+
+    public UpdateSavedPictureInteractor getUpdateDELSavedPictureInteractor() {
+        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, null,
+                null, null, imageId, null, DELETE),
+                new MainThreadImp(), new ThreadExecutor());
+    }
+    public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
+        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
+                picture.getDescription(), DateUtil.getCurrentDate(), imageId, DateUtil.getCurrentTime(), INSERT),
+                new MainThreadImp(), new ThreadExecutor());
     }
 }

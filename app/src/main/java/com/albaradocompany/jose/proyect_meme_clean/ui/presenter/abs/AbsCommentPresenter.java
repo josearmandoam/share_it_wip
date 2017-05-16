@@ -20,6 +20,10 @@ public abstract class AbsCommentPresenter extends Presenter<AbsCommentPresenter.
 
     public abstract void onBackClicked();
 
+    public abstract void onPictureClicked(Comment comment);
+
+    public abstract void onUsernameClicked(Comment comment);
+
     public interface View {
         void showLoading();
 
@@ -44,5 +48,7 @@ public abstract class AbsCommentPresenter extends Presenter<AbsCommentPresenter.
 
     public interface Navigator {
         void navigateToBack();
+
+        void navigateToUserDetail(Comment comment);
     }
 }

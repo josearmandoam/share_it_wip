@@ -117,6 +117,12 @@ public class UserSharedImp implements UserShared, SignupShared {
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
         return commentID;
     }
+    public String createLikeID() {
+        Calendar calendar = Calendar.getInstance();
+        String likeID = "like" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
+                + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
+        return likeID;
+    }
 
     @Override
     public void saveDateBirthday(int i, int i1, int i2) {

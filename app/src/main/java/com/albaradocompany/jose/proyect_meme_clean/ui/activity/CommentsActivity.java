@@ -1,9 +1,10 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -57,8 +58,8 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     ImageButton btn_send;
     @BindView(R.id.comments_pbr)
     ProgressBar progressBar;
-    @BindView(R.id.comments_swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+//    @BindView(R.id.comments_swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindDrawable(R.drawable.send)
     Drawable sendLight;
@@ -95,20 +96,18 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     CommentsRecyclerAdapter.onCommentClicked onCommentClicked = new CommentsRecyclerAdapter.onCommentClicked() {
         @Override
-        public void onPictureClicked() {
-
+        public void onPictureClicked(Comment comment) {
+            presenter.onPictureClicked(comment);
         }
 
         @Override
-        public void onUsernameClicked() {
-
+        public void onUsernameClicked(Comment comment) {
+            presenter.onUsernameClicked(comment);
         }
 
         @Override
-        public void onLongClick(Comment comment) {
-            if (comment.getUserId().equals(userSharedImp.getUserID())) {
-                presenter.onCommentLongClick(comment);
-            }
+        public void onDeleteClicked(Comment comment) {
+            presenter.onCommentLongClick(comment);
         }
     };
 
@@ -130,7 +129,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
         userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
 
         getDataBundle();
-        adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked);
+        adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked, userSharedImp.getUserID());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -141,24 +140,24 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
         showSnackBarImp = new ShowSnackBarImp(this);
 
-        initializeSwipeRefresh();
+//        initializeSwipeRefresh();
     }
 
     private void updateRecycler() {
-        adapter = null;
-        adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked);
-        recyclerView.setAdapter(adapter);
+        adapter.clear();
+        adapter.setList(comments);
+        adapter.notifyDataSetChanged();
     }
 
-    private void initializeSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-    }
+//    private void initializeSwipeRefresh() {
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
+//    }
 
     @Override
     protected int getLayoutId() {
@@ -272,5 +271,16 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     @Override
     public void navigateToBack() {
         onBackPressed();
+    }
+
+    @Override
+    public void navigateToUserDetail(Comment comment) {
+        openUserDetail(this, comment);
+    }
+
+    public static void openUserDetail(Context ctx, Comment comment) {
+        Intent intent = new Intent(ctx, UserActivity.class);
+        intent.putExtra("userId", comment.getUserId());
+        ctx.startActivity(intent);
     }
 }

@@ -11,19 +11,22 @@ public class Like implements Serializable {
     String username;
     String profile;
     String userId;
+    String likeId;
 
     public Like() {
         imageId = "";
         username = "";
         profile = "";
         userId = "";
+        likeId = "";
     }
 
-    public Like(String imageId, String username, String profile, String userId) {
+    public Like(String imageId, String username, String profile, String userId, String likeId) {
         this.imageId = imageId;
         this.username = username;
         this.profile = profile;
         this.userId = userId;
+        this.likeId = likeId;
     }
 
     public String getImageId() {
@@ -56,5 +59,13 @@ public class Like implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getLikeId() {
+        return likeId;
+    }
+
+    public void setLikeId(String likeId) {
+        this.likeId = likeId;
     }
 }
