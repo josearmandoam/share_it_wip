@@ -10,7 +10,7 @@ public class PictureApiEntry {
     String userId = "";
     String imagePath = "";
     String description = "";
-    String fechaSubida = "";
+    String date = "";
     String imageId = "";
     String time = "";
 
@@ -19,7 +19,7 @@ public class PictureApiEntry {
         obj.setUserId(userId);
         obj.setImagePath(imagePath);
         obj.setDescription(description);
-        obj.setDate(fechaSubida);
+        obj.setDate(date);
         obj.setImageId(imageId);
         obj.setTime(time);
         return obj;

@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateUserImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateUserApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
@@ -397,7 +397,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         UpdateUserInteractor interactor = null;
         userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
         if (userSharedImp.isProfileChanged() && userSharedImp.isBackgroundChanged()) {
-            interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+            interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                     name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                     userName.getText().toString(), BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile", BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background",
                     description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
@@ -405,14 +405,14 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         } else {
             if (userSharedImp.isProfileChanged()) {
                 if (userSharedImp.isProfileFTPSelected()) {
-                    interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                    interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), userSharedImp.getProfile(), userBD.user_background,
                             description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
                             new MainThreadImp(), new ThreadExecutor());
 
                 } else {
-                    interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                    interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile", userBD.user_background,
                             description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
@@ -421,21 +421,21 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
             } else {
                 if (userSharedImp.isBackgroundChanged()) {
                     if (userSharedImp.isBackgroundFTPSelected()) {
-                        interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                        interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                                 name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                                 userName.getText().toString(), userBD.user_profile, userSharedImp.getBackground(),
                                 description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
                                 new MainThreadImp(), new ThreadExecutor());
 
                     } else {
-                        interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                        interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                                 name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                                 userName.getText().toString(), userBD.user_profile, BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background",
                                 description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
                                 new MainThreadImp(), new ThreadExecutor());
                     }
                 } else {
-                    interactor = new UpdateUserInteractor(new UpdateUserImp(userSharedImp.getUserID(),
+                    interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
                             userName.getText().toString(), userBD.user_profile, userBD.user_background,
                             description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),

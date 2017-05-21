@@ -2,7 +2,7 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
@@ -80,7 +80,7 @@ public class UserPresenter extends AbsUserPresenter {
 
     }
     private void getUserPhotos() {
-        PicturesByIdInteractor interactor = new PicturesByIdInteractor(new PicturesByIdImp(userId), new MainThreadImp(), new ThreadExecutor());
+        PicturesByIdInteractor interactor = new PicturesByIdInteractor(new PicturesByIdApiImp(userId), new MainThreadImp(), new ThreadExecutor());
         interactor.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {

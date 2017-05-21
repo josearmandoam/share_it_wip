@@ -53,7 +53,7 @@
             android:layout_below="@+id/picture_vw_toolbar"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/recycler_row_picture" />
+            <include layout="@layout/picture_detail" />
         </RelativeLayout>
     </RelativeLayout>
 </FrameLayout>

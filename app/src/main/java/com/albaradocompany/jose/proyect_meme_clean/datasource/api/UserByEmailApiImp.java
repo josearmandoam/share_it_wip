@@ -17,11 +17,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jose on 27/04/2017.
  */
 
-public class UserByEmailImp implements GetUserByEmail, Callback<LoginApiResponse> {
+public class UserByEmailApiImp implements GetUserByEmail, Callback<LoginApiResponse> {
     String email;
     GetUserByEmail.Listener listener = new NullListener();
 
-    public UserByEmailImp(String email) {
+    public UserByEmailApiImp(String email) {
         this.email = email;
     }
 

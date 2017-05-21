@@ -19,6 +19,7 @@
                 android:id="@+id/profile_lyt_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
@@ -241,4 +242,10 @@
             </RelativeLayout>
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <ProgressBar
+        android:id="@+id/profile_pbr"
+        android:layout_gravity="center"
+        android:background="@drawable/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </FrameLayout>

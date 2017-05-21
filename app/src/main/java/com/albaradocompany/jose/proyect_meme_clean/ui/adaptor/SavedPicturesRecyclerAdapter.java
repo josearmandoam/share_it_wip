@@ -48,6 +48,14 @@ public class SavedPicturesRecyclerAdapter extends RecyclerView.Adapter<SavedPict
         return pictureList.size();
     }
 
+    public void clear() {
+        pictureList.clear();
+    }
+
+    public void setList(List<Picture> list) {
+        this.pictureList = list;
+    }
+
     public class SavedPictureView extends RecyclerView.ViewHolder {
         @BindView(R.id.spictures_row_iv_image)
         ImageView image;

@@ -16,12 +16,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jose on 28/04/2017.
  */
 
-public class UpdatePasswordImp implements UpdatePassword, Callback<GenericApiResponse> {
+public class UpdatePasswordApiImp implements UpdatePassword, Callback<GenericApiResponse> {
     UpdatePassword.Listener listener = new NullListener();
     String newPassword;
     String idUser;
 
-    public UpdatePasswordImp(String idUser, String newPassword) {
+    public UpdatePasswordApiImp(String idUser, String newPassword) {
         this.newPassword = newPassword;
         this.idUser = idUser;
     }

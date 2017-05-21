@@ -1,11 +1,11 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
@@ -42,6 +42,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void initialize() {
+        view.showLoading();
         view.showBackground();
         view.showName();
         view.showProfile();
@@ -49,6 +50,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showDescription();
         view.showPhotos();
         view.checkSocialPrivacity();
+        view.hideLoading();
     }
 
     @Override
@@ -60,6 +62,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showDescription();
         view.updateRecycler();
         view.checkSocialPrivacity();
+        view.hideLoading();
     }
 
     @Override
@@ -79,7 +82,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void onBackClicked() {
-
+        navigator.navigateToBack();
     }
 
     @Override
@@ -154,7 +157,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void updatePictures() {
-        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesByIdImp(userSharedImp.getUserID()),
+        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesByIdApiImp(userSharedImp.getUserID()),
                 new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
@@ -180,7 +183,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void updateSavedPictures() {
-        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesSavedImp(userSharedImp.getUserID()), new MainThreadImp(), new ThreadExecutor());
+        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesSavedApiImp(userSharedImp.getUserID()), new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {

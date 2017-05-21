@@ -46,7 +46,7 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
     };
 
     @OnClick(R.id.saved_pictures_ibtn_back)
-    public void onBackClicked(View view){
+    public void onBackClicked(View view) {
         presenter.onBackClicked();
     }
 
@@ -101,7 +101,13 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
 
     @Override
     public void showListPhotos(List<Picture> userSavedPictures) {
-        adapter = new SavedPicturesRecyclerAdapter(this, userSavedPictures, onClickListener);
+        if (adapter != null) {
+            adapter.clear();
+            adapter.setList(userSavedPictures);
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter = new SavedPicturesRecyclerAdapter(this, userSavedPictures, onClickListener);
+        }
     }
 
     @Override

@@ -55,11 +55,15 @@ public class SplashActivity extends AppCompatActivity implements AbsSplash.Navig
 
     @Override
     public void navigateToMainPage() {
-        openProfileActivity(this);
+        openMain(this);
     }
 
     public static void openLoginActivity(Context ctx) {
         Intent intent = new Intent(ctx, LoginActivity.class);
+        ctx.startActivity(intent);
+    }
+    public static void openMain(Context ctx) {
+        Intent intent = new Intent(ctx, MainActivity.class);
         ctx.startActivity(intent);
     }
 

@@ -15,6 +15,6 @@ public interface UpdateSavedPictureService {
     @FormUrlEncoded
     @POST("updateSavePicture.php")
     Call<UpdateSavedPictureResponse> updateSavedPicture(@Field("userId") String userId, @Field("imagePath") String imagePath,
-                                                        @Field("description") String description, @Field("fechaSubida") String date,
+                                                        @Field("description") String description, @Field("date") String date,
                                                         @Field("imageId") String imageId, @Field("time") String time, @Field("action") String action);
 }

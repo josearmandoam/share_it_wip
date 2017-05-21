@@ -81,6 +81,10 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
         void showError(Exception e);
 
         void updateRecycler();
+
+        void showLoading();
+
+        void hideLoading();
     }
 
     public interface Navigator {
@@ -103,5 +107,7 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
         void navigateToPicture(Picture picture);
 
         void navigateToPicturesSaved();
+
+        void navigateToBack();
     }
 }

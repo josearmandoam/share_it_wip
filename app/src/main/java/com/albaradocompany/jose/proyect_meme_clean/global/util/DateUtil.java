@@ -7,8 +7,8 @@ import java.util.Calendar;
  */
 
 public class DateUtil {
-    public static String timeAgo(String date, String time){
-        if (date.equals(getCurrentDate())){
+    public static String timeAgo(String date, String time) {
+        if (date.equals(getCurrentDate())) {
             long timeParsed = Long.parseLong(time);
             long currentTimeParse = Long.parseLong(getCurrentTime());
 
@@ -17,18 +17,20 @@ public class DateUtil {
         }
         return "wip";
     }
+
     public static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
-        String date = "" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
-                + calendar.get(calendar.YEAR);
+        String date = "" + calendar.get(calendar.YEAR) + "-" + calendar.get(calendar.DAY_OF_MONTH) + "-" + calendar.get(calendar.MONTH);
         return date;
     }
+
     public static String getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
-        String time = ""+calendar.get(calendar.HOUR_OF_DAY) +calendar.get(calendar.MINUTE)+ calendar.get(calendar.SECOND);
+        String time = "" + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.MINUTE) + calendar.get(calendar.SECOND);
         return time;
     }
-    public static String getCurrentDateTime(){
+
+    public static String getCurrentDateTime() {
         Calendar calendar = Calendar.getInstance();
         String datetime = "" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);

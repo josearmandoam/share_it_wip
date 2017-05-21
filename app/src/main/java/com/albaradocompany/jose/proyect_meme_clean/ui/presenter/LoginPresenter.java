@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
@@ -127,7 +127,6 @@ public class LoginPresenter extends AbsUserLogin {
         this.getLogin = getLogin;
         this.username = username;
         this.password = password;
-        initialize();
     }
 
     @Override
@@ -142,7 +141,7 @@ public class LoginPresenter extends AbsUserLogin {
 
     @Override
     public void checkForUserPictures() {
-        getPicturesById = new PicturesByIdInteractor(new PicturesByIdImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
+        getPicturesById = new PicturesByIdInteractor(new PicturesByIdApiImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {
@@ -188,7 +187,7 @@ public class LoginPresenter extends AbsUserLogin {
 
     @Override
     public void checkForUserSavedPictures() {
-        getPicturesById = new PicturesByIdInteractor(new PicturesSavedImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
+        getPicturesById = new PicturesByIdInteractor(new PicturesSavedApiImp(user.getIdUser()), new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
             public void onNoInternetAvailable() {

@@ -12,8 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePasswordImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePasswordApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
@@ -92,7 +92,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @OnClick(R.id.password_tv_email_send)
     public void onEmailSendClicked(View view) {
-        interactor = new UserByEmailInteractor(new UserByEmailImp(email.getText().toString()),
+        interactor = new UserByEmailInteractor(new UserByEmailApiImp(email.getText().toString()),
                 new MainThreadImp(), new ThreadExecutor());
         if (!email.getText().toString().isEmpty()) {
             presenter.onEmailSubmitClicked(interactor);
@@ -109,7 +109,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     @OnClick(R.id.password_tv_update_send)
     public void onUpdateSendClicked(View view) {
         if (password1.getText().toString().equals(password2.getText().toString())) {
-            passwordInteractor = new UpdatePasswordInteractor(new UpdatePasswordImp(user.getIdUser(), password1.getText().toString()), new MainThreadImp(), new ThreadExecutor());
+            passwordInteractor = new UpdatePasswordInteractor(new UpdatePasswordApiImp(user.getIdUser(), password1.getText().toString()), new MainThreadImp(), new ThreadExecutor());
             presenter.onUpdateSubmitClicked(passwordInteractor);
         } else {
             showSnackBar.show(error_passwords, Color.RED);

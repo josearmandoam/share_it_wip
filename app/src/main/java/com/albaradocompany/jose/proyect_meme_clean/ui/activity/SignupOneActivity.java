@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
@@ -115,7 +115,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @OnClick(R.id.signup_button_next)
     public void onNextPageClicked(View view) {
-        UserByEmailInteractor interactor = new UserByEmailInteractor(new UserByEmailImp(email.getText().toString()), new MainThreadImp(), new ThreadExecutor());
+        UserByEmailInteractor interactor = new UserByEmailInteractor(new UserByEmailApiImp(email.getText().toString()), new MainThreadImp(), new ThreadExecutor());
         if (checkFields()) {
             presenter.chekImageImp(interactor);
         }

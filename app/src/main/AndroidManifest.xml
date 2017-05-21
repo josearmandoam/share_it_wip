@@ -57,7 +57,8 @@
         <activity android:name=".ui.activity.PictureActivity" />
         <activity android:name=".ui.activity.CommentsActivity" />
         <activity android:name=".ui.activity.SavedPicturesActivity" />
-        <activity android:name=".ui.activity.UserActivity"></activity>
+        <activity android:name=".ui.activity.UserActivity" />
+        <activity android:name=".ui.activity.MainActivity"></activity>
     </application>
 
 </manifest>

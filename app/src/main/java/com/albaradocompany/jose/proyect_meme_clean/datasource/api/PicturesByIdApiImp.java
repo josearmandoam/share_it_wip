@@ -20,11 +20,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jose on 05/05/2017.
  */
 
-public class PicturesByIdImp implements GetPicturesById, Callback<PictureResponse> {
+public class PicturesByIdApiImp implements GetPicturesById, Callback<PictureResponse> {
     String userId;
     GetPicturesById.Listener listener = new NullListener();
 
-    public PicturesByIdImp(String userId) {
+    public PicturesByIdApiImp(String userId) {
         this.userId = userId;
     }
 

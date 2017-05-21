@@ -4,6 +4,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SavedPicturesActivity;
@@ -11,13 +12,17 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PostRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.DropCommentDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.FeedFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.PicturePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
@@ -77,4 +82,12 @@ public interface UIComponent {
     void inject(SavedPicturesActivity savedPicturesActivity);
 
     void inject(SavedPicturesPresenter savedPicturesPresenter);
+
+    void inject(LikesDialog likesDialog);
+
+    void inject(MainActivity mainActivity);
+
+    void inject(PostRecyclerAdapter postRecyclerAdapter);
+
+    void inject(FeedPresenter feedPresenter);
 }

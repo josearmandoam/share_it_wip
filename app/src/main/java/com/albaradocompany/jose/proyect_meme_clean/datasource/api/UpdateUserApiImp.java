@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by jose on 06/05/2017.
  */
 
-public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
+public class UpdateUserApiImp implements UpdateUser, Callback<GenericApiResponse> {
     UpdateUser.Listener listener = new NullListener();
     String userId;
     String name;
@@ -33,11 +33,11 @@ public class UpdateUserImp implements UpdateUser, Callback<GenericApiResponse> {
     String socialFacebook;
     String socialTwitter;
 
-    public UpdateUserImp(String userId, String name, String lastName,
-                         String email, String username, String profile, String background,
-                         String description, String socialWebsite, String socialWhatsapp,
-                         String socialEmail, String socialInstagram, String socialFacebook,
-                         String socialTwitter) {
+    public UpdateUserApiImp(String userId, String name, String lastName,
+                            String email, String username, String profile, String background,
+                            String description, String socialWebsite, String socialWhatsapp,
+                            String socialEmail, String socialInstagram, String socialFacebook,
+                            String socialTwitter) {
         this.userId = userId;
         this.name = name;
         this.lastName = lastName;

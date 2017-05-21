@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -63,6 +64,8 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     RecyclerView recyclerPhotos;
     @BindView(R.id.profile_lyt_container)
     RelativeLayout layout;
+    @BindView(R.id.profile_pbr)
+    ProgressBar progressBar;
     @BindView(R.id.profile_swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.profile_ibtn_facebook)
@@ -134,6 +137,11 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     List<PicturesBD> userphotos;
     List<SavedPicturesBD> usersavedphotos;
     PhotosRecyclerAdapter adapter;
+
+    @OnClick(R.id.profile_ibtn_back)
+    public void onBackClicked(View view) {
+        presenter.onBackClicked();
+    }
 
     @OnClick(R.id.profile_btn_menu)
     public void onLogOutClicked(View view) {
@@ -305,6 +313,11 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     @Override
     public void navigateToPicturesSaved() {
         openSavedPictures(this);
+    }
+
+    @Override
+    public void navigateToBack() {
+        onBackPressed();
     }
 
     public static void openSavedPictures(Context ctx) {
@@ -486,6 +499,18 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         adapter = new PhotosRecyclerAdapter(this, getUserBD.parsePicturesBDList(userphotos), onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showLoading() {
+        layout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.GONE);
+        layout.setVisibility(View.VISIBLE);
     }
 
     private void emailDialog() {

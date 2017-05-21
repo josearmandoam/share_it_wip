@@ -38,7 +38,12 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.github.wangjiegulu:AndroidBucket:1.0.4'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.wangjiegulu:RapidFloatingActionButton:1.0.3'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+
 }

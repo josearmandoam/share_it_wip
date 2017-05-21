@@ -113,6 +113,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         if (checkFields()) {
             presenter.onSigninClicked(loginInteractor, username.getText().toString(),
                     password.getText().toString());
+            presenter.initialize();
         }
     }
 
@@ -191,7 +192,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                openProfileActivity();
+                openMain(getApplicationContext());
             }
         }, 1500);
     }
@@ -200,7 +201,11 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);
     }
-
+    public static void openMain(Context ctx) {
+        Intent intent = new Intent(ctx, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(intent);
+    }
     @Override
     public void navigateToSignupPage() {
         openSignupActivity(this);
@@ -238,4 +243,5 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         }
         return component;
     }
+
 }

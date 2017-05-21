@@ -275,12 +275,20 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     @Override
     public void navigateToUserDetail(Comment comment) {
-        openUserDetail(this, comment);
+        if (comment.getUserId().equals(userSharedImp.getUserID()))
+            openUserProfile(this);
+        else
+            openUserDetail(this, comment);
     }
 
     public static void openUserDetail(Context ctx, Comment comment) {
         Intent intent = new Intent(ctx, UserActivity.class);
         intent.putExtra("userId", comment.getUserId());
+        ctx.startActivity(intent);
+    }
+
+    public static void openUserProfile(Context ctx) {
+        Intent intent = new Intent(ctx, ProfileActivity.class);
         ctx.startActivity(intent);
     }
 }

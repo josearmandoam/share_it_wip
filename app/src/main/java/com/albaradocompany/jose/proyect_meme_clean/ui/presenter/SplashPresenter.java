@@ -28,6 +28,7 @@ public class SplashPresenter extends AbsSplash {
     public void initialize() {
         view.sleep();
         if (userSharedImp.isLogged()) {
+//            navigator.navigateToMainPage();
             navigator.navigateToMainPage();
         } else {
             navigator.navigateToLoginActivity();
