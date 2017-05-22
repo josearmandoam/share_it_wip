@@ -5,6 +5,7 @@ import android.content.Context;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.CommentsApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.FeedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
@@ -34,7 +35,10 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateLike;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateSavedPicture;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,6 +50,8 @@ import javax.inject.Inject;
 public class FeedPresenter extends AbsFeedPresenter {
     private static final String INSERT = "insert";
     private static final String DELETE = "delete";
+    private static final int UPDATE = 1;
+    private static final int GET = 0;
     Context context;
     String userId;
     List<Post> posts;
@@ -55,19 +61,22 @@ public class FeedPresenter extends AbsFeedPresenter {
     GetUserBDImp getUserBDImp;
     @Inject
     UserSharedImp userSharedImp;
+    private int action;
 
     public FeedPresenter(Context context, String userId) {
         this.context = context;
         this.userId = userId;
+        posts = new ArrayList<>();
     }
 
     @Override
     public void initialize() {
         getComponent().inject(this);
+        view.showLoading();
         userBD = getUserBDImp.getUserBD(userId);
-        posts = new ArrayList<>();
         checkForUserSavedPictures();
-
+        action = GET;
+        posts.clear();
     }
 
     public void checkForUserSavedPictures() {
@@ -95,7 +104,9 @@ public class FeedPresenter extends AbsFeedPresenter {
 
     @Override
     public void resume() {
-
+        action = UPDATE;
+        posts.clear();
+        getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
     }
 
     @Override
@@ -109,9 +120,8 @@ public class FeedPresenter extends AbsFeedPresenter {
     }
 
     @Override
-    public void getFeed(FeedInteractor feedInteracto) {
-        view.showLoading();
-        feedInteracto.getFeed(new GetFeed.Listener() {
+    public void getFeed(FeedInteractor feedInteractor) {
+        feedInteractor.getFeed(new GetFeed.Listener() {
             @Override
             public void onNoInternetAvailable() {
                 view.showNoInternetAvailable();
@@ -130,8 +140,8 @@ public class FeedPresenter extends AbsFeedPresenter {
     }
 
     @Override
-    public void onCommentsClicked(List<Comment> comments, String imageId) {
-        navigator.navigateToComments(comments, imageId);
+    public void onCommentsClicked(List<Comment> comments, String imageId, Post post, int adapterPosition) {
+        navigator.navigateToComments(comments, imageId, post, adapterPosition);
     }
 
     @Override
@@ -265,6 +275,7 @@ public class FeedPresenter extends AbsFeedPresenter {
         for (final Feed feed : feeds) {
             PicturesByIdInteractor interactor = getPicturesInteractor(feed.getxUserId());
             interactor.getPictures(new GetPicturesById.Listener() {
+
                 @Override
                 public void onNoInternetAvailable() {
                     view.showNoInternetAvailable();
@@ -287,17 +298,16 @@ public class FeedPresenter extends AbsFeedPresenter {
                         c.setxProfile(feed.getxProfile());
                         posts.add(c);
                     }
-                    getComments(posts);
-                    getLikes(posts);
+                    getLikesComments();
                 }
             });
         }
     }
 
-    private void getComments(final List<Post> listpost) {
-        for (final Post post : listpost) {
-            CommentsInteractor interactor = getCommentsInteractor(post.getPicture().getImageId());
-            interactor.getComments(new GetComments.Listener() {
+    private void getLikesComments() {
+        for (final Post post : posts) {
+            CommentsInteractor interactorComments = getCommentsInteractor(post.getPicture().getImageId());
+            interactorComments.getComments(new GetComments.Listener() {
                 @Override
                 public void onNoInternetAvailable() {
                     view.showNoInternetAvailable();
@@ -313,13 +323,8 @@ public class FeedPresenter extends AbsFeedPresenter {
                     post.setCommentList(comments);
                 }
             });
-        }
-    }
-
-    private void getLikes(final List<Post> listpost) {
-        for (final Post post : listpost) {
-            LikesInteractor interactor = getLikesInteractor(post.getPicture().getImageId());
-            interactor.getLikes(new GetLikes.Listener() {
+            LikesInteractor interactorLikes = getLikesInteractor(post.getPicture().getImageId());
+            interactorLikes.getLikes(new GetLikes.Listener() {
                 @Override
                 public void onNoInternetAvailable() {
                     view.showNoInternetAvailable();
@@ -333,15 +338,41 @@ public class FeedPresenter extends AbsFeedPresenter {
                 @Override
                 public void onLikesReceived(List<Like> likes) {
                     post.setLikeList(likes);
-
+                    if (posts.size() - 1 > 0)
+                        if (post.getPicture().getImageId().equals(posts.get(posts.size() - 1).getPicture().getImageId()))
+                            postReceived(posts);
                 }
+
+
             });
         }
-        if (!posts.isEmpty()){
-            view.showFloatingButton();
-            view.showPosts(listpost);
-            view.hideLoading();
+    }
+
+    private void postReceived(List<Post> posts) {
+        switch (action) {
+            case GET:
+                view.showPosts(orderList(posts));
+                view.hideLoading();
+                view.showFloatingButton();
+                break;
+            case UPDATE:
+                view.updatePosts(orderList(posts));
+                break;
         }
+
+    }
+
+    private List<Post> orderList(List<Post> posts) {
+        Collections.sort(posts, new Comparator<Post>() {
+            @Override
+            public int compare(Post post, Post t1) {
+                if (Date.valueOf(post.getPicture().getDate()).after(Date.valueOf(t1.getPicture().getDate())))
+                    return 0;
+                else
+                    return -1;
+            }
+        });
+        return posts;
     }
 
     private LikesInteractor getLikesInteractor(String imageId) {
@@ -378,6 +409,9 @@ public class FeedPresenter extends AbsFeedPresenter {
                 new MainThreadImp(), new ThreadExecutor());
     }
 
+    private FeedInteractor getFeedInteractor() {
+        return new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor());
+    }
 
     protected UIComponent getComponent() {
         return ((MainActivity) context).component();

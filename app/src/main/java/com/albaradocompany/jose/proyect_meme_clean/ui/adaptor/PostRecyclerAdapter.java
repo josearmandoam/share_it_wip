@@ -101,8 +101,27 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         return posts.size();
     }
 
+    public void updateListAt(int position, Post post) {
+        posts.get(position).setCommentList(post.getCommentList());
+    }
+
+    public void setNewPosts(List<Post> newPosts) {
+        for (Post post : newPosts) {
+            posts.add(post);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void updatePosts(List<Post> posts) {
+        for (int i = 0; i < posts.size(); i++) {
+            this.posts.get(i).setCommentList(posts.get(i).getCommentList());
+            this.posts.get(i).setLikeList(posts.get(i).getLikeList());
+            notifyItemChanged(i);
+        }
+    }
+
     public interface Listener {
-        void onCommentsClicked(List<Comment> commments, String imageId);
+        void onCommentsClicked(List<Comment> commments, String imageId, Post post, int adapterPosition);
 
         void onLikesClicked(List<Like> likes);
 
@@ -145,7 +164,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         @OnClick({R.id.picture_row_ibtn_comments, R.id.picture_row_tv_comments})
         public void onCommentsClicked(View view) {
             listener.onCommentsClicked(posts.get(getAdapterPosition()).getCommentList(),
-                    posts.get(getAdapterPosition()).getPicture().getImageId());
+                    posts.get(getAdapterPosition()).getPicture().getImageId(), posts.get(getAdapterPosition()), getAdapterPosition());
         }
 
         @OnClick(R.id.picture_row_tv_likes)
@@ -203,7 +222,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
     private class NullListener implements Listener {
         @Override
-        public void onCommentsClicked(List<Comment> commments, String imageId) {
+        public void onCommentsClicked(List<Comment> commments, String imageId, Post post, int adapterPosition) {
 
         }
 

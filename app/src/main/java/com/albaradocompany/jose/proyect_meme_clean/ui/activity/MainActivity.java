@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -45,6 +46,7 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     GetUserBDImp getUserBDImp;
 
     private UIComponent component;
+    private FeedFragment feedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,10 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         initialilze();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
     private void initialilze() {
         component().inject(this);
         viewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), getFragments()));
@@ -73,6 +79,7 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     @Override
     protected void onResume() {
         super.onResume();
+        feedFragment.parentResume();
     }
 
     @Override
@@ -82,10 +89,9 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
 
     public List<Fragment> getFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
+        feedFragment = FeedFragment.newInstance(getUserBDImp.getUserBD(userSharedImp.getUserID()));
         list.add(AddPictureFragment.newInstance());
-        String us = userSharedImp.getUserID();
-        UserBD u = getUserBDImp.getUserBD(userSharedImp.getUserID());
-        list.add(FeedFragment.newInstance(getUserBDImp.getUserBD(userSharedImp.getUserID())));
+        list.add(feedFragment);
         list.add(ChatFragment.newInstance());
         return list;
     }

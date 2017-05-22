@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.RecyclerHelper;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.FeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -48,6 +50,8 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by jose on 19/05/2017.
  */
@@ -57,6 +61,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     private static final int FIRST_POSITION = 0;
     private static final int SECOND_POSITION = 1;
     private static final int THIRD_POSITION = 2;
+    private static final String COMMENTS = "comments";
+    private static final String IMAGE_ID = "imageId";
+    private static final String POST = "post";
+    private static final String POSITION = "position";
+    private static final int COMMENT_ACTION = 0;
 
     @BindView(R.id.feed_recyclerview)
     RecyclerView recyclerView;
@@ -68,18 +77,21 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     RapidFloatingActionButton rfaBtn;
     @BindView(R.id.feed_rfal)
     RapidFloatingActionLayout rfaLayout;
+    @BindView(R.id.feed_swiperefreshlayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     RapidFloatingActionHelper rfaHelper;
     AbsFeedPresenter presenter;
     static String userId;
-    static UserBD userBD;
     ShowSnackBarImp showSnackBar;
     PostRecyclerAdapter adapter;
+    private static UserBD userDB;
+    private List<Post> posts;
 
     PostRecyclerAdapter.Listener onClickListener = new PostRecyclerAdapter.Listener() {
         @Override
-        public void onCommentsClicked(List<Comment> comments, String imageId) {
-            presenter.onCommentsClicked(comments, imageId);
+        public void onCommentsClicked(List<Comment> comments, String imageId, Post post, int adapterPosition) {
+            presenter.onCommentsClicked(comments, imageId, post, adapterPosition);
         }
 
         @Override
@@ -107,7 +119,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
             presenter.onUnSaveLikeClicked(userId, imageId);
         }
     };
-    private static UserBD userDB;
+    ;
 
     public FeedFragment() {
     }
@@ -131,6 +143,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         initialize();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     private void initialize() {
         presenter = new FeedPresenter(getContext(), userId);
         presenter.setView(this);
@@ -138,7 +155,17 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
         showSnackBar = new ShowSnackBarImp(getActivity());
 
+        posts = new ArrayList<>();
+    }
 
+    private void initializeSwipeRefresh() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                parentResume();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Nullable
@@ -146,8 +173,9 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, view);
+        initializeSwipeRefresh();
         presenter.initialize();
-        presenter.getFeed(getFeedInteracto());
+        presenter.getFeed(getFeedInteractor());
         return view;
     }
 
@@ -161,7 +189,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         super.onDetach();
     }
 
-    public FeedInteractor getFeedInteracto() {
+    public FeedInteractor getFeedInteractor() {
         return new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor());
     }
 
@@ -177,7 +205,12 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void showPosts(List<Post> listpost) {
-        initializeRecycler(listpost);
+        if (posts.isEmpty()) {
+            initializeRecycler(listpost);
+            this.posts = listpost;
+        } else {
+            updatePosts(listpost);
+        }
     }
 
     private void initializeRecycler(List<Post> listpost) {
@@ -253,49 +286,32 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         configureFloating();
     }
 
-    private void configureFloating() {
-        RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(getContext());
-        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
-        List<RFACLabelItem> items = new ArrayList<>();
-        items.add(new RFACLabelItem<Integer>()
-//                .setLabel("Search")
-                        .setResId(R.drawable.search)
-                        .setIconNormalColor(0xff9C0000)
-                        .setIconPressedColor(0xffB03333)
-                        .setLabelColor(0xff9C0000)
-                        .setWrapper(3)
-        );
-        items.add(new RFACLabelItem<Integer>()
-//                .setLabel("Saved Photos")
-                        .setResId(R.drawable.saved_light)
-                        .setIconNormalColor(0xff5CAC77)
-                        .setIconPressedColor(0xff007D2A)
-                        .setLabelColor(0xff007D2A)
-                        .setWrapper(2)
-        );
-        items.add(new RFACLabelItem<Integer>()
-//                .setLabel("Profile")
-                        .setResId(R.drawable.user)
-                        .setIconNormalColor(0xff00A4A9)
-                        .setIconPressedColor(0xff00696C)
-                        .setLabelColor(0xff00A4A9)
-                        .setWrapper(0)
-        );
-        rfaContent.setItems(items)
-                .setIconShadowRadius(ABTextUtil.dip2px(getContext(), 5))
-                .setIconShadowColor(R.color.color_login)
-                .setIconShadowDy(ABTextUtil.dip2px(getContext(), 5));
-        rfaHelper = new RapidFloatingActionHelper(
-                getContext(),
-                rfaLayout,
-                rfaBtn,
-                rfaContent
-        ).build();
+    @Override
+    public void updatePosts(List<Post> listpost) {
+        if (RecyclerHelper.hasNewPosts(listpost, posts)) {
+            adapter.setNewPosts(RecyclerHelper.getNewPosts(listpost, posts));
+        } else {
+            for (int i = 0; i < listpost.size(); i++) {
+                int newCommentPosition = RecyclerHelper.hasPostNewComments(listpost.get(i).getCommentList(), posts.get(i).getCommentList());
+                if (newCommentPosition != -1) {
+                    posts.get(i).setCommentList(listpost.get(i).getCommentList());
+                    adapter.updateListAt(i, posts.get(i));
+                    adapter.notifyItemChanged(i);
+                }
+                int newLikePosition = RecyclerHelper.hasPostNewLikes(listpost.get(i).getLikeList(), posts.get(i).getLikeList());
+                if (newLikePosition != -1) {
+                    posts.get(i).setLikeList(listpost.get(i).getLikeList());
+                    adapter.updateListAt(i, posts.get(i));
+                    adapter.notifyItemChanged(i);
+                }
+            }
+//            adapter.updatePosts(RecyclerHelper.updateLikesAndComments(listpost, posts));
+        }
     }
 
     @Override
-    public void navigateToComments(List<Comment> comments, String imageId) {
-        openCommentsActivity(comments, imageId);
+    public void navigateToComments(List<Comment> comments, String imageId, Post post, int adapterPosition) {
+        openCommentsActivity(comments, imageId, post, adapterPosition);
     }
 
     @Override
@@ -313,11 +329,13 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         openProfileActivity(getContext());
     }
 
-    public void openCommentsActivity(List<Comment> comments, String imageId) {
+    public void openCommentsActivity(List<Comment> comments, String imageId, Post post, int adapterPosition) {
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
-        intent.putExtra("comments", (Serializable) comments);
-        intent.putExtra("imageId", imageId);
-        startActivity(intent);
+        intent.putExtra(COMMENTS, (Serializable) comments);
+        intent.putExtra(IMAGE_ID, imageId);
+        intent.putExtra(POST, post);
+        intent.putExtra(POSITION, adapterPosition);
+        startActivityForResult(intent, COMMENT_ACTION);
     }
 
     public static void setUserId(String id) {
@@ -388,5 +406,69 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     public static void openSavedPictures(Context ctx) {
         Intent intent = new Intent(ctx, SavedPicturesActivity.class);
         ctx.startActivity(intent);
+    }
+
+    private void configureFloating() {
+        RapidFloatingActionContentLabelList rfaContent = new RapidFloatingActionContentLabelList(getContext());
+        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
+        List<RFACLabelItem> items = new ArrayList<>();
+        items.add(new RFACLabelItem<Integer>()
+//                .setLabel("Search")
+                        .setResId(R.drawable.search)
+                        .setIconNormalColor(0xff9C0000)
+                        .setIconPressedColor(0xffB03333)
+                        .setLabelColor(0xff9C0000)
+                        .setWrapper(3)
+        );
+        items.add(new RFACLabelItem<Integer>()
+//                .setLabel("Saved Photos")
+                        .setResId(R.drawable.saved_light)
+                        .setIconNormalColor(0xff5CAC77)
+                        .setIconPressedColor(0xff007D2A)
+                        .setLabelColor(0xff007D2A)
+                        .setWrapper(2)
+        );
+        items.add(new RFACLabelItem<Integer>()
+//                .setLabel("Profile")
+                        .setResId(R.drawable.user)
+                        .setIconNormalColor(0xff00A4A9)
+                        .setIconPressedColor(0xff00696C)
+                        .setLabelColor(0xff00A4A9)
+                        .setWrapper(0)
+        );
+        rfaContent.setItems(items)
+                .setIconShadowRadius(ABTextUtil.dip2px(getContext(), 5))
+                .setIconShadowColor(R.color.color_login)
+                .setIconShadowDy(ABTextUtil.dip2px(getContext(), 5));
+        rfaHelper = new RapidFloatingActionHelper(
+                getContext(),
+                rfaLayout,
+                rfaBtn,
+                rfaContent
+        ).build();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+            if (requestCode == COMMENT_ACTION) {
+                if (data.getExtras() != null) {
+                    int position = (int) data.getExtras().get(POSITION);
+                    Post post = (Post) data.getExtras().get(POST);
+                    adapter.updateListAt(position, post);
+                    adapter.notifyItemChanged(position);
+                    try {
+                        Thread.sleep(28);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+    }
+
+    public void parentResume() {
+        if (presenter != null)
+            presenter.resume();
     }
 }

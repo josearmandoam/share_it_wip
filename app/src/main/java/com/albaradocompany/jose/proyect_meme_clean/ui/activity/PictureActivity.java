@@ -27,7 +27,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
@@ -61,6 +60,9 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     private static final String DELETE = "delete";
     private static final String INSERT = "insert";
+    private static final String COMMENTS = "comments";
+    private static final String IMAGE_ID = "imageId";
+    private static final int COMMENT_ACTION = 0;
     @BindView(R.id.picture_row_iv_photo)
     ImageView image;
     @BindView(R.id.picture_row_iv_user_profile)
@@ -102,7 +104,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     String comments_title;
 
     List<Like> listLikes = new ArrayList<>();
-    List<Comment> listComments =  new ArrayList<>();
+    List<Comment> listComments = new ArrayList<>();
     AbsPicturePresenter presenter;
     LikesInteractor likesInteractor;
     GetComments commentsInteractor;
@@ -157,7 +159,6 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     protected void onResume() {
         super.onResume();
         presenter.resume();
-        Toast.makeText(this, "RESUME", Toast.LENGTH_SHORT).show();
     }
 
     private void initialize() {
@@ -243,7 +244,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
             } else {
                 btnLike.setImageDrawable(heartBorder);
             }
-        }else{
+        } else {
             likes.setText("" + listLikes.size() + " " + likes_title);
             if (listLikes.size() > 0) {
                 checkLiked(likesList);
@@ -258,7 +259,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         if (RecyclerHelper.hasNewComments(listComments, commentsList)) {
             listComments = commentsList;
             comments.setText("" + commentsList.size() + " " + comments_title);
-        }else{
+        } else {
             comments.setText("" + listComments.size() + " " + comments_title);
         }
     }
@@ -370,8 +371,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     public void openCommentsActivity() {
         Intent intent = new Intent(this, CommentsActivity.class);
-        intent.putExtra("comments", (Serializable) listComments);
-        intent.putExtra("imageId", imageId);
+        intent.putExtra(COMMENTS, (Serializable) listComments);
+        intent.putExtra(IMAGE_ID, imageId);
         startActivity(intent);
     }
 
@@ -386,7 +387,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     private void updateUserSavePictureApi() {
         if (btnSave.getDrawable().equals(saveClicked)) {
             presenter.onDeleteSavedPicture(getUpdateDELSavedPictureInteractor());
-        }else{
+        } else {
             presenter.onInsertSavePicture(getUpdateINSSavePictureInteractor());
         }
     }
@@ -406,6 +407,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
                 null, null, imageId, null, DELETE),
                 new MainThreadImp(), new ThreadExecutor());
     }
+
     public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
         return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
                 picture.getDescription(), DateUtil.getCurrentDate(), imageId, DateUtil.getCurrentTime(), INSERT),

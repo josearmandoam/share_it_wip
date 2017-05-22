@@ -23,6 +23,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.RecyclerHelper;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.CommentsInteractor;
@@ -49,6 +50,11 @@ import butterknife.OnClick;
 public class CommentsActivity extends BaseActivty implements AbsCommentPresenter.View, AbsCommentPresenter.Navigator {
     private static final String INSERT = "insert";
     private static final String DELETE = "delete";
+    private static final String COMMENTS = "comments";
+    private static final String IMAGE_ID = "imageId";
+    private static final String POST = "post";
+    private static final String POSITION = "position";
+    private static final String USER_ID = "userId";
 
     @BindView(R.id.comments_rv_list_comments)
     RecyclerView recyclerView;
@@ -76,7 +82,9 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     String imageId;
     UIComponent component;
     Comment commentOnCache;
+    private Post post;
     ShowSnackBarImp showSnackBarImp;
+    private int position;
 
     UserBD userBD;
     @Inject
@@ -121,6 +129,19 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     protected void onResume() {
         super.onResume();
         presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (post != null)
+            if (RecyclerHelper.hasNewComments(post.getCommentList(), comments)) {
+                Intent intent = new Intent();
+                post.setCommentList(comments);
+                intent.putExtra(POST, post);
+                intent.putExtra(POSITION, position);
+                setResult(RESULT_OK, intent);
+            }
+        super.onBackPressed();
     }
 
     private void initialize() {
@@ -172,8 +193,11 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     public void getDataBundle() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            comments = (ArrayList<Comment>) bundle.get("comments");
-            imageId = (String) bundle.get("imageId");
+            comments = (ArrayList<Comment>) bundle.get(COMMENTS);
+            imageId = (String) bundle.get(IMAGE_ID);
+            post = (Post) bundle.get(POST);
+            if (post != null)
+                position = (int) bundle.get(POSITION);
         }
     }
 
@@ -283,7 +307,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     public static void openUserDetail(Context ctx, Comment comment) {
         Intent intent = new Intent(ctx, UserActivity.class);
-        intent.putExtra("userId", comment.getUserId());
+        intent.putExtra(USER_ID, comment.getUserId());
         ctx.startActivity(intent);
     }
 

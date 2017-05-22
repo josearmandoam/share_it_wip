@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, AbsFeedPresenter.Navigator> {
     public abstract void getFeed(FeedInteractor feedInteracto);
 
-    public abstract void onCommentsClicked(List<Comment> comments, String imageId);
+    public abstract void onCommentsClicked(List<Comment> comments, String imageId, Post post, int adapterPosition);
 
     public abstract void onLikesClicked(List<Like> likes);
 
@@ -64,10 +64,12 @@ public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, 
         void showUnLikeFailure();
 
         void showFloatingButton();
+
+        void updatePosts(List<Post> posts);
     }
 
     public interface Navigator {
-        void navigateToComments(List<Comment> comments, String imageId);
+        void navigateToComments(List<Comment> comments, String imageId, Post post, int adapterPosition);
 
         void navigateToSearch();
 

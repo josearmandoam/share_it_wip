@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by jose on 20/05/2017.
  */
 
-public class Post {
+public class Post implements Serializable {
     String feedId;
     String userId;
     String xUserId;

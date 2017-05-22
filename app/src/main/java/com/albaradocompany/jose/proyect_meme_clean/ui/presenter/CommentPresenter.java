@@ -93,7 +93,6 @@ public class CommentPresenter extends AbsCommentPresenter {
             public void onCommentesReceived(List<Comment> comments) {
                 view.showComments(comments);
                 view.hideLoading();
-                initialize();
             }
         });
     }
