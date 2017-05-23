@@ -9,17 +9,15 @@ import android.support.v4.view.ViewPager;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.MainViewPagerAdapter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AddPictureFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NewPictureFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.ChatFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.FeedFragment;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserBD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +79,9 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         super.onResume();
         feedFragment.parentResume();
     }
+    public void updateFeedFragment(){
+        feedFragment.parentResume();
+    }
 
     @Override
     protected boolean hideToolbar() {
@@ -90,7 +91,7 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     public List<Fragment> getFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
         feedFragment = FeedFragment.newInstance(getUserBDImp.getUserBD(userSharedImp.getUserID()));
-        list.add(AddPictureFragment.newInstance());
+        list.add(NewPictureFragment.newInstance());
         list.add(feedFragment);
         list.add(ChatFragment.newInstance());
         return list;

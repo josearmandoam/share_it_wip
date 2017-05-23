@@ -62,4 +62,6 @@ public final class BuildConfig {
     public static final String FACEBOOK_PAGE = "https://www.facebook.com/";
     public static final String INSTAGRAM_PAGE = "https://www.instagram.com/";
     public static final String TWITTER_PAGE = "https://twitter.com/";
+    public static final int COLOR_GREEN= 0xff00A900;
+    public static final int COLOR_RED= 0xff9C0000;
 }

@@ -12,6 +12,7 @@ class FeedApiEntry {
     String xUserId = "";
     String xProfile = "";
     String xUsername = "";
+    String state = "";
 
     public Feed parseFeed() {
         Feed obj = new Feed();
@@ -20,6 +21,7 @@ class FeedApiEntry {
         obj.setxUserId(xUserId);
         obj.setxProfile(xProfile);
         obj.setxUsername(xUsername);
+        obj.setState(state);
         return obj;
     }
 }

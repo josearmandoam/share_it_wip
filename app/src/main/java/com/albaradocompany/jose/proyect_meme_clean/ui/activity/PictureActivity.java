@@ -410,7 +410,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
         return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
-                picture.getDescription(), DateUtil.getCurrentDate(), imageId, DateUtil.getCurrentTime(), INSERT),
+                picture.getDescription(), DateUtil.getCurrentDateFormated(), imageId, DateUtil.getCurrentTime(), INSERT),
                 new MainThreadImp(), new ThreadExecutor());
     }
 }

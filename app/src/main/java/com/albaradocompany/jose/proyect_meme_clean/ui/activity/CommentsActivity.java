@@ -203,7 +203,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     public UpdateCommentInteractor getINSCommentInteractor() {
         commentOnCache = new Comment(imageId, userSharedImp.createCommentID(), userBD.user_name + " " + userBD.user_lastname,
-                userBD.user_profile, comment.getText().toString(), userSharedImp.getUserID(), DateUtil.getCurrentDate(), DateUtil.getCurrentTime());
+                userBD.user_profile, comment.getText().toString(), userSharedImp.getUserID(), DateUtil.getCurrentDateFormated(), DateUtil.getCurrentTime());
         return new UpdateCommentInteractor(new UpdateCommentApiImp(commentOnCache.getUserId(), commentOnCache.getImageId(),
                 commentOnCache.getCommentId(), commentOnCache.getComment(), userBD.user_name,
                 userBD.user_lastname, commentOnCache.getProfile(), commentOnCache.getTime(),

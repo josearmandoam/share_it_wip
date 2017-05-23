@@ -114,4 +114,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_photo">Create a new Photo</string>
+    <string name="insert_any_photo_s_description">Insert any photo\'s description</string>
+    <string name="upload_failure">Something went wrong</string>
+    <string name="upload_picture">Upload picture</string>
 </resources>

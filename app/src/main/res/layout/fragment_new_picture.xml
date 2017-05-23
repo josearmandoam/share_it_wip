@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/new_picture_btn_from_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/border_text_orange"
+                android:drawableLeft="@mipmap/photocamera"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:text="@string/take_from_camera" />
+            <Button
+                android:id="@+id/new_picture_btn_from_gallery"
+                android:layout_below="@+id/new_picture_btn_from_camera"
+                android:layout_marginTop="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/border_text_blue"
+                android:drawableLeft="@mipmap/pictures"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:text="@string/take_from_gallery" />
+            <Button
+                android:id="@+id/new_picture_picture_new"
+                android:layout_below="@+id/new_picture_btn_from_gallery"
+                android:layout_marginTop="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/border_text_red"
+                android:drawableLeft="@mipmap/new_pic"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:layout_alignEnd="@+id/new_picture_btn_from_gallery"
+                android:layout_alignStart="@+id/new_picture_btn_from_gallery"
+                android:text="@string/new_photo" />
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

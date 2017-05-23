@@ -12,6 +12,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UploadActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PostRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.DropCommentDialog;
@@ -29,6 +30,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SplashPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.UploadPresenter;
 
 import dagger.Component;
 
@@ -90,4 +92,6 @@ public interface UIComponent {
     void inject(PostRecyclerAdapter postRecyclerAdapter);
 
     void inject(FeedPresenter feedPresenter);
+
+    void inject(UploadActivity uploadActivity);
 }

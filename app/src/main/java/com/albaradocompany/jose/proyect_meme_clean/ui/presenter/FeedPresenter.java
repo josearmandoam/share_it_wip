@@ -66,7 +66,6 @@ public class FeedPresenter extends AbsFeedPresenter {
     public FeedPresenter(Context context, String userId) {
         this.context = context;
         this.userId = userId;
-        posts = new ArrayList<>();
     }
 
     @Override
@@ -76,7 +75,7 @@ public class FeedPresenter extends AbsFeedPresenter {
         userBD = getUserBDImp.getUserBD(userId);
         checkForUserSavedPictures();
         action = GET;
-        posts.clear();
+        posts = new ArrayList<>();
     }
 
     public void checkForUserSavedPictures() {
@@ -105,8 +104,12 @@ public class FeedPresenter extends AbsFeedPresenter {
     @Override
     public void resume() {
         action = UPDATE;
-        posts.clear();
-        getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
+        if (posts != null) {
+            view.showPosts(posts);
+        } else {
+            posts = new ArrayList<>();
+            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
+        }
     }
 
     @Override

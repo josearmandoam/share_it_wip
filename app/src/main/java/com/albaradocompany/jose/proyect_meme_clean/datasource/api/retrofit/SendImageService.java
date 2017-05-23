@@ -11,6 +11,6 @@ import retrofit2.http.POST;
 
 public interface SendImageService {
     @FormUrlEncoded
-    @POST("uploadImage.php")
+    @POST("uploadPicture.php")
     Call<String> sendImage(@Field("idUser") String idUser, @Field("image") byte[] image);
 }
