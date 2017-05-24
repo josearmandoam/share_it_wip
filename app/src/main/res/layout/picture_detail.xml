@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity">
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/picture_row_swipe_refresh"
+        android:id="@+id/picture_detail_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <ScrollView
@@ -16,43 +16,43 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/picture_row_iv_photo"
+                android:id="@+id/picture_detail_iv_photo"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/fo3" />
 
             <View
-                android:id="@+id/picture_row_vw_social"
+                android:id="@+id/picture_detail_vw_social"
                 android:layout_width="wrap_content"
                 android:layout_height="?actionBarSize"
-                android:layout_below="@+id/picture_row_iv_photo" />
+                android:layout_below="@+id/picture_detail_iv_photo" />
 
             <View
-                android:layout_below="@+id/picture_row_vw_social"
+                android:layout_below="@+id/picture_detail_vw_social"
                 android:background="@android:color/darker_gray"
-                android:layout_alignStart="@+id/picture_row_vw_social"
-                android:layout_alignEnd="@+id/picture_row_vw_social"
+                android:layout_alignStart="@+id/picture_detail_vw_social"
+                android:layout_alignEnd="@+id/picture_detail_vw_social"
                 android:layout_width="wrap_content"
                 android:layout_height="0.5dp" />
 
             <ImageButton
-                android:id="@+id/picture_row_ibtn_like"
+                android:id="@+id/picture_detail_ibtn_like"
                 android:src="@drawable/heart_border"
                 android:background="@null"
-                android:layout_alignTop="@+id/picture_row_vw_social"
-                android:layout_alignBottom="@+id/picture_row_vw_social"
+                android:layout_alignTop="@+id/picture_detail_vw_social"
+                android:layout_alignBottom="@+id/picture_detail_vw_social"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/picture_row_tv_likes"
+                android:id="@+id/picture_detail_tv_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/picture_row_ibtn_like"
-                android:layout_alignTop="@+id/picture_row_vw_social"
-                android:layout_alignBottom="@+id/picture_row_vw_social"
+                android:layout_toRightOf="@+id/picture_detail_ibtn_like"
+                android:layout_alignTop="@+id/picture_detail_vw_social"
+                android:layout_alignBottom="@+id/picture_detail_vw_social"
                 android:text="255"
                 android:padding="8dp"
                 android:textStyle="bold"
@@ -61,23 +61,23 @@
                 android:gravity="center" />
 
             <ImageButton
-                android:id="@+id/picture_row_ibtn_comments"
+                android:id="@+id/picture_detail_ibtn_comments"
                 android:src="@drawable/comment2"
                 android:background="@null"
-                android:layout_alignTop="@+id/picture_row_vw_social"
-                android:layout_alignBottom="@+id/picture_row_vw_social"
-                android:layout_toRightOf="@+id/picture_row_tv_likes"
+                android:layout_alignTop="@+id/picture_detail_vw_social"
+                android:layout_alignBottom="@+id/picture_detail_vw_social"
+                android:layout_toRightOf="@+id/picture_detail_tv_likes"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/picture_row_tv_comments"
+                android:id="@+id/picture_detail_tv_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/picture_row_ibtn_comments"
-                android:layout_alignTop="@+id/picture_row_vw_social"
-                android:layout_alignBottom="@+id/picture_row_vw_social"
+                android:layout_toRightOf="@+id/picture_detail_ibtn_comments"
+                android:layout_alignTop="@+id/picture_detail_vw_social"
+                android:layout_alignBottom="@+id/picture_detail_vw_social"
                 android:text="255"
                 android:padding="8dp"
                 android:textStyle="bold"
@@ -86,39 +86,39 @@
                 android:gravity="center" />
 
             <ImageButton
-                android:id="@+id/picture_row_ibtn_save"
+                android:id="@+id/picture_detail_ibtn_save"
                 android:src="@drawable/save_unclicked"
                 android:background="@null"
-                android:layout_alignTop="@+id/picture_row_vw_social"
-                android:layout_alignBottom="@+id/picture_row_vw_social"
+                android:layout_alignTop="@+id/picture_detail_vw_social"
+                android:layout_alignBottom="@+id/picture_detail_vw_social"
                 android:layout_alignParentEnd="true"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <View
-                android:id="@+id/picture_row_vw_user_info"
+                android:id="@+id/picture_detail_vw_user_info"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/picture_row_vw_social"
+                android:layout_below="@+id/picture_detail_vw_social"
                 android:layout_height="?actionBarSize" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/picture_row_iv_user_profile"
+                android:id="@+id/picture_detail_iv_user_profile"
                 android:layout_width="50dp"
                 android:src="@drawable/face"
-                android:layout_alignTop="@+id/picture_row_vw_user_info"
-                android:layout_alignBottom="@+id/picture_row_vw_user_info"
+                android:layout_alignTop="@+id/picture_detail_vw_user_info"
+                android:layout_alignBottom="@+id/picture_detail_vw_user_info"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/picture_row_tv_user_name"
+                android:id="@+id/picture_detail_tv_user_name"
                 android:layout_width="wrap_content"
-                android:layout_alignTop="@+id/picture_row_vw_user_info"
-                android:layout_alignBottom="@+id/picture_row_vw_user_info"
-                android:layout_toRightOf="@id/picture_row_iv_user_profile"
+                android:layout_alignTop="@+id/picture_detail_vw_user_info"
+                android:layout_alignBottom="@+id/picture_detail_vw_user_info"
+                android:layout_toRightOf="@id/picture_detail_iv_user_profile"
                 android:text="JOAN MANUEL SERRAT"
                 android:gravity="center"
                 android:padding="4dp"
@@ -128,10 +128,10 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/picture_row_tv_time"
+                android:id="@+id/picture_detail_tv_time"
                 android:layout_width="wrap_content"
-                android:layout_alignTop="@+id/picture_row_vw_user_info"
-                android:layout_alignBottom="@+id/picture_row_vw_user_info"
+                android:layout_alignTop="@+id/picture_detail_vw_user_info"
+                android:layout_alignBottom="@+id/picture_detail_vw_user_info"
                 android:layout_alignParentEnd="true"
                 android:text="14H"
                 android:gravity="center"
@@ -141,8 +141,8 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/picture_row_tv_description"
-                android:layout_below="@+id/picture_row_vw_user_info"
+                android:id="@+id/picture_detail_tv_description"
+                android:layout_below="@+id/picture_detail_vw_user_info"
                 android:fontFamily="@string/default_font"
                 android:padding="16dp"
                 android:text="@string/text_large"

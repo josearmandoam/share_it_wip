@@ -276,6 +276,14 @@ public class FeedPresenter extends AbsFeedPresenter {
         navigator.navigateToProfile();
     }
 
+    @Override
+    public void onUserClicked(String userId) {
+        if (userId.equals(this.userId))
+            navigator.navigateToProfile();
+        else
+            navigator.openUserProfile(userId);
+    }
+
     private void getPicturesOfFeed(List<Feed> feeds) {
         final List<Post> list = new ArrayList<Post>();
         for (final Feed feed : feeds) {

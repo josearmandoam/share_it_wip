@@ -59,7 +59,7 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
 
         void showUsername(String s);
 
-        void showTime(String time);
+        void showTime(String date, String time);
 
         void showSaved(String imagePath);
 

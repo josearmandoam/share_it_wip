@@ -3,10 +3,11 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
@@ -32,9 +33,11 @@ public class PicturePresenter extends AbsPicturePresenter {
     Picture picture;
     GetLikes getLikes;
     GetComments getComments;
-
+    UserBD userBD;
     @Inject
     GetUserBDImp getUserBDImp;
+    @Inject
+    UserSharedImp userSharedImp;
 
     public PicturePresenter(Context context) {
         this.context = context;
@@ -43,13 +46,13 @@ public class PicturePresenter extends AbsPicturePresenter {
     @Override
     public void initialize() {
         getComponent().inject(this);
-
+        userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
         view.showLoading();
         view.showPicture(picture.getImagePath());
         view.showDescription(picture.getDescription());
         view.showUserProfile(user.getProfile());
         view.showUsername(user.getName() + " " + user.getLastname());
-        view.showTime(picture.getTime());
+        view.showTime(picture.getDate(), picture.getTime());
         view.showSaved(picture.getImageId());
     }
 
@@ -156,8 +159,8 @@ public class PicturePresenter extends AbsPicturePresenter {
     }
 
     private List<Like> updateListAfterInsert(List<Like> likeList) {
-        likeList.add(new Like(picture.getImageId(), user.getName() + " " + user.getLastname(),
-                user.getProfile(), user.getUserId(), "like" + DateUtil.getCurrentDateTime()));
+        likeList.add(new Like(picture.getImageId(), userBD.user_name + " " + userBD.user_lastname,
+                userBD.user_profile, userBD.userId, "like" + DateUtil.getCurrentDateTime()));
         return likeList;
     }
 
@@ -247,7 +250,7 @@ public class PicturePresenter extends AbsPicturePresenter {
 
     private List<Like> updateListAfterDelete(List<Like> likeList) {
         for (int i = 0; i < likeList.size(); i++) {
-            if (likeList.get(i).getUserId().equals(user.getUserId()))
+            if (likeList.get(i).getUserId().equals(userBD.userId))
                 likeList.remove(i);
         }
         return likeList;

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -63,29 +62,31 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     private static final String COMMENTS = "comments";
     private static final String IMAGE_ID = "imageId";
     private static final int COMMENT_ACTION = 0;
-    @BindView(R.id.picture_row_iv_photo)
+    private static final String USER = "user";
+    private static final String IMAGE = "image";
+    @BindView(R.id.picture_detail_iv_photo)
     ImageView image;
-    @BindView(R.id.picture_row_iv_user_profile)
+    @BindView(R.id.picture_detail_iv_user_profile)
     ImageView profile;
-    @BindView(R.id.picture_row_tv_description)
+    @BindView(R.id.picture_detail_tv_description)
     TextView description;
-    @BindView(R.id.picture_row_tv_user_name)
+    @BindView(R.id.picture_detail_tv_user_name)
     TextView name;
-    @BindView(R.id.picture_row_tv_time)
+    @BindView(R.id.picture_detail_tv_time)
     TextView time;
-    @BindView(R.id.picture_row_tv_likes)
+    @BindView(R.id.picture_detail_tv_likes)
     TextView likes;
-    @BindView(R.id.picture_row_tv_comments)
+    @BindView(R.id.picture_detail_tv_comments)
     TextView comments;
     @BindView(R.id.picture_lyt_photo)
     RelativeLayout layoutPhoto;
     @BindView(R.id.picture_pbr)
     ProgressBar progressBar;
-    @BindView(R.id.picture_row_ibtn_save)
+    @BindView(R.id.picture_detail_ibtn_save)
     ImageButton btnSave;
-    @BindView(R.id.picture_row_ibtn_like)
+    @BindView(R.id.picture_detail_ibtn_like)
     ImageButton btnLike;
-    @BindView(R.id.picture_row_swipe_refresh)
+    @BindView(R.id.picture_detail_swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
     @BindString(R.string.noInternetAvailable)
@@ -118,17 +119,17 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     UserSharedImp userSharedImp;
     Picture picture;
 
-    @OnClick(R.id.picture_row_ibtn_comments)
+    @OnClick(R.id.picture_detail_ibtn_comments)
     public void onCommentClicked(View view) {
         presenter.onCommentsClicked();
     }
 
-    @OnClick(R.id.picture_row_tv_comments)
+    @OnClick(R.id.picture_detail_tv_comments)
     public void onTVCommentClicked(View view) {
         presenter.onCommentsClicked();
     }
 
-    @OnClick(R.id.picture_row_ibtn_like)
+    @OnClick(R.id.picture_detail_ibtn_like)
     public void onLikesClicked(View view) {
         updateUserLikePictureApi();
     }
@@ -138,12 +139,12 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
         presenter.onBackClicked();
     }
 
-    @OnClick(R.id.picture_row_tv_likes)
+    @OnClick(R.id.picture_detail_tv_likes)
     public void onTVLikesClicked(View view) {
         presenter.onLikesClicked();
     }
 
-    @OnClick(R.id.picture_row_ibtn_save)
+    @OnClick(R.id.picture_detail_ibtn_save)
     public void onSaveClicked(View view) {
         updateUserSavePictureApi();
     }
@@ -152,7 +153,6 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initialize();
-        Toast.makeText(this, "CREATE", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -198,9 +198,9 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     public void getDataReceived() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            imageId = (String) bundle.get("imageId");
-            User user = (User) bundle.get("user");
-            picture = (Picture) bundle.get("image");
+            imageId = (String) bundle.get(IMAGE_ID);
+            User user = (User) bundle.get(USER);
+            picture = (Picture) bundle.get(IMAGE);
             presenter.initializeData(user, picture, getLikesInteractor(imageId), getCommentsInteractor(imageId));
             presenter.initialize();
             presenter.getPictureLikes(getLikesInteractor(imageId), imageId);
@@ -293,8 +293,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     }
 
     @Override
-    public void showTime(String timee) {
-        time.setText(timee);
+    public void showTime(String date, String timee) {
+        time.setText(DateUtil.timeAgo(date, timee));
     }
 
     @Override
@@ -410,7 +410,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
         return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
-                picture.getDescription(), DateUtil.getCurrentDateFormated(), imageId, DateUtil.getCurrentTime(), INSERT),
+                picture.getDescription(), DateUtil.getCurrentDateFormated(), imageId, DateUtil.getCurrentTimeFormated(), INSERT),
                 new MainThreadImp(), new ThreadExecutor());
     }
 }

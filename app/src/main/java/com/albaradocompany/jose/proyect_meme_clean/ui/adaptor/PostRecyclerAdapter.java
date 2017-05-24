@@ -19,6 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.ListUtil;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.squareup.picasso.Picasso;
@@ -71,8 +72,10 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         Picasso.with(context).load(posts.get(position).getxProfile()).into(holder.profile);
         holder.description.setText(posts.get(position).getPicture().getDescription());
         holder.username.setText(posts.get(position).getxUsername());
+        holder.username2.setText(posts.get(position).getxUsername());
         holder.comments.setText("" + posts.get(position).getCommentList().size() + " " + context.getString(R.string.comments));
         holder.likes.setText("" + posts.get(position).getLikeList().size() + " " + context.getString(R.string.likes));
+        holder.time.setText(DateUtil.timeAgo(posts.get(position).getPicture().getDate(),posts.get(position).getPicture().getTime()));
         if (photoSaved(posts.get(position).getPicture().getImageId()))
             holder.btnSave.setImageDrawable(holder.saved);
         else
@@ -134,6 +137,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         void onSaveLikeClicked(String imageId);
 
         void onUnSaveLikeClicked(String userId, String imageId);
+
+        void onUserClicked(String userId);
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
@@ -141,8 +146,10 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         ImageView profile;
         @BindView(R.id.picture_row_tv_description)
         TextView description;
-        @BindView(R.id.picture_row_tv_user_name)
+        @BindView(R.id.picture_row_tv_user_name1)
         TextView username;
+        @BindView(R.id.picture_row_tv_user_name2)
+        TextView username2;
         @BindView(R.id.picture_row_iv_photo)
         ImageView image;
         @BindView(R.id.picture_row_tv_likes)
@@ -153,6 +160,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         ImageButton btnLike;
         @BindView(R.id.picture_row_ibtn_save)
         ImageButton btnSave;
+        @BindView(R.id.picture_row_tv_time)
+        TextView time;
 
         @BindDrawable(R.drawable.heart_fill)
         Drawable heartFill;
@@ -192,6 +201,10 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             } else {
                 saveLike();
             }
+        }
+        @OnClick({R.id.picture_row_tv_user_name2, R.id.picture_row_tv_user_name1, R.id.picture_row_iv_user_profile})
+        public void onUserClicked(View view){
+            listener.onUserClicked(posts.get(getAdapterPosition()).getxUserId());
         }
 
         public PostViewHolder(View itemView) {
@@ -250,6 +263,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
         @Override
         public void onUnSaveLikeClicked(String userId, String imageId) {
+
+        }
+
+        @Override
+        public void onUserClicked(String userId) {
 
         }
     }

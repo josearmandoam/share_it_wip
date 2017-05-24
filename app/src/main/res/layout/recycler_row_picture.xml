@@ -12,6 +12,8 @@
             <ImageView
                 android:id="@+id/picture_row_iv_photo"
                 android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/picture_row_iv_user_profile"
                 android:layout_height="300dp"
                 android:src="@drawable/fo3" />
 
@@ -21,13 +23,13 @@
                 android:layout_height="?actionBarSize"
                 android:layout_below="@+id/picture_row_iv_photo" />
 
-            <View
-                android:layout_below="@+id/picture_row_vw_social"
-                android:background="@android:color/darker_gray"
-                android:layout_alignStart="@+id/picture_row_vw_social"
-                android:layout_alignEnd="@+id/picture_row_vw_social"
-                android:layout_width="wrap_content"
-                android:layout_height="0.5dp" />
+            <!--<View-->
+                <!--android:layout_below="@+id/picture_row_vw_social"-->
+                <!--android:background="@color/color_login"-->
+                <!--android:layout_alignStart="@+id/picture_row_vw_social"-->
+                <!--android:layout_alignEnd="@+id/picture_row_vw_social"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="1dp" />-->
 
             <ImageButton
                 android:id="@+id/picture_row_ibtn_like"
@@ -94,27 +96,45 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_below="@+id/picture_row_vw_social"
-                android:layout_height="?actionBarSize" />
+                android:layout_height="30dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/picture_row_iv_user_profile"
+                android:layout_marginLeft="8dp"
                 android:layout_width="50dp"
                 android:src="@drawable/face"
-                android:layout_alignTop="@+id/picture_row_vw_user_info"
-                android:layout_alignBottom="@+id/picture_row_vw_user_info"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="50dp" />
             <TextView
-                android:id="@+id/picture_row_tv_user_name"
+                android:id="@+id/picture_row_tv_user_name1"
+                android:layout_toRightOf="@+id/picture_row_iv_user_profile"
+                android:layout_alignBottom="@+id/picture_row_iv_user_profile"
+                android:layout_alignTop="@+id/picture_row_iv_user_profile"
+                android:layout_width="wrap_content"
+                android:paddingLeft="16dp"
+                android:text="JOAN MANUEL SERRAT"
+                android:gravity="center"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+                android:fontFamily="@string/default_font"
+                android:layout_height="wrap_content" />
+            <!--<View-->
+                <!--android:id="@+id/picture_vw_sept_top"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_below="@+id/picture_row_iv_user_profile"-->
+                <!--android:background="@color/color_login"-->
+                <!--android:layout_marginTop="4dp"-->
+                <!--android:layout_marginBottom="4dp"-->
+                <!--android:layout_height="1dp"/>-->
+            <TextView
+                android:id="@+id/picture_row_tv_user_name2"
                 android:layout_width="wrap_content"
                 android:layout_alignTop="@+id/picture_row_vw_user_info"
                 android:layout_alignBottom="@+id/picture_row_vw_user_info"
-                android:layout_toRightOf="@id/picture_row_iv_user_profile"
+                android:paddingLeft="16dp"
                 android:text="JOAN MANUEL SERRAT"
                 android:gravity="center"
-                android:padding="4dp"
                 android:textSize="@dimen/text_size"
                 android:textStyle="bold"
                 android:fontFamily="@string/default_font"
@@ -125,10 +145,10 @@
                 android:layout_width="wrap_content"
                 android:layout_alignTop="@+id/picture_row_vw_user_info"
                 android:layout_alignBottom="@+id/picture_row_vw_user_info"
+                android:paddingEnd="16dp"
                 android:layout_alignParentEnd="true"
                 android:text="14H"
                 android:gravity="center"
-                android:padding="16dp"
                 android:textStyle="bold"
                 android:fontFamily="@string/default_font"
                 android:layout_height="wrap_content" />
@@ -137,14 +157,17 @@
                 android:id="@+id/picture_row_tv_description"
                 android:layout_below="@+id/picture_row_vw_user_info"
                 android:fontFamily="@string/default_font"
-                android:padding="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
                 android:text="@string/text_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_alignParentBottom="true"
-                android:background="@color/color_login"
+                android:background="@color/testThird"
                 android:layout_width="wrap_content"
-                android:layout_height="0.5dp"/>
+                android:layout_height="1dp"/>
         </RelativeLayout>
 </FrameLayout>

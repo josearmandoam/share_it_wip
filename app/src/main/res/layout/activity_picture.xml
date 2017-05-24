@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <View
-            android:id="@+id/picture_vw_toolbar"
+            android:id="@+id/picture_toolbar"
             android:layout_width="match_parent"
             android:background="@color/color_login"
             android:layout_height="?actionBarSize" />
@@ -19,8 +19,8 @@
             android:id="@+id/picture_ibtn_back"
             android:src="@drawable/back"
             android:background="@null"
-            android:layout_alignTop="@+id/picture_vw_toolbar"
-            android:layout_alignBottom="@+id/picture_vw_toolbar"
+            android:layout_alignTop="@+id/picture_toolbar"
+            android:layout_alignBottom="@+id/picture_toolbar"
             android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -28,8 +28,8 @@
         <TextView
             android:id="@+id/picture_tv_title"
             android:layout_width="wrap_content"
-            android:layout_alignTop="@+id/picture_vw_toolbar"
-            android:layout_alignBottom="@+id/picture_vw_toolbar"
+            android:layout_alignTop="@+id/picture_toolbar"
+            android:layout_alignBottom="@+id/picture_toolbar"
             android:layout_centerHorizontal="true"
             android:text="@string/picture"
             android:textColor="@android:color/white"
@@ -50,7 +50,7 @@
         <RelativeLayout
             android:id="@+id/picture_lyt_photo"
             android:layout_width="match_parent"
-            android:layout_below="@+id/picture_vw_toolbar"
+            android:layout_below="@+id/picture_toolbar"
             android:layout_height="wrap_content">
 
             <include layout="@layout/picture_detail" />

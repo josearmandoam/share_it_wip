@@ -9,24 +9,55 @@ import java.util.Calendar;
 public class DateUtil {
     public static String timeAgo(String date, String time) {
         if (date.equals(getCurrentDateFormated())) {
-            long timeParsed = Long.parseLong(time);
-            long currentTimeParse = Long.parseLong(getCurrentTime());
-
-            long diference = currentTimeParse - timeParsed;
-
+            String hr = time.substring(0, 2);
+            String mm = time.substring(3, 5);
+            String ss = time.substring(6, 8);
+            String ctime = getCurrentTimeFormated();
+            String chr = ctime.substring(0, 2);
+            String cmm = ctime.substring(3, 5);
+            String css = ctime.substring(6, 8);
+            if (Integer.parseInt(chr) - Integer.parseInt(hr) > 0)
+                return Integer.parseInt(chr) - Integer.parseInt(hr) + " hr";
+            else if (Integer.parseInt(cmm) - Integer.parseInt(mm) > 0)
+                return Integer.parseInt(cmm) - Integer.parseInt(mm) + " min";
+            else
+                return Integer.parseInt(css) - Integer.parseInt(ss) + " seg";
+        } else {
+            String dd = date.substring(8, 10);
+            String mm = date.substring(5, 7);
+            String cdate = getCurrentDateFormated();
+            String cdd = cdate.substring(8, 10);
+            String cmm = cdate.substring(5, 7);
+            if (mm.equals(cmm))
+                return Integer.parseInt(cdd) - Integer.parseInt(dd) + " d";
+            else
+                return Integer.parseInt(cmm) - Integer.parseInt(mm) + " m";
         }
-        return "wip";
     }
 
     public static String getCurrentDateFormated() {
         Calendar calendar = Calendar.getInstance();
-        String date = "" + calendar.get(calendar.YEAR) + "-" + (calendar.get(calendar.MONTH) + 1) + "-" + calendar.get(calendar.DAY_OF_MONTH);
+        String yyyy = Integer.toString(calendar.get(calendar.YEAR));
+        String mm = Integer.toString(calendar.get(calendar.MONTH) + 1);
+        String dd = Integer.toString(calendar.get(calendar.DAY_OF_MONTH));
+        if (Integer.parseInt(mm) < 10)
+            mm = "0" + mm;
+        if (Integer.parseInt(dd) < 10)
+            dd = "0" + dd;
+        String date = "" + yyyy + "-" + mm + "-" + dd;
         return date;
     }
 
     public static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
-        String date = "" + calendar.get(calendar.YEAR) + (calendar.get(calendar.MONTH) + 1) + calendar.get(calendar.DAY_OF_MONTH);
+        String yyyy = Integer.toString(calendar.get(calendar.YEAR));
+        String mm = Integer.toString(calendar.get(calendar.MONTH) + 1);
+        String dd = Integer.toString(calendar.get(calendar.DAY_OF_MONTH));
+        if (Integer.parseInt(mm) < 10)
+            mm = "0" + mm;
+        if (Integer.parseInt(dd) < 10)
+            dd = "0" + dd;
+        String date = "" + yyyy + mm + dd;
         return date;
     }
 

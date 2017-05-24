@@ -34,6 +34,8 @@ public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, 
 
     public abstract void onProfileClickedFAB();
 
+    public abstract void onUserClicked(String userId);
+
     public interface View {
         void showNoInternetAvailable();
 
@@ -76,5 +78,7 @@ public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, 
         void navigateToSavePictures();
 
         void navigateToProfile();
+
+        void openUserProfile(String userId);
     }
 }

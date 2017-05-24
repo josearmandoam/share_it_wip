@@ -30,6 +30,7 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SavedPicturesActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UserActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PostRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
@@ -117,6 +118,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         @Override
         public void onUnSaveLikeClicked(String userId, String imageId) {
             presenter.onUnSaveLikeClicked(userId, imageId);
+        }
+
+        @Override
+        public void onUserClicked(String userId) {
+            presenter.onUserClicked(userId);
         }
     };
     ;
@@ -318,6 +324,18 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     @Override
     public void navigateToProfile() {
         openProfileActivity(getContext());
+    }
+
+    @Override
+    public void openUserProfile(String userId) {
+        openUserDetail(getActivity().getApplicationContext(), userId);
+    }
+
+    public static void openUserDetail(Context ctx, String userId) {
+        Intent intent = new Intent(ctx, UserActivity.class);
+        intent.putExtra(USERID, userId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(intent);
     }
 
     public void openCommentsActivity(List<Comment> comments, String imageId, Post post, int adapterPosition) {
