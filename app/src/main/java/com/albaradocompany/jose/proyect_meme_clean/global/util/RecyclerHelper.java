@@ -44,16 +44,26 @@ public class RecyclerHelper {
     }
 
     public static boolean hasNewPosts(List<Post> newPosts, List<Post> oldPosts) {
+        boolean exist = false;
         if (newPosts.size() == oldPosts.size()) {
+            for (int i = 0; i < newPosts.size(); i++) {
+                if (!newPosts.get(i).getPicture().getImageId().equals(oldPosts.get(i).getPicture().getImageId()))
+                    return true;
+            }
             return false;
         } else {
             for (int i = 0; i < newPosts.size(); i++) {
+                exist = false;
                 for (int j = 0; j < oldPosts.size(); j++) {
                     if (newPosts.get(i).getPicture().getImageId().equals(oldPosts.get(j).getPicture().getImageId()))
-                        return false;
+                        exist = true;
+                    if (exist)
+                        j = oldPosts.size() - 1;
                 }
+                if (!exist)
+                    return true;
             }
-            return true;
+            return false;
         }
     }
 
@@ -61,6 +71,7 @@ public class RecyclerHelper {
         boolean exist = false;
         List<Post> list = new ArrayList<Post>();
         for (int i = 0; i < newPosts.size(); i++) {
+            exist = false;
             for (int j = 0; j < oldPosts.size(); j++) {
                 if (newPosts.get(i).getPicture().getImageId().equals(oldPosts.get(j).getPicture().getImageId()))
                     exist = true;
@@ -83,19 +94,29 @@ public class RecyclerHelper {
         return posts;
     }
 
-    public static int hasPostNewComments(List<Comment> posts, List<Comment> listpost) {
-        for (int i = 0; i < posts.size(); i++) {
-            if (!posts.get(i).getCommentId().equals(listpost.get(i).getCommentId()))
-                return i;
+    public static List<Comment> hasPostNewComments(List<Comment> newComments, List<Comment> oldComments) {
+        if (newComments.size() != oldComments.size()) {
+            return newComments;
+        } else {
+            for (int i = 0; i < newComments.size(); i++) {
+                if (!newComments.get(i).getCommentId().equals(oldComments.get(i).getCommentId())) {
+                    return newComments;
+                }
+            }
+            return oldComments;
         }
-        return -1;
     }
 
-    public static int hasPostNewLikes(List<Like> likeList, List<Like> likeList1) {
-        for (int i = 0; i < likeList.size(); i++) {
-            if (!likeList.get(i).getLikeId().equals(likeList1.get(i).getLikeId()))
-                return i;
+    public static List<Like> hasPostNewLikes(List<Like> newLikes, List<Like> oldLikes) {
+        if (newLikes.size() != oldLikes.size()) {
+            return newLikes;
+        } else {
+            for (int i = 0; i < newLikes.size(); i++) {
+                if (!newLikes.get(i).getLikeId().equals(oldLikes.get(i).getLikeId())) {
+                    return newLikes;
+                }
+            }
+            return oldLikes;
         }
-        return -1;
     }
 }

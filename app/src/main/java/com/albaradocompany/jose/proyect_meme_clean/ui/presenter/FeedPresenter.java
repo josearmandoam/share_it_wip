@@ -18,6 +18,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.ListUtil;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.CommentsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.FeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LikesInteractor;
@@ -61,7 +62,6 @@ public class FeedPresenter extends AbsFeedPresenter {
     GetUserBDImp getUserBDImp;
     @Inject
     UserSharedImp userSharedImp;
-    private int action;
 
     public FeedPresenter(Context context, String userId) {
         this.context = context;
@@ -71,11 +71,14 @@ public class FeedPresenter extends AbsFeedPresenter {
     @Override
     public void initialize() {
         getComponent().inject(this);
-        view.showLoading();
+        if (posts != null) {
+            view.updatePosts(posts);
+        } else {
+            view.showLoading();
+            getFeed(getFeedInteractor());
+        }
         userBD = getUserBDImp.getUserBD(userId);
         checkForUserSavedPictures();
-        action = GET;
-        posts = new ArrayList<>();
     }
 
     public void checkForUserSavedPictures() {
@@ -96,18 +99,17 @@ public class FeedPresenter extends AbsFeedPresenter {
                 for (Picture picture : pictures) {
                     getUserBDImp.insertUserSavedPicture(picture);
                 }
-                userSharedImp.saveUserID(userBD.userId);
+//                userSharedImp.saveUserID(userBD.userId);
             }
         });
     }
 
     @Override
     public void resume() {
-        action = UPDATE;
         if (posts != null) {
-            view.showPosts(posts);
+            view.updatePosts(posts);
+            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
         } else {
-            posts = new ArrayList<>();
             getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
         }
     }
@@ -275,6 +277,7 @@ public class FeedPresenter extends AbsFeedPresenter {
     }
 
     private void getPicturesOfFeed(List<Feed> feeds) {
+        final List<Post> list = new ArrayList<Post>();
         for (final Feed feed : feeds) {
             PicturesByIdInteractor interactor = getPicturesInteractor(feed.getxUserId());
             interactor.getPictures(new GetPicturesById.Listener() {
@@ -299,16 +302,16 @@ public class FeedPresenter extends AbsFeedPresenter {
                         c.setxUsername(feed.getxUsername());
                         c.setxUserId(feed.getxUserId());
                         c.setxProfile(feed.getxProfile());
-                        posts.add(c);
+                        list.add(c);
                     }
-                    getLikesComments();
+                    getLikesComments(list);
                 }
             });
         }
     }
 
-    private void getLikesComments() {
-        for (final Post post : posts) {
+    private void getLikesComments(final List<Post> list) {
+        for (final Post post : list) {
             CommentsInteractor interactorComments = getCommentsInteractor(post.getPicture().getImageId());
             interactorComments.getComments(new GetComments.Listener() {
                 @Override
@@ -341,41 +344,25 @@ public class FeedPresenter extends AbsFeedPresenter {
                 @Override
                 public void onLikesReceived(List<Like> likes) {
                     post.setLikeList(likes);
-                    if (posts.size() - 1 > 0)
-                        if (post.getPicture().getImageId().equals(posts.get(posts.size() - 1).getPicture().getImageId()))
-                            postReceived(posts);
+                    if (list.size() - 1 > 0)
+                        if (post.getPicture().getImageId().equals(list.get(list.size() - 1).getPicture().getImageId()))
+                            if (posts != null) {
+                                if (list.size() != posts.size()) {
+                                    view.showPosts(ListUtil.orderList(list));
+                                    posts = list;
+                                } else {
+                                    view.updatePosts(ListUtil.orderList(list));
+                                }
+                            } else {
+                                posts = list;
+                                view.showPosts(ListUtil.orderList(list));
+                                view.hideLoading();
+                                view.showFloatingButton();
+                            }
+//                            postReceived(posts);
                 }
-
-
             });
         }
-    }
-
-    private void postReceived(List<Post> posts) {
-        switch (action) {
-            case GET:
-                view.showPosts(orderList(posts));
-                view.hideLoading();
-                view.showFloatingButton();
-                break;
-            case UPDATE:
-                view.updatePosts(orderList(posts));
-                break;
-        }
-
-    }
-
-    private List<Post> orderList(List<Post> posts) {
-        Collections.sort(posts, new Comparator<Post>() {
-            @Override
-            public int compare(Post post, Post t1) {
-                if (Date.valueOf(post.getPicture().getDate()).after(Date.valueOf(t1.getPicture().getDate())))
-                    return 0;
-                else
-                    return -1;
-            }
-        });
-        return posts;
     }
 
     private LikesInteractor getLikesInteractor(String imageId) {

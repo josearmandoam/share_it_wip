@@ -19,6 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.ListUtil;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.squareup.picasso.Picasso;
 
@@ -108,6 +109,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     public void setNewPosts(List<Post> newPosts) {
         for (Post post : newPosts) {
             posts.add(post);
+            posts = ListUtil.orderList(posts);
             notifyDataSetChanged();
         }
     }

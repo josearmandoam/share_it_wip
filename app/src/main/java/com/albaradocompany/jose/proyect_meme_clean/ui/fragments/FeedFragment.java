@@ -175,7 +175,6 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         ButterKnife.bind(this, view);
         initializeSwipeRefresh();
         presenter.initialize();
-        presenter.getFeed(getFeedInteractor());
         return view;
     }
 
@@ -292,18 +291,10 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
             adapter.setNewPosts(RecyclerHelper.getNewPosts(listpost, posts));
         } else {
             for (int i = 0; i < listpost.size(); i++) {
-                int newCommentPosition = RecyclerHelper.hasPostNewComments(listpost.get(i).getCommentList(), posts.get(i).getCommentList());
-                if (newCommentPosition != -1) {
-                    posts.get(i).setCommentList(listpost.get(i).getCommentList());
-                    adapter.updateListAt(i, posts.get(i));
-                    adapter.notifyItemChanged(i);
-                }
-                int newLikePosition = RecyclerHelper.hasPostNewLikes(listpost.get(i).getLikeList(), posts.get(i).getLikeList());
-                if (newLikePosition != -1) {
-                    posts.get(i).setLikeList(listpost.get(i).getLikeList());
-                    adapter.updateListAt(i, posts.get(i));
-                    adapter.notifyItemChanged(i);
-                }
+                posts.get(i).setCommentList(RecyclerHelper.hasPostNewComments(listpost.get(i).getCommentList(), posts.get(i).getCommentList()));
+                posts.get(i).setLikeList(RecyclerHelper.hasPostNewLikes(listpost.get(i).getLikeList(), posts.get(i).getLikeList()));
+                adapter.updateListAt(i, posts.get(i));
+                adapter.notifyItemChanged(i);
             }
 //            adapter.updatePosts(RecyclerHelper.updateLikesAndComments(listpost, posts));
         }
