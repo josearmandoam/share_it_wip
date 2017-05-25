@@ -8,16 +8,23 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePasswordApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePermissionsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePermissionsInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetQuestions;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePermissions;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -200,6 +207,7 @@ public class SignupThreePresenter extends AbsSignupThree {
                 savePhotoFTP();
                 Looper.prepare();
                 notificateFinish();
+                updatePermissions();
                 ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
 
@@ -208,6 +216,26 @@ public class SignupThreePresenter extends AbsSignupThree {
             }
         }).start();
 
+    }
+
+    private void updatePermissions() {
+        UpdatePermissionsInteractor interactor = getUpdatePermissionsInteractor();
+        interactor.updatePermissions(new UpdatePermissions.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+        });
     }
 
     private void notificateFinish() {
@@ -228,5 +256,9 @@ public class SignupThreePresenter extends AbsSignupThree {
                 });
             }
         }).start();
+    }
+
+    public UpdatePermissionsInteractor getUpdatePermissionsInteractor() {
+        return new UpdatePermissionsInteractor(new UpdatePermissionsApiImp(), new MainThreadImp(), new ThreadExecutor());
     }
 }

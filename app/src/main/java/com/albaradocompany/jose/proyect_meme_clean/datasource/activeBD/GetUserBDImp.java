@@ -72,6 +72,7 @@ public class GetUserBDImp implements GetUserBD {
 
     @Override
     public void insertUserSavedPicture(Picture picture) {
+        new Delete().from(SavedPicturesBD.class).where("imageId = ?", picture.getImageId()).execute();
         SavedPicturesBD picturesBD = new SavedPicturesBD();
         picturesBD.userId = picture.getUserId();
         picturesBD.imagePath = picture.getImagePath();
@@ -177,6 +178,7 @@ public class GetUserBDImp implements GetUserBD {
         }
         return list;
     }
+
     @Override
     public List<Picture> parsePicturesBDList(List<PicturesBD> PicturesBDs) {
         List<Picture> list = new ArrayList<Picture>();

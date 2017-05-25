@@ -37,11 +37,11 @@ import butterknife.OnClick;
  * Created by jose on 20/05/2017.
  */
 
-public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.PostViewHolder> {
+public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapter.PostViewHolder> {
     Context context;
     List<Post> posts;
 
-    PostRecyclerAdapter.Listener listener = new NullListener();
+    FeedRecyclerAdapter.Listener listener = new NullListener();
 
     @Inject
     GetUserBDImp getUserBDImp;
@@ -49,7 +49,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     UserSharedImp userSharedImp;
     UserBD userBD;
 
-    public PostRecyclerAdapter(Context context, List<Post> posts, Listener listener) {
+    public FeedRecyclerAdapter(Context context, List<Post> posts, Listener listener) {
         this.context = context;
         this.posts = posts;
         this.listener = listener;
@@ -57,17 +57,15 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     }
 
     @Override
-    public PostRecyclerAdapter.PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FeedRecyclerAdapter.PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_row_picture, parent, false);
-
         getComponent().inject(this);
-
         userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
         return new PostViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PostRecyclerAdapter.PostViewHolder holder, int position) {
+    public void onBindViewHolder(FeedRecyclerAdapter.PostViewHolder holder, int position) {
         Picasso.with(context).load(posts.get(position).getPicture().getImagePath()).into(holder.image);
         Picasso.with(context).load(posts.get(position).getxProfile()).into(holder.profile);
         holder.description.setText(posts.get(position).getPicture().getDescription());
@@ -75,7 +73,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         holder.username2.setText(posts.get(position).getxUsername());
         holder.comments.setText("" + posts.get(position).getCommentList().size() + " " + context.getString(R.string.comments));
         holder.likes.setText("" + posts.get(position).getLikeList().size() + " " + context.getString(R.string.likes));
-        holder.time.setText(DateUtil.timeAgo(posts.get(position).getPicture().getDate(),posts.get(position).getPicture().getTime()));
+        holder.time.setText(DateUtil.timeAgo(posts.get(position).getPicture().getDate(), posts.get(position).getPicture().getTime()));
         if (photoSaved(posts.get(position).getPicture().getImageId()))
             holder.btnSave.setImageDrawable(holder.saved);
         else
@@ -202,8 +200,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
                 saveLike();
             }
         }
+
         @OnClick({R.id.picture_row_tv_user_name2, R.id.picture_row_tv_user_name1, R.id.picture_row_iv_user_profile})
-        public void onUserClicked(View view){
+        public void onUserClicked(View view) {
             listener.onUserClicked(posts.get(getAdapterPosition()).getxUserId());
         }
 

@@ -43,8 +43,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
     @Override
     public void initialize() {
         view.showLoading();
-        view.showBackground();
         view.showName();
+        view.showBackground();
         view.showProfile();
         view.showUsername();
         view.showDescription();

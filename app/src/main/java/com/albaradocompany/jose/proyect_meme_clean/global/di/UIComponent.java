@@ -8,20 +8,19 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SavedPicturesActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SearchActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UploadActivity;
-import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PostRecyclerAdapter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.DropCommentDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.FeedFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
@@ -30,7 +29,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupThreePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SplashPresenter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.UploadPresenter;
 
 import dagger.Component;
 
@@ -89,9 +87,11 @@ public interface UIComponent {
 
     void inject(MainActivity mainActivity);
 
-    void inject(PostRecyclerAdapter postRecyclerAdapter);
+    void inject(FeedRecyclerAdapter feedRecyclerAdapter);
 
     void inject(FeedPresenter feedPresenter);
 
     void inject(UploadActivity uploadActivity);
+
+    void inject(SearchActivity searchActivity);
 }

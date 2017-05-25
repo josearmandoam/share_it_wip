@@ -243,5 +243,4 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         }
         return component;
     }
-
 }

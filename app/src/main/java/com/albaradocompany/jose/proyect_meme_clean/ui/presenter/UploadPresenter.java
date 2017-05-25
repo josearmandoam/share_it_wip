@@ -6,15 +6,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePermissionsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UploadPictureApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePermissionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UploadPictureInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUploadPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.UploadPicture;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePermissions;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -93,8 +96,7 @@ public class UploadPresenter extends AbsUploadPresenter {
 
             @Override
             public void onSuccess() {
-                view.hideLoading();
-                view.showSuccess();
+
             }
 
             @Override
@@ -129,7 +131,7 @@ public class UploadPresenter extends AbsUploadPresenter {
                         }
                         ftpClient.logout();
                         ftpClient.disconnect();
-                        ((MainActivity)context).updateFeedFragment();
+                        updatePermissions();
                     }
                 } catch (Exception e) {
                     Log.v("count", "error");
@@ -137,6 +139,27 @@ public class UploadPresenter extends AbsUploadPresenter {
                 }
 //            }
 //        }).start();
+    }
+
+    private void updatePermissions() {
+        UpdatePermissionsInteractor interactor  = getPermissionInteractor();
+        interactor.updatePermissions(new UpdatePermissions.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                view.hideLoading();
+                view.showSuccess();
+            }
+        });
     }
 
     public void savePictureOnMemory(final Bitmap b, final String name) {
@@ -163,5 +186,9 @@ public class UploadPresenter extends AbsUploadPresenter {
                 }
             }
         }).start();
+    }
+
+    public UpdatePermissionsInteractor getPermissionInteractor() {
+        return new UpdatePermissionsInteractor(new UpdatePermissionsApiImp(), new MainThreadImp(), new ThreadExecutor());
     }
 }

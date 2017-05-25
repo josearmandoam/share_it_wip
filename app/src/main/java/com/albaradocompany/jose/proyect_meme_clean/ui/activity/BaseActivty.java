@@ -25,7 +25,6 @@ public abstract class BaseActivty extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
         Configuration dbConfiguration = new Configuration.Builder(this)
                 .setDatabaseName("MyDb.db")
                 .addModelClass(UserBD.class)
@@ -34,9 +33,9 @@ public abstract class BaseActivty extends AppCompatActivity {
                 .create();
         ActiveAndroid.initialize(dbConfiguration);
 
-        if (hideToolbar()) {
-            getSupportActionBar().hide();
-        }
+//        if (hideToolbar()) {
+//            getSupportActionBar().hide();
+//        }
 
     }
 

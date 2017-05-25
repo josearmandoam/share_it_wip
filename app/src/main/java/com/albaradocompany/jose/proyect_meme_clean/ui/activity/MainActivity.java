@@ -79,9 +79,6 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         super.onResume();
         feedFragment.parentResume();
     }
-    public void updateFeedFragment(){
-        feedFragment.parentResume();
-    }
 
     @Override
     protected boolean hideToolbar() {

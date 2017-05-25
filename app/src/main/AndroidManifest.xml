@@ -59,7 +59,8 @@
         <activity android:name=".ui.activity.SavedPicturesActivity" />
         <activity android:name=".ui.activity.UserActivity" />
         <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.UploadActivity"></activity>
+        <activity android:name=".ui.activity.UploadActivity" />
+        <activity android:name=".ui.activity.SearchActivity"></activity>
     </application>
 
 </manifest>

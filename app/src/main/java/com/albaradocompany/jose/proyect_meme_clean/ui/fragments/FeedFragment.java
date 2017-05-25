@@ -18,20 +18,17 @@ import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.FeedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.RecyclerHelper;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.FeedInteractor;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.ProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SavedPicturesActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SearchActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UserActivity;
-import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.PostRecyclerAdapter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsFeedPresenter;
@@ -85,11 +82,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     AbsFeedPresenter presenter;
     static String userId;
     ShowSnackBarImp showSnackBar;
-    PostRecyclerAdapter adapter;
+    FeedRecyclerAdapter adapter;
     private static UserBD userDB;
     private List<Post> posts;
 
-    PostRecyclerAdapter.Listener onClickListener = new PostRecyclerAdapter.Listener() {
+    FeedRecyclerAdapter.Listener onClickListener = new FeedRecyclerAdapter.Listener() {
         @Override
         public void onCommentsClicked(List<Comment> comments, String imageId, Post post, int adapterPosition) {
             presenter.onCommentsClicked(comments, imageId, post, adapterPosition);
@@ -194,10 +191,6 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         super.onDetach();
     }
 
-    public FeedInteractor getFeedInteractor() {
-        return new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor());
-    }
-
     @Override
     public void showNoInternetAvailable() {
         showSnackBar.show(noInternet, Color.RED);
@@ -219,7 +212,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     }
 
     private void initializeRecycler(List<Post> listpost) {
-        adapter = new PostRecyclerAdapter(getContext(), listpost, onClickListener);
+        adapter = new FeedRecyclerAdapter(getContext(), listpost, onClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -313,7 +306,12 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void navigateToSearch() {
+        openSearch();
+    }
 
+    private void openSearch() {
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        startActivity(intent);
     }
 
     @Override

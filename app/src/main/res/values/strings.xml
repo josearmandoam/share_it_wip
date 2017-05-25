@@ -118,4 +118,6 @@
     <string name="insert_any_photo_s_description">Insert any photo\'s description</string>
     <string name="upload_failure">Something went wrong</string>
     <string name="upload_picture">Upload picture</string>
+    <string name="unfollow">unfollow</string>
+    <string name="follow">follow</string>
 </resources>

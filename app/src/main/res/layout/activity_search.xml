@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        android:layout_width="match_parent"
+        app:titleTextColor="@android:color/white"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.Toolbar>
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_mSearch_view"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+    </com.miguelcatalan.materialsearchview.MaterialSearchView>
+    <RelativeLayout
+        android:id="@+id/search_lyt_container"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_recycler"
+        android:layout_below="@+id/search_mSearch_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/search_pbr"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</FrameLayout>
