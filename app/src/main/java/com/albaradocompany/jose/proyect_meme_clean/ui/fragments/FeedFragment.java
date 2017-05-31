@@ -300,6 +300,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     }
 
     @Override
+    public void showNoFeedAvailable() {
+
+    }
+
+    @Override
     public void navigateToComments(List<Comment> comments, String imageId, Post post, int adapterPosition) {
         openCommentsActivity(comments, imageId, post, adapterPosition);
     }

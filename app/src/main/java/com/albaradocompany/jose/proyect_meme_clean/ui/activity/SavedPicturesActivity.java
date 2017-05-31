@@ -15,6 +15,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.SavedPicturesRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSavedPicturesPresenter;
@@ -122,10 +123,7 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
 
     public void openPictureDetail(Context ctx, Picture picture) {
         Intent intent = new Intent(ctx, PictureActivity.class);
-        intent.putExtra("imageId", picture.getImageId());
-        UserBD userBD = getUserBD.getUserBD(picture.getUserId());
         intent.putExtra("image", picture);
-        intent.putExtra("user", getUserBD.parseUserBD(userBD));
         ctx.startActivity(intent);
     }
 }

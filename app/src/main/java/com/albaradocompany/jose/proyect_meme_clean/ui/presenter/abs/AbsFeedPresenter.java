@@ -68,6 +68,8 @@ public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, 
         void showFloatingButton();
 
         void updatePosts(List<Post> posts);
+
+        void showNoFeedAvailable();
     }
 
     public interface Navigator {

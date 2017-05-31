@@ -77,8 +77,8 @@ public class FeedPresenter extends AbsFeedPresenter {
             view.showLoading();
             getFeed(getFeedInteractor());
         }
-        userBD = getUserBDImp.getUserBD(userId);
-        checkForUserSavedPictures();
+        userBD = getUserBDImp.getUsers().get(0);
+//        checkForUserSavedPictures();
     }
 
     public void checkForUserSavedPictures() {
@@ -139,6 +139,11 @@ public class FeedPresenter extends AbsFeedPresenter {
 
             @Override
             public void onFeedReceived(List<Feed> feeds) {
+                if (feeds.size()==0){
+                    view.hideLoading();
+                    view.showFloatingButton();
+                    view.showNoFeedAvailable();
+                }
                 getPicturesOfFeed(feeds);
             }
         });
@@ -157,55 +162,11 @@ public class FeedPresenter extends AbsFeedPresenter {
     @Override
     public void onSaveClicked(Picture picture, String userId) {
         getUserBDImp.insertUserSavedPicture(picture);
-        UpdateSavedPictureInteractor interactor = getSavePictureInteractor(picture, userId);
-        interactor.updateSavedPicture(new UpdateSavedPicture.Listener() {
-            @Override
-            public void onNoInternetAvailable() {
-                view.showNoInternetAvailable();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e);
-            }
-
-            @Override
-            public void onSuccess() {
-                view.showSaveSuccess();
-            }
-
-            @Override
-            public void onFailure() {
-                view.showSaveFailure();
-            }
-        });
     }
 
     @Override
     public void onUnSaveClicked(final Picture picture, String userId) {
-        UpdateSavedPictureInteractor interactor = getUnSavePictureInteractor(userId);
-        interactor.updateSavedPicture(new UpdateSavedPicture.Listener() {
-            @Override
-            public void onNoInternetAvailable() {
-                view.showNoInternetAvailable();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e);
-            }
-
-            @Override
-            public void onSuccess() {
-                view.showUnSaveSuccess();
-                getUserBDImp.deleteUserSavedPicture(picture.getImageId());
-            }
-
-            @Override
-            public void onFailure() {
-                view.showUnSaveFailure();
-            }
-        });
+        getUserBDImp.deleteUserSavedPicture(picture.getImageId());
     }
 
     @Override
@@ -383,17 +344,6 @@ public class FeedPresenter extends AbsFeedPresenter {
 
     public CommentsInteractor getCommentsInteractor(String imageId) {
         return new CommentsInteractor(new CommentsApiImp(imageId), new MainThreadImp(), new ThreadExecutor());
-    }
-
-    public UpdateSavedPictureInteractor getSavePictureInteractor(Picture picture, String userId) {
-        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userId, picture.getImagePath(),
-                picture.getDescription(), picture.getDate(), picture.getImageId(), picture.getTime(), INSERT), new MainThreadImp(), new ThreadExecutor());
-    }
-
-    private UpdateSavedPictureInteractor getUnSavePictureInteractor(String userId) {
-        return new UpdateSavedPictureInteractor(
-                new UpdateSavedPictureApiImp(userId, null, null, null, null, null, DELETE),
-                new MainThreadImp(), new ThreadExecutor());
     }
 
     private UpdateLikesInteractor getINSUpdateLikeInteractor(String imageId) {

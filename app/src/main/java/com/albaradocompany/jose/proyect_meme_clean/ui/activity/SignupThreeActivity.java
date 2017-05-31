@@ -1,6 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -46,6 +45,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.View, AbsSignupThree.Navigator {
+    private static final String USERNAME = "username";
+    private static final String URI = "uri";
+    private static final String BITMAP = "bitmap";
     @BindView(R.id.signup_three_button_back)
     ImageButton bBack;
     @BindView(R.id.signup_three_button_menu)
@@ -111,11 +113,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void onConfirmClicked(View view) {
         if (checkFields()) {
             userSharedImp.saveSignThreeData(question.getText().toString(), answer1.getText().toString(), answer2.getText().toString());
+            userSharedImp.saveUsernameSucReg(userSharedImp.getUserUsernamedSaved());
             Login user = userSharedImp.getUser();
 
             interactor = new RegistrationResponseInteractor(new RegistrationResponseImp(user), new MainThreadImp(), new ThreadExecutor());
             presenter.onConfirmClicked(interactor, user, ((BitmapDrawable) image.getDrawable()).getBitmap());
-
         }
     }
 
@@ -154,11 +156,11 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     private void getExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Uri uri = (Uri) bundle.get("uri");
+            Uri uri = (Uri) bundle.get(URI);
             if (uri != null) {
                 uriReceived = uri;
             }
-            Bitmap bm = (Bitmap) bundle.get("bitmap");
+            Bitmap bm = (Bitmap) bundle.get(BITMAP);
             if (bm != null) {
                 bitmapReceived = bm;
             }
@@ -302,13 +304,14 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     public void navigateToLogin() {
         userSharedImp.removeSignInformation();
         this.finish();
-        openLogin(this);
+        openLogin();
     }
 
-    public static void openLogin(Context ctx) {
-        Intent intent = new Intent(ctx, LoginActivity.class);
+    public void openLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        ctx.startActivity(intent);
+        intent.putExtra(USERNAME, userSharedImp.getSavedUsernameSusReg());
+        startActivity(intent);
     }
 
     private void checkDataSaved() {
@@ -325,10 +328,10 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     private void saveExtras() {
         Intent intent = new Intent();
         if (uriReceived != null) {
-            intent.putExtra("uri", uriReceived);
+            intent.putExtra(URI, uriReceived);
         }
         if (bitmapReceived != null) {
-            intent.putExtra("bitmap", bitmapReceived);
+            intent.putExtra(BITMAP, bitmapReceived);
         }
         setResult(RESULT_OK, intent);
     }

@@ -1,9 +1,11 @@
 package com.albaradocompany.jose.proyect_meme_clean.usecase.get;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.NotificationLineBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.SavedPicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 
@@ -51,4 +53,12 @@ public interface GetUserBD {
     List<Picture> parsePicturesBDList(List<PicturesBD> PicturesBDs);
 
     boolean isPhotoSaved(String imageId);
+
+    boolean isNotificationLineOpen(String userId);
+
+    List<NotificationLineBD> getNotificationLines();
+
+    List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD);
+
+    void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state);
 }

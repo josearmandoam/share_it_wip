@@ -327,10 +327,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
 
     public void openPictureDetail(Context ctx, Picture picture) {
         Intent intent = new Intent(ctx, PictureActivity.class);
-        intent.putExtra("imageId", picture.getImageId());
-        UserBD userBD = getUserBD.getUserBD(picture.getUserId());
         intent.putExtra("image", picture);
-        intent.putExtra("user", getUserBD.parseUserBD(userBD));
         ctx.startActivity(intent);
     }
 

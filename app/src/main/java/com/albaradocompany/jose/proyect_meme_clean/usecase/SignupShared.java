@@ -60,4 +60,14 @@ public interface SignupShared {
     void deleteImageProfile();
 
     void photoStateTaken(String state);
+
+    String getUserName();
+
+    String getUserLastName();
+
+    void saveUsernameSucReg(String userUsernamedSaved);
+
+    String getSavedUsernameSusReg();
+
+    void removeUsernameSucReg();
 }

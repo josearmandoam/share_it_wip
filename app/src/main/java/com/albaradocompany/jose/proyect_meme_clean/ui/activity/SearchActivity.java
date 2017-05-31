@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
@@ -57,8 +56,6 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     @Inject
     GetUserBDImp getUserBDImp;
-    @Inject
-    UserSharedImp userSharedImp;
 
     AbsSearchPresenter presenter;
     private UIComponent component;
@@ -98,7 +95,7 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
     private void initialize() {
         component().inject(this);
 
-        userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
+        userBD = getUserBDImp.getUsers().get(0);
         showSnackBarImp = new ShowSnackBarImp(this);
 
         presenter = new SearchPresenter(this);

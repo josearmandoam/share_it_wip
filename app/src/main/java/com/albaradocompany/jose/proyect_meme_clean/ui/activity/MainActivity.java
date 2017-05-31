@@ -9,15 +9,19 @@ import android.support.v4.view.ViewPager;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.MainViewPagerAdapter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NewPictureFragment;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.ChatFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NotificationFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.FeedFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NewPictureFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.MainPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsMainPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,15 @@ import javax.inject.Inject;
 import butterknife.BindColor;
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivty implements TabLayout.OnTabSelectedListener {
+public class MainActivity extends BaseActivty implements TabLayout.OnTabSelectedListener, AbsMainPresenter.View, AbsMainPresenter.Navigator {
+    private static final java.lang.String NOTIFICATION = "notification";
+    private static final java.lang.String ACTION = "action";
+    private static final int NOTIFICATION_FRAGMENT = 2;
+    private static final int ADD_NEW_FRAGMENT = 0;
+    private static final int FEED_FRAGMENT = 1;
+    private static final String TITLE = "title";
+    private static final String MESSAGE = "body";
+    private static final String TOKEN = "token";
     @BindView(R.id.main_tablayout)
     TabLayout tabLayout;
     @BindView(R.id.main_viewpager)
@@ -45,28 +57,44 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
 
     private UIComponent component;
     private FeedFragment feedFragment;
+    AbsMainPresenter presenter;
+    private NotificationFragment notificationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        component().inject(this);
         initialilze();
+        checkDataReceive();
+    }
+
+    private void checkDataReceive() {
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().getString(ACTION).equals(NOTIFICATION))
+                presenter.onNotificationReceived(getIntent().getExtras());
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private void initialilze() {
-        component().inject(this);
+        presenter = new MainPresenter(this);
+        presenter.setView(this);
+        presenter.setNavigator(this);
+        presenter.initialize();
+
         viewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager(), getFragments()));
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
-        tabLayout.getTabAt(0).setIcon(getResources().getDrawable(R.drawable.camera_light));
-        tabLayout.getTabAt(1).setIcon(getResources().getDrawable(R.drawable.send_dark));
-        tabLayout.getTabAt(2).setIcon(getResources().getDrawable(R.drawable.avatar_light));
+        tabLayout.getTabAt(ADD_NEW_FRAGMENT).setIcon(getResources().getDrawable(R.drawable.camera_light));
+        tabLayout.getTabAt(FEED_FRAGMENT).setIcon(getResources().getDrawable(R.drawable.send_dark));
+        tabLayout.getTabAt(NOTIFICATION_FRAGMENT).setIcon(getResources().getDrawable(R.drawable.avatar_light));
 
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(FEED_FRAGMENT);
     }
 
     @Override
@@ -87,10 +115,12 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
 
     public List<Fragment> getFragments() {
         List<Fragment> list = new ArrayList<Fragment>();
-        feedFragment = FeedFragment.newInstance(getUserBDImp.getUserBD(userSharedImp.getUserID()));
+        List<UserBD> userBDs = getUserBDImp.getUsers();
+        feedFragment = FeedFragment.newInstance(userBDs.get(0));
+        notificationFragment = NotificationFragment.newInstance();
         list.add(NewPictureFragment.newInstance());
         list.add(feedFragment);
-        list.add(ChatFragment.newInstance());
+        list.add(notificationFragment);
         return list;
     }
 
@@ -122,4 +152,16 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         }
         return component;
     }
+
+    @Override
+    public void openNotificationFragment(NotificationLine line) {
+        viewPager.setCurrentItem(NOTIFICATION_FRAGMENT);
+        notificationFragment.notifyNewNotification(line);
+//        NotificationFragment.newInstance(extras.get(TITLE),extras.get(MESSAGE),extras.get(TOKEN));
+    }
+//
+//    @Override
+//    public void showNewNotification(String userId) {
+//        notificationFragment.notifyNewNotification(userId);
+//    }
 }

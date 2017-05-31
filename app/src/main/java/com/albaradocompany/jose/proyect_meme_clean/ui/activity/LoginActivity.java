@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivty implements AbsUserLogin.View, AbsUserLogin.Navigator {
-
+    private static final java.lang.String USERNAME = "username";
     AbsUserLogin presenter;
     LoginInteractor loginInteractor;
 
@@ -91,20 +91,23 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         component().inject(this);
-        initializePresenter();
         initialize();
     }
 
     private void initialize() {
-        userSharedImp.removeSignInformation();
-        userSharedImp.deleteUserData();
-        showSnackBar = new ShowSnackBarImp(this);
-    }
-
-    private void initializePresenter() {
         presenter = new LoginPresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            presenter.onDataReceived(bundle.getString(USERNAME, ""));
+        }
+        userSharedImp.removeSignInformation();
+        userSharedImp.removeUsernameSucReg();
+        userSharedImp.deleteUserData();
+        showSnackBar = new ShowSnackBarImp(this);
+
     }
 
     private void requestLogin() {
@@ -185,6 +188,11 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     }
 
     @Override
+    public void showDataReceived(String username) {
+        this.username.setText(username);
+    }
+
+    @Override
     public void navigateToHomePage() {
         userSharedImp.saveUserLogged();
         showSnackBar.show(loginCorrect, Color.GREEN);
@@ -201,11 +209,13 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         Intent i = new Intent(this, ProfileActivity.class);
         startActivity(i);
     }
+
     public static void openMain(Context ctx) {
         Intent intent = new Intent(ctx, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(intent);
     }
+
     @Override
     public void navigateToSignupPage() {
         openSignupActivity(this);

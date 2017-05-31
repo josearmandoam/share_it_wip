@@ -8,7 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePasswordApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateFeedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePermissionsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
@@ -16,7 +16,8 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.GenericResponse;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateFeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePermissionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -24,6 +25,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivi
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupThree;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetQuestions;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetRegistrationResponse;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateFeed;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePermissions;
 
 import org.apache.commons.net.ftp.FTP;
@@ -43,6 +45,7 @@ import javax.inject.Inject;
  */
 
 public class SignupThreePresenter extends AbsSignupThree {
+    private static final String INSERT = "insert";
     Context context;
     GetQuestions getQuestions;
     public String data;
@@ -99,7 +102,7 @@ public class SignupThreePresenter extends AbsSignupThree {
     }
 
     @Override
-    public void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, Login login, final Bitmap bitmap) {
+    public void onConfirmClicked(GetRegistrationResponse getRegistrationResponse, final Login login, final Bitmap bitmap) {
         view.showLoading();
         getRegistrationResponse.getRegistrationResponse(new GetRegistrationResponse.Listener() {
             @Override
@@ -116,6 +119,7 @@ public class SignupThreePresenter extends AbsSignupThree {
 
             @Override
             public void onRegistrationSuccess(GenericResponse response) {
+                configureFeedHimSelf(login);
                 saveImageOnMemory(context, bitmap, userSharedImp.getUser().getIdUser() + "_profile");
             }
 
@@ -148,6 +152,7 @@ public class SignupThreePresenter extends AbsSignupThree {
                             Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
                         ftpClient.logout();
                         ftpClient.disconnect();
+                        updatePermissions();
                     }
                 } catch (Exception e) {
                     Log.v("count", "error");
@@ -160,6 +165,31 @@ public class SignupThreePresenter extends AbsSignupThree {
                 });
             }
         }).start();
+    }
+
+    private void configureFeedHimSelf(Login login) {
+        UpdateFeedInteractor interactor = getUpdateFeedInteractor(login);
+        interactor.updateFedd(new UpdateFeed.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     @Override
@@ -207,7 +237,6 @@ public class SignupThreePresenter extends AbsSignupThree {
                 savePhotoFTP();
                 Looper.prepare();
                 notificateFinish();
-                updatePermissions();
                 ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
                     public void run() {
 
@@ -260,5 +289,11 @@ public class SignupThreePresenter extends AbsSignupThree {
 
     public UpdatePermissionsInteractor getUpdatePermissionsInteractor() {
         return new UpdatePermissionsInteractor(new UpdatePermissionsApiImp(), new MainThreadImp(), new ThreadExecutor());
+    }
+
+    public UpdateFeedInteractor getUpdateFeedInteractor(Login login) {
+        return new UpdateFeedInteractor(new UpdateFeedApiImp(login.getIdUser(), login.getIdUser(),
+                login.getIdUser()+"_profile", "feed" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(),
+                login.getNombre() + " " + login.getApellidos(), INSERT), new MainThreadImp(), new ThreadExecutor());
     }
 }

@@ -22,7 +22,7 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
 
     public abstract void getPictureComments(GetComments commentsInteractor, String imageId);
 
-    public abstract void initializeData(User user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor);
+    public abstract void initializeData(String user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor);
 
     public abstract void onCommentsClicked();
 
@@ -34,9 +34,9 @@ public abstract class AbsPicturePresenter extends Presenter<AbsPicturePresenter.
 
     public abstract void onBackClicked();
 
-    public abstract void onDeleteSavedPicture(UpdateSavedPictureInteractor updateDELSaveInteractor);
+    public abstract void onDeleteSavedPicture();
 
-    public abstract void onInsertSavePicture(UpdateSavedPictureInteractor updateINSSaveInteractor);
+    public abstract void onInsertSavePicture();
 
     public interface View {
         void showLoading();

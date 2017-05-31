@@ -50,14 +50,19 @@ public class SearchRecyclerAdapter extends RecyclerView.Adapter<SearchRecyclerAd
 
     @Override
     public void onBindViewHolder(SearchRecyclerAdapter.UsersViewHolder holder, int position) {
-        if (isFollowing(position)) {
-            holder.state.setTextColor(BuildConfig.COLOR_RED);
-            holder.state.setText(R.string.unfollow);
-            holder.state.setBackground(context.getDrawable(R.drawable.border_text_blue));
+        if (users.get(position).getUserId().equals(userId)) {
+            holder.state.setVisibility(View.GONE);
         } else {
-            holder.state.setTextColor(BuildConfig.COLOR_WHITE);
-            holder.state.setText(R.string.follow);
-            holder.state.setBackground(context.getDrawable(R.drawable.roundedbutton_blue));
+            holder.state.setVisibility(View.VISIBLE);
+            if (isFollowing(position)) {
+                holder.state.setTextColor(BuildConfig.COLOR_RED);
+                holder.state.setText(R.string.unfollow);
+                holder.state.setBackground(context.getDrawable(R.drawable.border_text_blue));
+            } else {
+                holder.state.setTextColor(BuildConfig.COLOR_WHITE);
+                holder.state.setText(R.string.follow);
+                holder.state.setBackground(context.getDrawable(R.drawable.roundedbutton_blue));
+            }
         }
         Picasso.with(context).load(users.get(position).getProfile()).into(holder.profile);
         holder.name.setText(users.get(position).getName() + " " + users.get(position).getLastname());

@@ -6,16 +6,19 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBD
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.RegisterTokenApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.RegisterTokenInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserLogin;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.RegisterToken;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLogin;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 
@@ -66,6 +69,7 @@ public class LoginPresenter extends AbsUserLogin {
                             getUserBDImp.insertUserDB(user);
                             userSharedImp.saveUserLogged();
                             checkForUserPictures();
+                            saveUserToken(login.get(i).getIdUser());
                             userFinded = true;
                         }
                         if (userFinded)
@@ -105,6 +109,35 @@ public class LoginPresenter extends AbsUserLogin {
                 view.showButtonSignin();
             }
         });
+    }
+
+    private void saveUserToken(String idUser) {
+        RegisterTokenInteractor interactor = getRegisterTokenInteractor(idUser);
+        interactor.registerToken(new RegisterToken.Listener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
+    private RegisterTokenInteractor getRegisterTokenInteractor(String idUser) {
+        return new RegisterTokenInteractor(new RegisterTokenApiImp(idUser, userSharedImp.getUserToken()), new MainThreadImp(), new ThreadExecutor());
     }
 
     @Override
@@ -212,6 +245,11 @@ public class LoginPresenter extends AbsUserLogin {
                 navigator.navigateToHomePage();
             }
         });
+    }
+
+    @Override
+    public void onDataReceived(String username) {
+        view.showDataReceived(username);
     }
 
     protected UIComponent getComponent() {

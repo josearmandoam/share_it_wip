@@ -66,4 +66,7 @@ public final class BuildConfig {
     public static final int COLOR_GREEN= 0xff00A900;
     public static final int COLOR_RED= 0xff9C0000;
     public static final int COLOR_WHITE= 0xffffffff;
+    public static final String REGISTRATIO_USERNAME = "username";
+    public static final String USER_TOKEN ="USER_TOKEN" ;
+    public static final int COLOR_GRAY = 0xffBFBFBF;
 }

@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.fcm.FcmInstanceIdService;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
@@ -24,6 +25,8 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.CamGallFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.MainPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.PicturePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
@@ -94,4 +97,10 @@ public interface UIComponent {
     void inject(UploadActivity uploadActivity);
 
     void inject(SearchActivity searchActivity);
+
+    void inject(FcmInstanceIdService fcmInstanceIdService);
+
+    void inject(MainPresenter mainPresenter);
+
+    void inject(NotificationPresenter notificationPresenter);
 }

@@ -19,6 +19,8 @@ public abstract class AbsUserLogin extends Presenter<AbsUserLogin.View, AbsUserL
 
     public abstract void checkForUserSavedPictures();
 
+    public abstract void onDataReceived(String string);
+
     public interface View {
 
         void showLoading();
@@ -37,6 +39,7 @@ public abstract class AbsUserLogin extends Presenter<AbsUserLogin.View, AbsUserL
 
         void showButtonSignin();
 
+        void showDataReceived(String username);
     }
 
     public interface Navigator {

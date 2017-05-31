@@ -216,7 +216,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void showImage() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 1);
+        new ShowAvatarDialog(this, 1);
     }
 
     @Override

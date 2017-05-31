@@ -11,11 +11,13 @@ import android.widget.ImageView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.fcm.FcmInstanceIdService;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Avatar;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -111,12 +113,14 @@ public class UserSharedImp implements UserShared, SignupShared {
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
         return userID;
     }
+
     public String createCommentID() {
         Calendar calendar = Calendar.getInstance();
         String commentID = "comment" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
                 + calendar.get(calendar.YEAR) + calendar.get(calendar.HOUR_OF_DAY) + calendar.get(calendar.SECOND) + calendar.get(Calendar.MILLISECOND);
         return commentID;
     }
+
     public String createLikeID() {
         Calendar calendar = Calendar.getInstance();
         String likeID = "like" + calendar.get(calendar.DAY_OF_MONTH) + calendar.get(calendar.MONTH)
@@ -480,6 +484,40 @@ public class UserSharedImp implements UserShared, SignupShared {
     }
 
     @Override
+    public String getUserName() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_NAME, "");
+    }
+
+    @Override
+    public String getUserLastName() {
+        sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_LAST_NAME, "");
+    }
+
+    @Override
+    public void saveUsernameSucReg(String userUsernamedSaved) {
+        sharedPreferences = context.getSharedPreferences(LoginActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.REGISTRATIO_USERNAME, userUsernamedSaved);
+        editor.apply();
+    }
+
+    @Override
+    public String getSavedUsernameSusReg() {
+        sharedPreferences = context.getSharedPreferences(LoginActivity.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.REGISTRATIO_USERNAME, "");
+    }
+
+    @Override
+    public void removeUsernameSucReg() {
+        sharedPreferences = context.getSharedPreferences(LoginActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+    @Override
     public boolean isLogged() {
         SharedPreferences sharedPref = context.getSharedPreferences(BuildConfig.PREF_NAME, Context.MODE_PRIVATE);
         String highScore = sharedPref.getString(BuildConfig.IS_LOGIN, "false");
@@ -829,6 +867,19 @@ public class UserSharedImp implements UserShared, SignupShared {
         } else {
             saveWebsitePrivacity("true");
         }
+    }
+
+    @Override
+    public void saveUserToken(String recent_token) {
+        sharedPreferences = context.getSharedPreferences(FcmInstanceIdService.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(BuildConfig.USER_TOKEN, recent_token);
+        editor.apply();
+    }
+    @Override
+    public String getUserToken() {
+        sharedPreferences = context.getSharedPreferences(FcmInstanceIdService.class.getName(), Context.MODE_PRIVATE);
+        return sharedPreferences.getString(BuildConfig.USER_TOKEN, "");
     }
 
     @Override

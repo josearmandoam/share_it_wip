@@ -44,6 +44,8 @@ public interface UserShared {
 
     void saveProfileChanges(String cond);
 
+    String getUserToken();
+
     void saveBackgroundChanges(String cond);
 
     boolean isBackgroundChanged();
@@ -85,4 +87,5 @@ public interface UserShared {
     void updateSocialMedia(String socialTwitter, String socialFacebook, String socialWhatsapp,
                            String socialEmail, String socialInstagram, String socialWebsite);
 
+    void saveUserToken(String recent_token);
 }

@@ -62,7 +62,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     private static final String COMMENTS = "comments";
     private static final String IMAGE_ID = "imageId";
     private static final int COMMENT_ACTION = 0;
-    private static final String USER = "user";
+    private static final String USERID = "userId";
     private static final String IMAGE = "image";
     @BindView(R.id.picture_detail_iv_photo)
     ImageView image;
@@ -198,13 +198,11 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     public void getDataReceived() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            imageId = (String) bundle.get(IMAGE_ID);
-            User user = (User) bundle.get(USER);
             picture = (Picture) bundle.get(IMAGE);
-            presenter.initializeData(user, picture, getLikesInteractor(imageId), getCommentsInteractor(imageId));
+            presenter.initializeData(picture.getUserId(), picture, getLikesInteractor(picture.getImageId()), getCommentsInteractor(picture.getImageId()));
             presenter.initialize();
-            presenter.getPictureLikes(getLikesInteractor(imageId), imageId);
-            presenter.getPictureComments(getCommentsInteractor(imageId), imageId);
+            presenter.getPictureLikes(getLikesInteractor(picture.getImageId()), picture.getImageId());
+            presenter.getPictureComments(getCommentsInteractor(picture.getImageId()), picture.getImageId());
         }
     }
 
@@ -386,9 +384,9 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     private void updateUserSavePictureApi() {
         if (btnSave.getDrawable().equals(saveClicked)) {
-            presenter.onDeleteSavedPicture(getUpdateDELSavedPictureInteractor());
+            presenter.onDeleteSavedPicture();
         } else {
-            presenter.onInsertSavePicture(getUpdateINSSavePictureInteractor());
+            presenter.onInsertSavePicture();
         }
     }
 

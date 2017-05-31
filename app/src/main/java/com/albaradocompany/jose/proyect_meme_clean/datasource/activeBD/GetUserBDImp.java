@@ -5,10 +5,12 @@ import android.content.Context;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.NotificationLineBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.SavedPicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUserBD;
@@ -90,7 +92,7 @@ public class GetUserBDImp implements GetUserBD {
 
     @Override
     public List<SavedPicturesBD> getUserSavedPictures(String userId) {
-        return new Select().from(SavedPicturesBD.class).where("userId = ?", userId).execute();
+        return new Select().from(SavedPicturesBD.class).execute();
     }
 
     @Override
@@ -202,5 +204,33 @@ public class GetUserBDImp implements GetUserBD {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public boolean isNotificationLineOpen(String userId) {
+        List a = new Select().from(NotificationLineBD.class).where("userId = ?", userId).execute();
+        if (a.size() > 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public List<NotificationLineBD> getNotificationLines() {
+        return new Select().from(NotificationLineBD.class).execute();
+    }
+
+    @Override
+    public List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD) {
+        List<NotificationLine> list = new ArrayList<NotificationLine>();
+        for (NotificationLineBD notification : notificationLineBD) {
+            list.add(new NotificationLine(notification.userId, notification.imagePath, notification.message, notification.time, notification.title, notification.state, notification.lineId));
+        }
+        return list;
+    }
+
+    @Override
+    public void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state) {
+        new NotificationLineBD(lineId, userId, profile, message, title, time, state).save();
     }
 }

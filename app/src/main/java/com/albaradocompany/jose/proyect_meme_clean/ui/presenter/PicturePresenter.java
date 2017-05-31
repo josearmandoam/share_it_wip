@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.GetUserApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
@@ -11,11 +12,14 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateSavedPictureInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UserInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.PictureActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsPicturePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetComments;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLikes;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUser;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateLike;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateSavedPicture;
 
@@ -29,7 +33,6 @@ import javax.inject.Inject;
 
 public class PicturePresenter extends AbsPicturePresenter {
     Context context;
-    User user;
     Picture picture;
     GetLikes getLikes;
     GetComments getComments;
@@ -46,12 +49,10 @@ public class PicturePresenter extends AbsPicturePresenter {
     @Override
     public void initialize() {
         getComponent().inject(this);
-        userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
+        userBD = getUserBDImp.getUsers().get(0);
         view.showLoading();
         view.showPicture(picture.getImagePath());
         view.showDescription(picture.getDescription());
-        view.showUserProfile(user.getProfile());
-        view.showUsername(user.getName() + " " + user.getLastname());
         view.showTime(picture.getDate(), picture.getTime());
         view.showSaved(picture.getImageId());
     }
@@ -108,18 +109,39 @@ public class PicturePresenter extends AbsPicturePresenter {
 
             @Override
             public void onCommentesReceived(List<Comment> comments) {
-                view.hideLoading();
                 view.showComments(comments);
             }
         });
     }
 
     @Override
-    public void initializeData(User user, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor) {
-        this.user = user;
+    public void initializeData(String userId, Picture pic, GetLikes likesInteractor, GetComments commentsInteractor) {
+        UserInteractor interactor = getUserInteractor(userId);
+        interactor.getUser(new GetUser.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onUserReceived(User user) {
+                view.showUserProfile(user.getProfile());
+                view.showUsername(user.getName() + " " + user.getLastname());
+                view.hideLoading();
+            }
+        });
         this.picture = pic;
         this.getLikes = likesInteractor;
         this.getComments = commentsInteractor;
+    }
+
+    private UserInteractor getUserInteractor(String userId) {
+        return new UserInteractor(new GetUserApiImp(userId), new MainThreadImp(), new ThreadExecutor());
     }
 
     @Override
@@ -197,55 +219,15 @@ public class PicturePresenter extends AbsPicturePresenter {
     }
 
     @Override
-    public void onDeleteSavedPicture(UpdateSavedPictureInteractor updateDELSaveInteractor) {
+    public void onDeleteSavedPicture() {
+        getUserBDImp.deleteUserSavedPicture(picture.getImageId());
         view.showPictureNotSaved();
-        updateDELSaveInteractor.updateSavedPicture(new UpdateSavedPicture.Listener() {
-            @Override
-            public void onNoInternetAvailable() {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-            @Override
-            public void onSuccess() {
-                getUserBDImp.deleteUserSavedPicture(picture.getImageId());
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
     }
 
     @Override
-    public void onInsertSavePicture(UpdateSavedPictureInteractor updateINSSaveInteractor) {
+    public void onInsertSavePicture() {
+        getUserBDImp.insertUserSavedPicture(picture);
         view.showPictureSaved();
-        updateINSSaveInteractor.updateSavedPicture(new UpdateSavedPicture.Listener() {
-            @Override
-            public void onNoInternetAvailable() {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-            @Override
-            public void onSuccess() {
-                getUserBDImp.insertUserSavedPicture(picture);
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
     }
 
     private List<Like> updateListAfterDelete(List<Like> likeList) {
