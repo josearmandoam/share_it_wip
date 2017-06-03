@@ -4,8 +4,11 @@ import android.content.Context;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationPresenter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,7 +28,7 @@ public class NotificationPresenter extends AbsNotificationPresenter {
     @Override
     public void initialize() {
         getComponent().inject(this);
-        view.showNotifications(db.parseNotificationLines(db.getNotificationLines()));
+        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()),(db.getNotificationLines()));
     }
 
     @Override
@@ -45,5 +48,10 @@ public class NotificationPresenter extends AbsNotificationPresenter {
 
     protected UIComponent getComponent() {
         return ((MainActivity) context).component();
+    }
+
+    @Override
+    public void onNotificationLineClicked(String name, List<NotificationLine> list, String userId) {
+        view.showNotificationDialog(name, list, userId);
     }
 }

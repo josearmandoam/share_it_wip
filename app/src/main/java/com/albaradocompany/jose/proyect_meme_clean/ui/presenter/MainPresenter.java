@@ -54,10 +54,10 @@ public class MainPresenter extends AbsMainPresenter {
 
     @Override
     public void onNotificationReceived(final Bundle extras) {
-        NotificationLine line = new NotificationLine(extras.getString(LINE_ID),extras.getString(USER_ID), extras.getString(PROFILE),extras.getString(MESSAGE),extras.getString(TITLE),extras.getString(TIME),NOT_SEEN);
+        NotificationLine line = new NotificationLine(extras.getString(USER_ID), extras.getString(PROFILE), extras.getString(MESSAGE), extras.getString(TIME), extras.getString(TITLE), NOT_SEEN, extras.getString(LINE_ID), extras.getString(USER_ID));
         view.openNotificationFragment(line);
 
-        db.insertNotificationLine(extras.getString(LINE_ID),extras.getString(USER_ID), extras.getString(PROFILE),extras.getString(MESSAGE),extras.getString(TITLE),extras.getString(TIME),NOT_SEEN);
+        db.insertNotificationLine(extras.getString(LINE_ID), extras.getString(USER_ID), extras.getString(PROFILE), extras.getString(MESSAGE), extras.getString(TITLE), extras.getString(TIME), NOT_SEEN, db.getUsers().get(0).userId);
     }
 
     protected UIComponent getComponent() {

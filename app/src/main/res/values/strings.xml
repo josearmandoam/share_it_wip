@@ -120,4 +120,6 @@
     <string name="upload_picture">Upload picture</string>
     <string name="unfollow">unfollow</string>
     <string name="follow">follow</string>
+    <string name="write_any_message">Write any message</string>
+    <string name="error_ocurred">An error ocurred</string>
 </resources>

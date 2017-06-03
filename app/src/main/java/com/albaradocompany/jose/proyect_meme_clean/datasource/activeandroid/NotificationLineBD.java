@@ -23,12 +23,14 @@ public class NotificationLineBD extends Model {
     public String time;
     @Column(name = "state")
     public String state;
+    @Column(name = "receptor")
+    public String receptor;
 
     public NotificationLineBD() {
         super();
     }
 
-    public NotificationLineBD(String lineId, String userId, String imagePath, String message, String title, String time, String state) {
+    public NotificationLineBD(String lineId, String userId, String imagePath, String message, String title, String time, String state, String receptor) {
         this.lineId = lineId;
         this.userId = userId;
         this.imagePath = imagePath;
@@ -36,5 +38,6 @@ public class NotificationLineBD extends Model {
         this.title = title;
         this.time = time;
         this.state = state;
+        this.receptor = receptor;
     }
 }

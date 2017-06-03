@@ -56,9 +56,13 @@ public interface GetUserBD {
 
     boolean isNotificationLineOpen(String userId);
 
-    List<NotificationLineBD> getNotificationLines();
+    List<NotificationLine> getNotificationsById(String userId);
+
+    List<NotificationLine> getNotificationLines();
 
     List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD);
 
-    void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state);
+    List<NotificationLineBD> getNotificationLinesGRUOUPBY();
+
+    void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state, String sender);
 }

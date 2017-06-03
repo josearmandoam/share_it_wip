@@ -216,21 +216,39 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
-    public List<NotificationLineBD> getNotificationLines() {
-        return new Select().from(NotificationLineBD.class).execute();
+    public List<NotificationLine> getNotificationsById(String userId) {
+        List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).where("userId = ?", userId).execute();
+        return parseNotificationLines(notificationLineBDs);
+    }
+
+    @Override
+    public List<NotificationLine> getNotificationLines() {
+        List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
+        return parseNotificationLines(notificationLineBDs);
     }
 
     @Override
     public List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD) {
         List<NotificationLine> list = new ArrayList<NotificationLine>();
         for (NotificationLineBD notification : notificationLineBD) {
-            list.add(new NotificationLine(notification.userId, notification.imagePath, notification.message, notification.time, notification.title, notification.state, notification.lineId));
+            list.add(new NotificationLine(notification.userId, notification.imagePath, notification.message, notification.time, notification.title, notification.state, notification.lineId, notification.receptor));
         }
         return list;
     }
 
     @Override
-    public void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state) {
-        new NotificationLineBD(lineId, userId, profile, message, title, time, state).save();
+    public List<NotificationLineBD> getNotificationLinesGRUOUPBY() {
+        List<NotificationLineBD> lines = new Select().from(NotificationLineBD.class).groupBy("userId").execute();
+        List<NotificationLineBD> list = new ArrayList<NotificationLineBD>();
+        for (NotificationLineBD line : lines) {
+            if (!line.userId.equals(getUsers().get(0).userId))
+                list.add(line);
+        }
+        return list;
+    }
+
+    @Override
+    public void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state, String receptor) {
+        new NotificationLineBD(lineId, userId, profile, message, title, time, state, receptor).save();
     }
 }

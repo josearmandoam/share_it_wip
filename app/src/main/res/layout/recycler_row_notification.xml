@@ -1,36 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="16dp"
+    android:id="@+id/notification_row_lyt_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/notification_row_iv_profile"
-        android:src="@drawable/face"
         android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:civ_border_color="@android:color/darker_gray"
-        app:civ_border_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/notification_row_tv_message"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/notification_row_tv_name"
+        android:src="@drawable/face"
+        app:civ_border_color="@android:color/darker_gray"
+        app:civ_border_width="1dp" />
+
     <TextView
         android:id="@+id/notification_row_tv_name"
-        android:layout_toRightOf="@+id/notification_row_iv_profile"
-        android:layout_marginLeft="16dp"
-        android:text="Lorem itsum"
-        android:padding="4dp"
-        android:textStyle="bold"
-        android:fontFamily="@string/default_font"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/notification_row_iv_profile"
+        android:fontFamily="@string/default_font"
+        android:padding="4dp"
+        android:text="Lorem itsum"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/notification_row_tv_message"
-        android:layout_toRightOf="@+id/notification_row_iv_profile"
-        android:layout_below="@+id/notification_row_tv_name"
-        android:maxLines="1"
-        android:layout_marginLeft="16dp"
-        android:padding="4dp"
-        android:text="@string/text_large"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_row_tv_name"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/notification_row_iv_profile"
+        android:layout_toLeftOf="@+id/notification_row_ibtn_buble"
+        android:maxLines="1"
+        android:padding="4dp"
+        android:text="@string/text_large" />
+
+    <View
+        android:id="@+id/notification_row_view"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignStart="@+id/notification_row_tv_name"
+        android:layout_below="@+id/notification_row_iv_profile"
+        android:layout_marginTop="16dp"
+        android:background="@color/testPrimary" />
+
+    <ImageButton
+        android:id="@+id/notification_row_ibtn_buble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/notification_row_tv_message"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/notification_row_tv_message"
+        android:background="@null"
+        android:padding="8dp"
+        android:src="@drawable/buble" />
+
+    <TextView
+        android:id="@+id/notification_row_tv_number_notif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/notification_row_ibtn_buble"
+        android:layout_alignStart="@+id/notification_row_ibtn_buble"
+        android:layout_alignTop="@+id/notification_row_ibtn_buble"
+        android:layout_alignBottom="@+id/notification_row_ibtn_buble"
+        android:gravity="center"
+        android:paddingBottom="4dp"
+        android:text="10"
+        android:textColor="@android:color/white" />
 </RelativeLayout>

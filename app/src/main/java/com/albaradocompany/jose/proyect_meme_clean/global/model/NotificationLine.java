@@ -12,8 +12,9 @@ public class NotificationLine {
     String title;
     String state;
     String notificationId;
+    String receptor;
 
-    public NotificationLine(String userId, String profile, String message, String time, String title, String state, String notificationId) {
+    public NotificationLine(String userId, String profile, String message, String time, String title, String state, String notificationId, String receptor) {
         this.userId = userId;
         this.profile = profile;
         this.message = message;
@@ -21,6 +22,7 @@ public class NotificationLine {
         this.title = title;
         this.state = state;
         this.notificationId = notificationId;
+        this.receptor = receptor;
     }
 
     public String getUserId() {
@@ -77,5 +79,13 @@ public class NotificationLine {
 
     public void setNotificationId(String notificationId) {
         this.notificationId = notificationId;
+    }
+
+    public String getReceptor() {
+        return receptor;
+    }
+
+    public void setReceptor(String receptor) {
+        this.receptor = receptor;
     }
 }

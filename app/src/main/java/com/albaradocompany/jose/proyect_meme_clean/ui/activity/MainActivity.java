@@ -17,9 +17,9 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.MainViewPagerAdapter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NotificationFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.FeedFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NewPictureFragment;
+import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NotificationFragment;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.MainPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsMainPresenter;
 
@@ -117,7 +117,7 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         List<Fragment> list = new ArrayList<Fragment>();
         List<UserBD> userBDs = getUserBDImp.getUsers();
         feedFragment = FeedFragment.newInstance(userBDs.get(0));
-        notificationFragment = NotificationFragment.newInstance();
+        notificationFragment = NotificationFragment.newInstance(userBDs.get(0).userId, userBDs.get(0).user_name + " " + userBDs.get(0).user_lastname);
         list.add(NewPictureFragment.newInstance());
         list.add(feedFragment);
         list.add(notificationFragment);
