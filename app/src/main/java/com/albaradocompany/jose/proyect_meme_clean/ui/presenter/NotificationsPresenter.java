@@ -11,8 +11,8 @@ import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.SendNotificationInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
-import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationDialogPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.NotificationActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.SendNotification;
 
 import java.util.List;
@@ -23,13 +23,13 @@ import javax.inject.Inject;
  * Created by jose on 02/06/2017.
  */
 
-public class NotificationsDialogPresenter extends AbsNotificationDialogPresenter {
+public class NotificationsPresenter extends AbsNotificationPresenter {
     private String SEEN = "seen";
     Context context;
     @Inject
     GetUserBDImp db;
 
-    public NotificationsDialogPresenter(Context context) {
+    public NotificationsPresenter(Context context) {
         this.context = context;
     }
 
@@ -67,7 +67,46 @@ public class NotificationsDialogPresenter extends AbsNotificationDialogPresenter
             public void onSuccess() {
                 view.hideLoading();
                 db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), mUserId, BuildConfig.BASE_URL_DEFAULT + mUserId + "_profile", message, mCompleteName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
-                view.showNotifications(db.getNotificationLines(), userId);
+                view.showNotifications(db.getNotificationLines(userId), userId);
+                view.cleanMessage();
+            }
+
+            @Override
+            public void onFailure() {
+                view.hideLoading();
+                view.showFailure();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.hideLoading();
+                view.showError(e);
+            }
+
+            @Override
+            public void onNoInternetAvailable() {
+                view.hideLoading();
+                view.showNoInternetAvailable();
+            }
+        });
+    }
+
+    @Override
+    public void onBackClicked() {
+        navigator.navigateToBack();
+    }
+
+    @Override
+    public void registerNewLine(final String message, final String mUserId, final String mCompleteName, final String userId, final String notifcationLineName) {
+        view.showLoading();
+        SendNotificationInteractor interactor = getSendNotificationInteractor(message, mUserId, mCompleteName, userId);
+        interactor.sendNotification(new SendNotification.Listener() {
+            @Override
+            public void onSuccess() {
+                view.hideLoading();
+                db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), userId, BuildConfig.BASE_URL_DEFAULT + mUserId + "_profile", message, notifcationLineName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
+                view.showNotifications(db.getNotificationLines(userId), userId);
+                view.cleanMessage();
             }
 
             @Override
@@ -95,6 +134,6 @@ public class NotificationsDialogPresenter extends AbsNotificationDialogPresenter
     }
 
     protected UIComponent getComponent() {
-        return ((MainActivity) context).component();
+        return ((NotificationActivity) context).component();
     }
 }

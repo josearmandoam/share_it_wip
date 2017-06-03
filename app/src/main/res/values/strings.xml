@@ -122,4 +122,5 @@
     <string name="follow">follow</string>
     <string name="write_any_message">Write any message</string>
     <string name="error_ocurred">An error ocurred</string>
+    <string name="select_one_contact">Select one contact: </string>
 </resources>

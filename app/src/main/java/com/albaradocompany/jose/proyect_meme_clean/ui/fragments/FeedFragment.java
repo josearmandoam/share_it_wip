@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -64,6 +65,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     private static final String POST = "post";
     private static final String POSITION = "position";
     private static final int COMMENT_ACTION = 0;
+    private static final String LIST_STATE_KEY = "list_state";
 
     @BindView(R.id.feed_recyclerview)
     RecyclerView recyclerView;
@@ -85,6 +87,8 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     FeedRecyclerAdapter adapter;
     private static UserBD userDB;
     private List<Post> posts;
+    private LinearLayoutManager layoutManager;
+    private Parcelable mListState;
 
     FeedRecyclerAdapter.Listener onClickListener = new FeedRecyclerAdapter.Listener() {
         @Override
@@ -122,7 +126,6 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
             presenter.onUserClicked(userId);
         }
     };
-    ;
 
     public FeedFragment() {
     }
@@ -156,6 +159,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
         presenter.setView(this);
         presenter.setNavigator(this);
 
+        layoutManager = new LinearLayoutManager(getContext());
         showSnackBar = new ShowSnackBarImp(getActivity());
 
         posts = new ArrayList<>();
@@ -213,7 +217,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     private void initializeRecycler(List<Post> listpost) {
         adapter = new FeedRecyclerAdapter(getContext(), listpost, onClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
     }
@@ -480,7 +484,28 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     }
 
     public void parentResume() {
-        if (presenter != null)
-            presenter.resume();
+        if (mListState != null) {
+            layoutManager.onRestoreInstanceState(mListState);
+        } else {
+            if (presenter != null)
+                presenter.resume();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (layoutManager != null) {
+            mListState = layoutManager.onSaveInstanceState();
+        }
+        outState.putParcelable(LIST_STATE_KEY, mListState);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        }
     }
 }

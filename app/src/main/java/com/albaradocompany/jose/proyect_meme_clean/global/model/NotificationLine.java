@@ -1,10 +1,12 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import java.io.Serializable;
+
 /**
  * Created by jose on 31/05/2017.
  */
 
-public class NotificationLine {
+public class NotificationLine implements Serializable {
     String userId;
     String profile;
     String message;

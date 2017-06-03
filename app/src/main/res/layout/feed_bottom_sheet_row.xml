@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/sheet_row_profile"
+        android:src="@drawable/face"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+    <View
+        android:id="@+id/sheet_row_view"
+        android:layout_marginTop="8dp"
+        android:background="@color/testThird"
+        android:layout_below="@+id/sheet_row_profile"
+        android:layout_alignStart="@+id/sheet_row_profile"
+        android:layout_alignEnd="@+id/sheet_row_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"/>
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +64,7 @@ public class NotificationDialogRecyclerAdapter extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (!notifications.get(position).getReceptor().equals(userId)) {
             ((SendViewHolder) holder).message.setText(notifications.get(position).getMessage());
-            Picasso.with(context).load(notifications.get(position).getProfile()).into(((SendViewHolder) holder).profile);
+            Picasso.with(context).load(BuildConfig.BASE_URL_DEFAULT + userId+"_profile").into(((SendViewHolder) holder).profile);
             ((SendViewHolder) holder).time.setText(notifications.get(position).getTime().substring(0, 5));
         } else {
             ((ReceiveViewHolder) holder).message.setText(notifications.get(position).getMessage());
@@ -78,11 +79,14 @@ public class NotificationDialogRecyclerAdapter extends RecyclerView.Adapter<Recy
     }
 
     public void clear() {
-        notifications.clear();
+//        notifications.clear();
     }
 
     public void addNewNotifications(List<NotificationLine> notifications) {
-        this.notifications = notifications;
+//        this.notifications = notifications;
+        for (int i = this.notifications.size(); i < notifications.size(); i++) {
+            this.notifications.add(notifications.get(i));
+        }
     }
 
     public static class ReceiveViewHolder extends RecyclerView.ViewHolder {

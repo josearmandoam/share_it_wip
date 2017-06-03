@@ -23,6 +23,7 @@ import java.util.List;
  */
 
 public class GetUserBDImp implements GetUserBD {
+    private static final java.lang.String SEEN = "seen";
     Context context;
 
     public GetUserBDImp(Context context) {
@@ -222,9 +223,14 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
-    public List<NotificationLine> getNotificationLines() {
+    public List<NotificationLine> getNotificationLines(String userId) {
         List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
-        return parseNotificationLines(notificationLineBDs);
+        List<NotificationLineBD> list = new ArrayList<NotificationLineBD>();
+        for (NotificationLineBD notification : notificationLineBDs) {
+            if (notification.userId.equals(userId) || notification.receptor.equals(userId))
+                list.add(notification);
+        }
+        return parseNotificationLines(list);
     }
 
     @Override
@@ -244,11 +250,27 @@ public class GetUserBDImp implements GetUserBD {
             if (!line.userId.equals(getUsers().get(0).userId))
                 list.add(line);
         }
+//        List<NotificationLineBD> linesSended = new Select().from(NotificationLineBD.class).groupBy("receptor").execute();
+//        for (NotificationLineBD line : linesSended) {
+//            if (!line.receptor.equals(getUsers().get(0).userId))
+//                list.add(line);
+//        }
         return list;
     }
 
     @Override
     public void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state, String receptor) {
         new NotificationLineBD(lineId, userId, profile, message, title, time, state, receptor).save();
+    }
+
+    @Override
+    public void updateNotificationsState(String userId) {
+        new Update(NotificationLineBD.class).set("state = ?", SEEN).where("userId = ?", userId).execute();
+    }
+
+    @Override
+    public List<NotificationLine> getNotificationLines() {
+        List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
+        return parseNotificationLines(notificationLineBDs);
     }
 }

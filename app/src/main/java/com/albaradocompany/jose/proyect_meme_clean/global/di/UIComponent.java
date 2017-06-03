@@ -18,6 +18,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UploadActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
+import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
@@ -26,8 +27,8 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.EditProfilePrese
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.FeedPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.LoginPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.MainPresenter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationPresenter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationsDialogPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationFragmentPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationsPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.PicturePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.ProfilePresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
@@ -103,8 +104,9 @@ public interface UIComponent {
 
     void inject(MainPresenter mainPresenter);
 
-    void inject(NotificationPresenter notificationPresenter);
+    void inject(NotificationFragmentPresenter notificationFragmentPresenter);
 
-    void inject(NotificationsDialogPresenter notificationsDialogPresenter);
+    void inject(NotificationsPresenter notificationsPresenter);
 
+    void inject(NotificationActivity notificationActivity);
 }

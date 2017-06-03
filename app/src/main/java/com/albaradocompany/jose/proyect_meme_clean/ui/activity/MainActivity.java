@@ -3,9 +3,11 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -65,7 +67,6 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         super.onCreate(savedInstanceState);
         component().inject(this);
         initialilze();
-        checkDataReceive();
     }
 
     private void checkDataReceive() {
@@ -95,6 +96,8 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         tabLayout.getTabAt(NOTIFICATION_FRAGMENT).setIcon(getResources().getDrawable(R.drawable.avatar_light));
 
         viewPager.setCurrentItem(FEED_FRAGMENT);
+
+        checkDataReceive();
     }
 
     @Override
@@ -159,7 +162,19 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
         notificationFragment.notifyNewNotification(line);
 //        NotificationFragment.newInstance(extras.get(TITLE),extras.get(MESSAGE),extras.get(TOKEN));
     }
-//
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+
+    }
+    //
 //    @Override
 //    public void showNewNotification(String userId) {
 //        notificationFragment.notifyNewNotification(userId);

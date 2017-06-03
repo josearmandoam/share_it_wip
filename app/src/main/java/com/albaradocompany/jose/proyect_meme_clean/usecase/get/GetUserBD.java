@@ -58,11 +58,15 @@ public interface GetUserBD {
 
     List<NotificationLine> getNotificationsById(String userId);
 
-    List<NotificationLine> getNotificationLines();
+    List<NotificationLine> getNotificationLines(String UserId);
 
     List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD);
 
     List<NotificationLineBD> getNotificationLinesGRUOUPBY();
 
     void insertNotificationLine(String lineId, String userId, String profile, String message, String title, String time, String state, String sender);
+
+    void updateNotificationsState(String userId);
+
+    List<NotificationLine> getNotificationLines();
 }

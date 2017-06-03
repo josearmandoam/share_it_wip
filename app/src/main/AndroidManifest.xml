@@ -61,6 +61,7 @@
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.UploadActivity" />
         <activity android:name=".ui.activity.SearchActivity"/>
+        <activity android:name=".ui.dialog.NotificationActivity"/>
         <service android:name=".datasource.fcm.FcmInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT">

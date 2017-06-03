@@ -52,9 +52,11 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
         int numNotifications = getNumNotifications(lines.get(position).getUserId(), allNotifications);
         if (numNotifications == 0) {
             holder.buble.setVisibility(View.GONE);
+            holder.numberNot.setVisibility(View.GONE);
             holder.profile.setBorderColor(BuildConfig.COLOR_GRAY);
         } else {
             holder.buble.setVisibility(View.VISIBLE);
+            holder.numberNot.setVisibility(View.VISIBLE);
             holder.numberNot.setText("" + numNotifications);
             holder.profile.setBorderColor(BuildConfig.COLOR_GREEN);
         }
@@ -80,6 +82,11 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
         lines.add(line);
     }
 
+    public void updateList(List<NotificationLine> notificationLines, List<NotificationLine> allNotifications) {
+        this.lines = notificationLines;
+        this.allNotifications = allNotifications;
+    }
+
     public interface Listener {
         void onNotificationClicked(String name, List<NotificationLine> list, String userId);
     }
@@ -98,7 +105,7 @@ public class NotificationRecyclerAdapter extends RecyclerView.Adapter<Notificati
 
         @OnClick({R.id.notification_row_tv_number_notif, R.id.notification_row_tv_name, R.id.notification_row_lyt_container})
         public void onNotificationClicked(View view) {
-            listener.onNotificationClicked(name.getText().toString(),getNotificationsOfUser(lines.get(getAdapterPosition()).getUserId()), lines.get(getAdapterPosition()).getUserId());
+            listener.onNotificationClicked(name.getText().toString(), getNotificationsOfUser(lines.get(getAdapterPosition()).getUserId()), lines.get(getAdapterPosition()).getUserId());
         }
 
         public NotificationViewHolder(View itemView) {
