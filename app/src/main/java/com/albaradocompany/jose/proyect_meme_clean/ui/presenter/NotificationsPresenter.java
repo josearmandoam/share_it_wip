@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.SendNotificationApiImp;
@@ -11,7 +12,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.SendNotificationInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.NotificationActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.SendNotification;
 
@@ -24,7 +25,16 @@ import javax.inject.Inject;
  */
 
 public class NotificationsPresenter extends AbsNotificationPresenter {
-    private String SEEN = "seen";
+    private static final String SEEN = "seen";
+    private static final String TITLE = "title";
+    private static final String MESSAGE = "message";
+    private static final String TOKEN = "token";
+    private static final String ACTION = "action";
+    private static final String TIME = "time";
+    private static final String USER_ID = "userId";
+    private static final String LINEID = "lineId";
+    private static final String PROFILE = "profile";
+    private static final String NOT_SEEN = "not seen";
     Context context;
     @Inject
     GetUserBDImp db;
@@ -67,7 +77,7 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
             public void onSuccess() {
                 view.hideLoading();
                 db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), mUserId, BuildConfig.BASE_URL_DEFAULT + mUserId + "_profile", message, mCompleteName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
-                view.showNotifications(db.getNotificationLines(userId), userId);
+                view.showNotifications(db.getAllNotifications(userId), userId);
                 view.cleanMessage();
             }
 
@@ -104,8 +114,8 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
             @Override
             public void onSuccess() {
                 view.hideLoading();
-                db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), userId, BuildConfig.BASE_URL_DEFAULT + mUserId + "_profile", message, notifcationLineName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
-                view.showNotifications(db.getNotificationLines(userId), userId);
+                db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), userId, BuildConfig.BASE_URL_DEFAULT + userId + "_profile", message, notifcationLineName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
+                view.showNotifications(db.getAllNotifications(userId), userId);
                 view.cleanMessage();
             }
 
@@ -129,8 +139,22 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
         });
     }
 
+    @Override
+    public void onNotificationsReceived(Intent intent) {
+        /* intent.putExtra(TITLE, title);
+        intent.putExtra(LINEID, "line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime());
+        intent.putExtra(USER_ID, userId);
+        intent.putExtra(MESSAGE, body);
+        intent.putExtra(ACTION, "notification");
+        intent.putExtra(TIME, time);
+        intent.putExtra(PROFILE, BuildConfig.BASE_URL_DEFAULT + userId + "_profile");*/
+        db.insertNotificationLine(intent.getStringExtra(LINEID), intent.getStringExtra(USER_ID), intent.getStringExtra(PROFILE), intent.getStringExtra(MESSAGE), intent.getStringExtra(TITLE), intent.getStringExtra(TIME), NOT_SEEN, db.getUsers().get(0).userId);
+        view.showNotifications(db.getAllNotifications(intent.getStringExtra(USER_ID)), intent.getStringExtra(USER_ID));
+
+    }
+
     private SendNotificationInteractor getSendNotificationInteractor(String message, String mUserId, String mCompleteName, String userId) {
-        return new SendNotificationInteractor(new SendNotificationApiImp(userId, mCompleteName + "-" + mUserId, message), new MainThreadImp(), new ThreadExecutor());
+        return new SendNotificationInteractor(new SendNotificationApiImp(userId, "Nuevo mensaje de: "+mCompleteName + "-" + mUserId, message), new MainThreadImp(), new ThreadExecutor());
     }
 
     protected UIComponent getComponent() {

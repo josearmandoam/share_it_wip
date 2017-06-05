@@ -322,7 +322,10 @@ public class UserSharedImp implements UserShared, SignupShared {
         try {
             File f = new File(path);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            imageView.setImageBitmap(b);
+            if (b != null)
+                imageView.setImageBitmap(b);
+            else
+                getProfileFromApi(imageView, userBD);
         } catch (FileNotFoundException e) {
             /*If something went wrong, it will charge from database*/
             getProfileFromApi(imageView, userBD);
@@ -350,7 +353,10 @@ public class UserSharedImp implements UserShared, SignupShared {
         try {
             File f = new File(path);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            imageView.setImageBitmap(b);
+            if (b != null)
+                imageView.setImageBitmap(b);
+            else
+                getBackgroundFromApi(imageView, userBD);
         } catch (FileNotFoundException e) {
             /*If something went wrong, it will charge from database*/
             getBackgroundFromApi(imageView, userBD);
@@ -876,6 +882,7 @@ public class UserSharedImp implements UserShared, SignupShared {
         editor.putString(BuildConfig.USER_TOKEN, recent_token);
         editor.apply();
     }
+
     @Override
     public String getUserToken() {
         sharedPreferences = context.getSharedPreferences(FcmInstanceIdService.class.getName(), Context.MODE_PRIVATE);

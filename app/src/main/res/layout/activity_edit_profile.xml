@@ -209,14 +209,13 @@
 
             <ProgressBar
                 android:id="@+id/edit_profile_pbr"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:background="@drawable/progress"
                 android:textCursorDrawable="@null"
                 android:layout_alignTop="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignBottom="@+id/edit_profile_ibtn_cancel"
                 android:layout_alignParentEnd="true"
-                android:padding="10dp"
-                android:visibility="gone"
                 android:layout_below="@id/edit_profile_iv_profile"
                 android:layout_height="wrap_content" />
 

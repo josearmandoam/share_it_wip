@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -8,6 +9,8 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsMainPresenter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -58,6 +61,26 @@ public class MainPresenter extends AbsMainPresenter {
         view.openNotificationFragment(line);
 
         db.insertNotificationLine(extras.getString(LINE_ID), extras.getString(USER_ID), extras.getString(PROFILE), extras.getString(MESSAGE), extras.getString(TITLE), extras.getString(TIME), NOT_SEEN, db.getUsers().get(0).userId);
+    }
+
+    @Override
+    public void onNotificationsReceived(Intent intent) {
+        db.insertNotificationLine(intent.getStringExtra(LINE_ID), intent.getStringExtra(USER_ID), intent.getStringExtra(PROFILE), intent.getStringExtra(MESSAGE), intent.getStringExtra(TITLE), intent.getStringExtra(TIME), NOT_SEEN, db.getUsers().get(0).userId);
+        view.updateNotifications();
+    }
+
+    @Override
+    public void checkNewNotificationsReceived() {
+        List<NotificationLine> notificationLines = db.getAllNotifications();
+        boolean notificationNotReaded= false;
+        for (NotificationLine line : notificationLines) {
+            if (line.getState().equals(NOT_SEEN))
+                notificationNotReaded = true;
+        }
+        if (notificationNotReaded)
+            view.notifyNewNotificationReceived();
+        else
+            view.notifyNoNewNotificationReceived();
     }
 
     protected UIComponent getComponent() {

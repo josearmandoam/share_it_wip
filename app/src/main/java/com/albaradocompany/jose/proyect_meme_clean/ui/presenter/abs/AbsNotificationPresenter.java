@@ -1,5 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
+import android.content.Intent;
+
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
 
@@ -17,6 +19,8 @@ public abstract class AbsNotificationPresenter extends Presenter<AbsNotification
     public abstract void onBackClicked();
 
     public abstract void registerNewLine(String message, String mUserId, String mCompleteName, String userId, String notifcationLineName);
+
+    public abstract void onNotificationsReceived(Intent intent);
 
     public interface View {
         void showNotifications(List<NotificationLine> notifications, String userId);

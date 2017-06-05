@@ -1,7 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
-import android.os.Handler;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
@@ -51,6 +50,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showPhotos();
         view.checkSocialPrivacity();
         view.hideLoading();
+
+
     }
 
     @Override
@@ -60,7 +61,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showProfile();
         view.showUsername();
         view.showDescription();
-        view.updateRecycler();
+//        view.updateRecycler();
         view.checkSocialPrivacity();
         view.hideLoading();
     }

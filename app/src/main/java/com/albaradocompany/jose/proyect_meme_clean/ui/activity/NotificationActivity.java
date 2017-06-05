@@ -1,5 +1,9 @@
-package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
+package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +21,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.BaseActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.NotificationDialogRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationsPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationPresenter;
@@ -52,11 +55,17 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     @Inject
     GetUserBDImp db;
     private LinearLayoutManager linearLayoutManager;
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            presenter.onNotificationsReceived(intent);
+        }
+    };
 
     @OnClick(R.id.notification_ibtn_send)
     public void onSendMessageClicked(View view) {
         if (!message.getText().toString().isEmpty())
-            if (db.getNotificationLines(userId).size() > 0)
+            if (db.getAllNotifications(userId).size() > 0)
                 presenter.onSendMessageClicked(message.getText().toString(), mUserId, mCompleteName, userId);
             else
                 presenter.registerNewLine(message.getText().toString(), mUserId, mCompleteName, userId, notifcationLineName);
@@ -109,7 +118,7 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
         presenter.setNavigator(this);
         presenter.initialize();
 
-        presenter.initializeRecycler(db.getNotificationLines(userId), mUserId);
+        presenter.initializeRecycler(db.getAllNotifications(userId), mUserId);
         snackBar = new ShowSnackBarImp(this);
     }
 
@@ -184,5 +193,18 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     @Override
     public void navigateToBack() {
         onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        showNotifications(db.getAllNotifications(userId), userId);
+        registerReceiver(mMessageReceiver, new IntentFilter("broadcast"));
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mMessageReceiver);
     }
 }

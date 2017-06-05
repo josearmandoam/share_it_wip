@@ -22,6 +22,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.ListUtil;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     @Override
     public void onBindViewHolder(FeedRecyclerAdapter.PostViewHolder holder, int position) {
         Picasso.with(context).load(posts.get(position).getPicture().getImagePath()).into(holder.image);
-        Picasso.with(context).load(posts.get(position).getxProfile()).into(holder.profile);
+        Picasso.with(context).load(posts.get(position).getxProfile()).memoryPolicy(MemoryPolicy.NO_CACHE).into(holder.profile);
         holder.description.setText(posts.get(position).getPicture().getDescription());
         holder.username.setText(posts.get(position).getxUsername());
         holder.username2.setText(posts.get(position).getxUsername());

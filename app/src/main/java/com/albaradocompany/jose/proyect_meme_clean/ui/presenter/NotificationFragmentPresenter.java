@@ -35,13 +35,13 @@ public class NotificationFragmentPresenter extends AbsNotificationFragmentPresen
     @Override
     public void initialize() {
         getComponent().inject(this);
-        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()), (db.getNotificationLines()));
+        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()), (db.getAllNotifications()));
         view.showFloatingButton();
     }
 
     @Override
     public void resume() {
-        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()), (db.getNotificationLines()));
+        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()), (db.getAllNotifications()));
     }
 
     @Override
@@ -93,6 +93,16 @@ public class NotificationFragmentPresenter extends AbsNotificationFragmentPresen
                 view.showButtonSheet(list);
             }
         });
+    }
+
+    @Override
+    public void onSheetDialogDismiss() {
+        view.showFloatingButton();
+    }
+
+    @Override
+    public void onNotificationsReceived() {
+        view.showNotifications(db.parseNotificationLines(db.getNotificationLinesGRUOUPBY()), (db.getAllNotifications()));
     }
 
     private FeedInteractor getFeedInteractor(String mUserId) {

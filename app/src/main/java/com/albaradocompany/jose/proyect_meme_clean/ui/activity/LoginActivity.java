@@ -200,6 +200,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                LoginActivity.this.finish();
                 openMain(getApplicationContext());
             }
         }, 1500);

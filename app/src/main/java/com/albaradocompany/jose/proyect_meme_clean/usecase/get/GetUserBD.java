@@ -58,7 +58,7 @@ public interface GetUserBD {
 
     List<NotificationLine> getNotificationsById(String userId);
 
-    List<NotificationLine> getNotificationLines(String UserId);
+    List<NotificationLine> getAllNotifications(String UserId);
 
     List<NotificationLine> parseNotificationLines(List<NotificationLineBD> notificationLineBD);
 
@@ -68,5 +68,5 @@ public interface GetUserBD {
 
     void updateNotificationsState(String userId);
 
-    List<NotificationLine> getNotificationLines();
+    List<NotificationLine> getAllNotifications();
 }

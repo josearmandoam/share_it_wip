@@ -13,9 +13,8 @@ import android.view.View;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedSheetRecyclerAdapter;
-import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.NotificationFragment;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.List;
@@ -38,6 +37,8 @@ public class FeedButtonSheedDialogFragment extends BottomSheetDialogFragment {
     private String mCompleteName;
     static List<Feed> feed;
 
+    static FeedButtonSheedDialogFragment.Listener listener = new NullListener();
+
     FeedSheetRecyclerAdapter.Listener onContactClickListener = new FeedSheetRecyclerAdapter.Listener() {
         @Override
         public void onContacClicked(Feed feed) {
@@ -57,10 +58,10 @@ public class FeedButtonSheedDialogFragment extends BottomSheetDialogFragment {
         startActivity(intent);
     }
 
-    public static FeedButtonSheedDialogFragment newInstance(List<Feed> feeds, String mCompleteName) {
-
+    public static FeedButtonSheedDialogFragment newInstance(List<Feed> feeds, String mCompleteName, Listener listener) {
         Bundle args = new Bundle();
         setFeed(feeds);
+        setListener(listener);
         args.putString(COMPLETENAME, mCompleteName);
         FeedButtonSheedDialogFragment fragment = new FeedButtonSheedDialogFragment();
         fragment.setArguments(args);
@@ -93,7 +94,21 @@ public class FeedButtonSheedDialogFragment extends BottomSheetDialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-
+        listener.onDialogDissmiss();
         super.onDismiss(dialog);
+    }
+
+    public static void setListener(Listener listene) {
+        listener = listene;
+    }
+
+    public interface Listener {
+        void onDialogDissmiss();
+    }
+
+    private static class NullListener implements Listener {
+        @Override
+        public void onDialogDissmiss() {
+        }
     }
 }

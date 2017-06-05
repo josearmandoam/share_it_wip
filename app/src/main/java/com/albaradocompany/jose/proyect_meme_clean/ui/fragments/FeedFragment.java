@@ -484,28 +484,26 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     }
 
     public void parentResume() {
-        if (mListState != null) {
-            layoutManager.onRestoreInstanceState(mListState);
-        } else {
+//        if (mListState != null) {
+//            layoutManager.onRestoreInstanceState(mListState);
+//        } else {
             if (presenter != null)
                 presenter.resume();
-        }
+//        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (layoutManager != null) {
-            mListState = layoutManager.onSaveInstanceState();
-        }
+        mListState = layoutManager.onSaveInstanceState();
         outState.putParcelable(LIST_STATE_KEY, mListState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-        }
+//        if (savedInstanceState != null) {
+//            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+//        }
     }
 }

@@ -223,7 +223,7 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
-    public List<NotificationLine> getNotificationLines(String userId) {
+    public List<NotificationLine> getAllNotifications(String userId) {
         List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
         List<NotificationLineBD> list = new ArrayList<NotificationLineBD>();
         for (NotificationLineBD notification : notificationLineBDs) {
@@ -269,7 +269,7 @@ public class GetUserBDImp implements GetUserBD {
     }
 
     @Override
-    public List<NotificationLine> getNotificationLines() {
+    public List<NotificationLine> getAllNotifications() {
         List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
         return parseNotificationLines(notificationLineBDs);
     }

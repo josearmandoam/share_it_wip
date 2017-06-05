@@ -1,8 +1,10 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.fragments;
 
 import android.animation.Animator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -21,7 +23,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.NotificationRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.FeedButtonSheedDialogFragment;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.NotificationActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationFragmentPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationFragmentPresenter;
 
@@ -50,6 +52,20 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
     private String mUserId;
     private String mCompleteName;
     private FeedButtonSheedDialogFragment dialog;
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            presenter.onNotificationsReceived();
+        }
+    };
+
+
+    FeedButtonSheedDialogFragment.Listener onDialogListener = new FeedButtonSheedDialogFragment.Listener() {
+        @Override
+        public void onDialogDissmiss() {
+            presenter.onSheetDialogDismiss();
+        }
+    };
 
     @OnClick(R.id.notification_fbtn_add)
     public void onFloatingClicked(View view) {
@@ -136,7 +152,14 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
         if (adapter != null)
             adapter.notifyDataSetChanged();
         showFloatingButton();
+        getActivity().registerReceiver(mMessageReceiver, new IntentFilter("broadcast"));
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(mMessageReceiver);
     }
 
     @Override
@@ -249,7 +272,7 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
 
     @Override
     public void showButtonSheet(List<Feed> list) {
-        dialog = FeedButtonSheedDialogFragment.newInstance(list, mCompleteName);
+        dialog = FeedButtonSheedDialogFragment.newInstance(list, mCompleteName, onDialogListener);
         dialog.show(getActivity().getSupportFragmentManager(), FeedButtonSheedDialogFragment.class.getName());
     }
 }

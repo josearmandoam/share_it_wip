@@ -17,6 +17,10 @@ public abstract class AbsNotificationFragmentPresenter extends Presenter<AbsNoti
 
     public abstract void onFloatingButtonHidden(String mUserId);
 
+    public abstract void onSheetDialogDismiss();
+
+    public abstract void onNotificationsReceived();
+
     public interface View {
         void showNotifications(List<NotificationLine> notificationLines, List<NotificationLine> lines);
 

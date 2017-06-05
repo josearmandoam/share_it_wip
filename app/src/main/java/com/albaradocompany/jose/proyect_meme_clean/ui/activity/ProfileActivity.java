@@ -214,9 +214,9 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.resume();
-                presenter.updatePictures();
-                presenter.updateSavedPictures();
+//                presenter.resume();
+//                presenter.updatePictures();
+//                presenter.updateSavedPictures();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -258,6 +258,11 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         super.onResume();
         userBD = getUserBD.getUserBD(userSharedImp.getUserID());
         presenter.resume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
     @Override
@@ -317,7 +322,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
 
     @Override
     public void navigateToBack() {
-        onBackPressed();
+       this.finish();
     }
 
     public static void openSavedPictures(Context ctx) {

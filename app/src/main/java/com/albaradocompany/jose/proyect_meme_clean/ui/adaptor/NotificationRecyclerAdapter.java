@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

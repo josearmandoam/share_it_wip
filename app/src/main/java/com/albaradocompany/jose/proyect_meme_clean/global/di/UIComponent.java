@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.di;
 
 import com.albaradocompany.jose.proyect_meme_clean.datasource.fcm.FcmInstanceIdService;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.fcm.FcmMessageService;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.CommentsActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
@@ -18,7 +19,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UploadActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
-import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.NotificationActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.SocialSettingsDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.fragments.AvatarsFragment;
@@ -109,4 +110,6 @@ public interface UIComponent {
     void inject(NotificationsPresenter notificationsPresenter);
 
     void inject(NotificationActivity notificationActivity);
+
+    void inject(FcmMessageService fcmMessageService);
 }
