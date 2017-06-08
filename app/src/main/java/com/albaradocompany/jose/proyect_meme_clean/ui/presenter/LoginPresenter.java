@@ -42,7 +42,7 @@ public class LoginPresenter extends AbsUserLogin {
 
     Login user;
     @Inject
-    GetUserBDImp getUserBDImp;
+    GetUserBDImp bd;
     @Inject
     UserSharedImp userSharedImp;
 
@@ -64,9 +64,10 @@ public class LoginPresenter extends AbsUserLogin {
                     for (int i = 0; i < login.size(); i++) {
                         if (login.get(i).getPassword().equals(password)) {
                             user = login.get(i); // user without photos/photos saved
-                            getUserBDImp.removeUserDBData();
+                            bd.removeUserDBData();
                             userSharedImp.saveUserID(login.get(i).getIdUser());
-                            getUserBDImp.insertUserDB(user);
+                            bd.insertUserDB(user);
+                            bd.removeAllNotifications();
                             userSharedImp.saveUserLogged();
                             checkForUserPictures();
                             saveUserToken(login.get(i).getIdUser());
@@ -191,7 +192,7 @@ public class LoginPresenter extends AbsUserLogin {
             @Override
             public void onPicturesReceived(List<Picture> pictures) {
                 for (Picture picture : pictures) {
-                    getUserBDImp.insertUserPicture(picture);
+                    bd.insertUserPicture(picture);
                 }
                 checkForUserSavedPictures();
             }
@@ -199,7 +200,7 @@ public class LoginPresenter extends AbsUserLogin {
     }
 
     private void insertNewPicturesBD(List<Picture> pictures) {
-        List<PicturesBD> pictureFromBD = getUserBDImp.getUserPictures(userSharedImp.getUserID());
+        List<PicturesBD> pictureFromBD = bd.getUserPictures(userSharedImp.getUserID());
         List<Picture> newPhotos = new ArrayList<Picture>();
         boolean exist = false;
         for (int i = 0; i < pictures.size(); i++) {
@@ -214,7 +215,7 @@ public class LoginPresenter extends AbsUserLogin {
             exist = false;
         }
         for (Picture picture : newPhotos) {
-            getUserBDImp.insertUserPicture(picture);
+            bd.insertUserPicture(picture);
         }
     }
 
@@ -237,7 +238,7 @@ public class LoginPresenter extends AbsUserLogin {
             @Override
             public void onPicturesReceived(List<Picture> pictures) {
                 for (Picture picture : pictures) {
-                    getUserBDImp.insertUserSavedPicture(picture);
+                    bd.insertUserSavedPicture(picture);
                 }
                 userSharedImp.saveUserID(user.getIdUser());
                 view.hideLoading();

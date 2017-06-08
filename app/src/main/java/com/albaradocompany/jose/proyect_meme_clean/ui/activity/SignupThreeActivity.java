@@ -2,7 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -22,6 +21,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Question;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.QuestionsInteractor;
@@ -145,7 +145,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
     }
 
     private void initialize() {
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
 
         uriReceived = null;
         bitmapReceived = null;
@@ -223,29 +223,30 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     @Override
     public void showImage() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 3);
+        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(3);
+        showAvatarDialog.show(getFragmentManager(), ShowAvatarDialog.class.getName());
     }
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showSuccess() {
-        showSnackBar.show(acountCreated, Color.GREEN);
+        showSnackBar.show(acountCreated, BuildConfig.COLOR_GREEN);
     }
 
     @Override
     public void showErrorRegistration() {
         pbr.setVisibility(View.GONE);
         bConfirm.setVisibility(View.VISIBLE);
-        showSnackBar.show(errorRegistration, Color.RED);
+        showSnackBar.show(errorRegistration, BuildConfig.COLOR_RED);
     }
 
     @Override
@@ -294,7 +295,7 @@ public class SignupThreeActivity extends BaseActivty implements AbsSignupThree.V
 
     private boolean checkFields() {
         if (answer1.getText().toString().isEmpty()) {
-            showSnackBar.show(answerErrorMessage, Color.RED);
+            showSnackBar.show(answerErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         return true;

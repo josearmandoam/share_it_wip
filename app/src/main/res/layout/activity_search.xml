@@ -1,41 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
-        app:titleTextColor="@android:color/white"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"></android.support.v7.widget.Toolbar>
+
     <com.miguelcatalan.materialsearchview.MaterialSearchView
         android:id="@+id/search_mSearch_view"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-    </com.miguelcatalan.materialsearchview.MaterialSearchView>
+        android:layout_height="?actionBarSize"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"></com.miguelcatalan.materialsearchview.MaterialSearchView>
+
     <RelativeLayout
         android:id="@+id/search_lyt_container"
-        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_recycler"
-        android:layout_below="@+id/search_mSearch_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+        <RelativeLayout
+            android:id="@+id/search_lyt_initial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/search_iv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/search_tv_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:src="@mipmap/search_people" />
+
+            <TextView
+                android:id="@+id/search_tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:text="@string/start_finding_people"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/search_tv_empty_results"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/border_text_orange"
+            android:padding="16dp"
+            android:text="@string/not_user_found"
+            android:textSize="15sp"
+            android:visibility="gone" />
     </RelativeLayout>
+
     <ProgressBar
         android:id="@+id/search_pbr"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:background="@drawable/progress"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/progress"
+        android:foregroundGravity="center"
+        android:visibility="gone" />
 </FrameLayout>

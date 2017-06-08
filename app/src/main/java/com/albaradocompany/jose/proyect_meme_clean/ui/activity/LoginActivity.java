@@ -2,13 +2,13 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LoginApiImp;
@@ -17,6 +17,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LoginInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -39,6 +40,8 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @BindView(R.id.login_username)
     EditText username;
+    @BindView(R.id.login_lyt_container)
+    RelativeLayout layout;
     @BindView(R.id.login_password)
     EditText password;
     @BindView(R.id.login_pbr)
@@ -106,7 +109,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
         userSharedImp.removeSignInformation();
         userSharedImp.removeUsernameSucReg();
         userSharedImp.deleteUserData();
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
 
     }
 
@@ -122,15 +125,15 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     private boolean checkFields() {
         if (username.getText().toString().isEmpty() && password.getText().toString().isEmpty()) {
-            showSnackBar.show(empty_username_password, Color.RED);
+            showSnackBar.show(empty_username_password, BuildConfig.COLOR_RED);
             return false;
         }
         if (username.getText().toString().isEmpty()) {
-            showSnackBar.show(empty_username, Color.RED);
+            showSnackBar.show(empty_username, BuildConfig.COLOR_RED);
             return false;
         }
         if (password.getText().toString().isEmpty()) {
-            showSnackBar.show(empty_password, Color.RED);
+            showSnackBar.show(empty_password, BuildConfig.COLOR_RED);
             return false;
         }
         return true;
@@ -153,23 +156,23 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
 
     @Override
     public void showErrorUserNotFound() {
-        showSnackBar.show(errorUsername, Color.RED);
+        showSnackBar.show(errorUsername, BuildConfig.COLOR_RED);
     }
 
 
     @Override
     public void showErrorLoginPassword() {
-        showSnackBar.show(errorPassword, Color.RED);
+        showSnackBar.show(errorPassword, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(error, Color.RED);
+        showSnackBar.show(error, BuildConfig.COLOR_RED);
     }
 
     @Override
@@ -195,7 +198,7 @@ public class LoginActivity extends BaseActivty implements AbsUserLogin.View, Abs
     @Override
     public void navigateToHomePage() {
         userSharedImp.saveUserLogged();
-        showSnackBar.show(loginCorrect, Color.GREEN);
+        showSnackBar.show(loginCorrect, BuildConfig.COLOR_GREEN);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

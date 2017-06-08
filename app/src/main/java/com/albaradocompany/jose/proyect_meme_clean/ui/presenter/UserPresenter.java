@@ -2,15 +2,23 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.presenter;
 
 import android.content.Context;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.FeedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateFeedApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
+import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.FeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateFeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsUserPresenter;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetFeed;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetUser;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateFeed;
 
 import java.util.List;
 
@@ -19,19 +27,46 @@ import java.util.List;
  */
 
 public class UserPresenter extends AbsUserPresenter {
+    private static final String INSERT = "insert";
+    private static final String DELETE = "delete";
     Context context;
     String userId;
     GetUser getUser;
+    String mUserId;
+    Feed feedRegistred;
 
-    public UserPresenter(Context context, String userId, GetUser getUser) {
+    public UserPresenter(Context context, String userId, GetUser getUser, String mUserId) {
         this.context = context;
         this.userId = userId;
         this.getUser = getUser;
+        this.mUserId = mUserId;
+        feedRegistred = new Feed();
     }
 
     @Override
     public void initialize() {
         view.showLoading();
+        getFeedInteractor().getFeed(new GetFeed.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onFeedReceived(List<Feed> feeds) {
+                for (Feed feed : feeds) {
+                    if (feed.getxUserId().equals(userId)) {
+                        view.showNewFloatingButton();
+                        feedRegistred = feed;
+                    }
+                }
+            }
+        });
         getUser.getUser(new GetUser.Listener() {
             @Override
             public void onNoInternetAvailable() {
@@ -65,6 +100,7 @@ public class UserPresenter extends AbsUserPresenter {
             }
         });
     }
+
     @Override
     public void resume() {
 
@@ -79,6 +115,7 @@ public class UserPresenter extends AbsUserPresenter {
     public void destroy() {
 
     }
+
     private void getUserPhotos() {
         PicturesByIdInteractor interactor = new PicturesByIdInteractor(new PicturesByIdApiImp(userId), new MainThreadImp(), new ThreadExecutor());
         interactor.getPictures(new GetPicturesById.Listener() {
@@ -170,5 +207,79 @@ public class UserPresenter extends AbsUserPresenter {
     @Override
     public void onBackClicked() {
         navigator.navigateToBack();
+    }
+
+    @Override
+    public void updateFollow(String userId, String xUserId, String xUserNameComplete, String profile, final String action) {
+        view.hideFloatinButton();
+        if (action.equals(INSERT)) {
+            UpdateFeedInteractor interactor = getUpdateFeedInteractorINS(userId, xUserId, xUserNameComplete, profile, action);
+            interactor.updateFedd(new UpdateFeed.Listener() {
+                @Override
+                public void onNoInternetAvailable() {
+                    view.showNoInternetAvailable();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    view.showError(e);
+                }
+
+                @Override
+                public void onSuccess() {
+                    view.showNewFloatingButton();
+                }
+
+                @Override
+                public void onFailure() {
+                    view.showError(new Exception("An error ocurred"));
+                }
+            });
+        } else {
+            UpdateFeedInteractor interactor = getUpdateFeedInteractorDEL();
+            interactor.updateFedd(new UpdateFeed.Listener() {
+                @Override
+                public void onNoInternetAvailable() {
+                    view.showNoInternetAvailable();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    view.showError(e);
+                }
+
+                @Override
+                public void onSuccess() {
+                    view.showInitialFloatingButton();
+                }
+
+                @Override
+                public void onFailure() {
+                    view.showError(new Exception("An error ocurred"));
+                }
+            });
+        }
+    }
+
+    private UpdateFeedInteractor getUpdateFeedInteractorDEL() {
+        return new UpdateFeedInteractor(new UpdateFeedApiImp(null, null, null, feedRegistred.getFeedId(), null, DELETE), new MainThreadImp(), new ThreadExecutor());
+    }
+
+    private UpdateFeedInteractor getUpdateFeedInteractorINS(String userId, String xUserId, String xUserNameComplete, String profile, String action) {
+        feedRegistred.setFeedId(getFeedId());
+        return new UpdateFeedInteractor(new UpdateFeedApiImp(userId, xUserId, profile, feedRegistred.getFeedId(), xUserNameComplete, action), new MainThreadImp(), new ThreadExecutor());
+    }
+
+    @Override
+    public void onChatClicked(String userId, String xUserId, String xCompleteNAME, String userCompleteName) {
+        navigator.openNotificationsPage(userId, xUserId, xCompleteNAME, userCompleteName);
+    }
+
+    public String getFeedId() {
+        return "feed" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime();
+    }
+
+    public FeedInteractor getFeedInteractor() {
+        return new FeedInteractor(new FeedApiImp(mUserId), new MainThreadImp(), new ThreadExecutor());
     }
 }

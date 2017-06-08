@@ -6,16 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.SavedPicturesRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SavedPicturesPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSavedPicturesPresenter;
@@ -31,6 +30,8 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
 
     @BindView(R.id.saved_pictures_recycler)
     RecyclerView recycler;
+    @BindView(R.id.saved_pictures_lyt_empty_photos)
+    RelativeLayout empty_saved_photos;
 
     AbsSavedPicturesPresenter presenter;
     private UIComponent component;
@@ -73,9 +74,6 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
         presenter.setNavigator(this);
         presenter.initialize();
 
-        recycler.setAdapter(adapter);
-        recycler.setLayoutManager(new GridLayoutManager(this, 3));
-        recycler.setHasFixedSize(true);
 
     }
 
@@ -102,12 +100,22 @@ public class SavedPicturesActivity extends BaseActivty implements AbsSavedPictur
 
     @Override
     public void showListPhotos(List<Picture> userSavedPictures) {
-        if (adapter != null) {
-            adapter.clear();
-            adapter.setList(userSavedPictures);
-            adapter.notifyDataSetChanged();
+        if (userSavedPictures.isEmpty()) {
+            recycler.setVisibility(View.GONE);
+            empty_saved_photos.setVisibility(View.VISIBLE);
         } else {
-            adapter = new SavedPicturesRecyclerAdapter(this, userSavedPictures, onClickListener);
+            if (adapter != null) {
+                adapter.clear();
+                adapter.setList(userSavedPictures);
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter = new SavedPicturesRecyclerAdapter(this, userSavedPictures, onClickListener);
+                recycler.setAdapter(adapter);
+                recycler.setLayoutManager(new GridLayoutManager(this, 3));
+                recycler.setHasFixedSize(true);
+            }
+            recycler.setVisibility(View.VISIBLE);
+            empty_saved_photos.setVisibility(View.GONE);
         }
     }
 

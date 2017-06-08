@@ -123,6 +123,8 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
     boolean fieldsStatus;
     @Inject
     GetUserBDImp getUserBD;
+    private SocialSettingsDialog dialog;
+    private ShowAvatarDialog dialogAvatar;
 
     @OnClick(R.id.edit_profile_ibtn_cancel)
     public void onCloseClicked(View view) {
@@ -175,7 +177,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
         presenter.setNavigator(this);
         presenter.initialize();
         layout.requestFocus();
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
     }
 
     @Override
@@ -256,13 +258,15 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void showBackgroundDialog() {
-        new ShowAvatarDialog(this, 4, ACTION_BACKGROUND);
+        dialogAvatar = new ShowAvatarDialog(4, ACTION_BACKGROUND);
+        dialogAvatar.show(getFragmentManager(), ShowAvatarDialog.class.getName());
         action = ACTION_BACKGROUND;
     }
 
     @Override
     public void showProfileDialog() {
-        new ShowAvatarDialog(this, 4, ACTION_PROFILE);
+        dialogAvatar = new ShowAvatarDialog(4, ACTION_PROFILE);
+        dialogAvatar.show(getFragmentManager(), ShowAvatarDialog.class.getName());
         action = ACTION_PROFILE;
     }
 
@@ -305,7 +309,8 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
 
     @Override
     public void showSocialSettingsDialog() {
-        new SocialSettingsDialog(this);
+        dialog = new SocialSettingsDialog(this);
+        dialog.show(getFragmentManager(), SocialSettingsDialog.class.getName());
     }
 
     @Override

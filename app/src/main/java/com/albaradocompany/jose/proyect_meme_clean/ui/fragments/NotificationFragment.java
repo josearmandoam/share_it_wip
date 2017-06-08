@@ -17,13 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.NotificationLine;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.NotificationRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.FeedButtonSheedDialogFragment;
-import com.albaradocompany.jose.proyect_meme_clean.ui.activity.NotificationActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.NotificationFragmentPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsNotificationFragmentPresenter;
 
@@ -46,6 +47,8 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
     RecyclerView recyclerView;
     @BindView(R.id.notification_fbtn_add)
     FloatingActionButton fab;
+    @BindView(R.id.notification_empty_notification)
+    RelativeLayout empty_lines;
 
     AbsNotificationFragmentPresenter presenter;
     NotificationRecyclerAdapter adapter;
@@ -75,7 +78,7 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
             public void run() {
                 presenter.onFloatingButtonHidden(mUserId);
             }
-        },500);
+        }, 500);
     }
 
     NotificationRecyclerAdapter.Listener onNotificationClickListener = new NotificationRecyclerAdapter.Listener() {
@@ -164,13 +167,20 @@ public class NotificationFragment extends Fragment implements AbsNotificationFra
 
     @Override
     public void showNotifications(List<NotificationLine> notificationLines, List<NotificationLine> allNotifications) {
-        if (adapter == null) {
-            adapter = new NotificationRecyclerAdapter(getActivity().getApplicationContext(), notificationLines, allNotifications, onNotificationClickListener);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.setAdapter(adapter);
+        if (notificationLines.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            empty_lines.setVisibility(View.VISIBLE);
         } else {
-            adapter.updateList(notificationLines, allNotifications);
-            adapter.notifyDataSetChanged();
+            if (adapter == null) {
+                adapter = new NotificationRecyclerAdapter(getActivity().getApplicationContext(), notificationLines, allNotifications, onNotificationClickListener);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.setAdapter(adapter);
+            } else {
+                adapter.updateList(notificationLines, allNotifications);
+                adapter.notifyDataSetChanged();
+            }
+            empty_lines.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 

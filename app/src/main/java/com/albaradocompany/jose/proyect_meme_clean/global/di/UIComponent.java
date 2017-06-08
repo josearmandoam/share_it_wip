@@ -16,6 +16,7 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivi
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SplashActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UploadActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.UserActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.adaptor.FeedRecyclerAdapter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.LikesDialog;
@@ -110,6 +111,8 @@ public interface UIComponent {
     void inject(NotificationsPresenter notificationsPresenter);
 
     void inject(NotificationActivity notificationActivity);
+
+    void inject(UserActivity userActivity);
 
     void inject(FcmMessageService fcmMessageService);
 }

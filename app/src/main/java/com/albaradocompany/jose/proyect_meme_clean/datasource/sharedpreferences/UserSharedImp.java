@@ -18,6 +18,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.AddPhotoActivty;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.LoginActivity;
+import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupOneActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupThreeActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.SignupTwoActivity;
@@ -520,6 +521,25 @@ public class UserSharedImp implements UserShared, SignupShared {
         sharedPreferences = context.getSharedPreferences(LoginActivity.class.getName(), Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.clear();
+        editor.apply();
+    }
+
+    @Override
+    public boolean isActivityOnBackground() {
+        SharedPreferences sharedPref = context.getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
+        String status = sharedPref.getString(BuildConfig.STATUS, "false");
+        if (status.equals("true")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void saveActivityStatus(String status) {
+        SharedPreferences sharedPref = context.getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+        editor.putString(BuildConfig.STATUS, status);
         editor.apply();
     }
 

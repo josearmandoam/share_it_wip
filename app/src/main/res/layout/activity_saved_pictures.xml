@@ -39,4 +39,27 @@
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:id="@+id/saved_pictures_lyt_empty_photos"
+        android:visibility="gone"
+        android:layout_below="@id/saved_pictures_vw_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/empty_photos_iv_picture"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/empty_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/empty_photos_tv_title"
+            android:layout_marginTop="16dp"
+            android:text="@string/empty_saved_photos"
+            android:layout_below="@+id/empty_photos_iv_picture"
+            android:padding="16dp"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </RelativeLayout>

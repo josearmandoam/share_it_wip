@@ -46,6 +46,8 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     private static final String MESSAGE = "body";
     private static final String TOKEN = "token";
     private static final String NOT_SEEN = "not seen";
+    private static final String ACTIVITY_OPEN = "false";
+    private static final String ACTIVITY_DESTROYED = "true";
     @BindView(R.id.main_tablayout)
     TabLayout tabLayout;
     @BindView(R.id.main_viewpager)
@@ -92,6 +94,7 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     }
 
     private void initialilze() {
+        userSharedImp.saveActivityStatus(ACTIVITY_OPEN);
         presenter = new MainPresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
@@ -120,8 +123,9 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
 
     @Override
     protected void onResume() {
+        userSharedImp.saveActivityStatus(ACTIVITY_OPEN);
         super.onResume();
-        feedFragment.parentResume();
+//        feedFragment.parentResume();
         registerReceiver(mMessageReceiver, new IntentFilter("broadcast"));
         presenter.checkNewNotificationsReceived();
     }
@@ -129,7 +133,14 @@ public class MainActivity extends BaseActivty implements TabLayout.OnTabSelected
     @Override
     protected void onPause() {
         super.onPause();
+        userSharedImp.saveActivityStatus(ACTIVITY_DESTROYED);
         unregisterReceiver(mMessageReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        userSharedImp.saveActivityStatus(ACTIVITY_DESTROYED);
+        super.onDestroy();
     }
 
     @Override

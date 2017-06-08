@@ -273,4 +273,9 @@ public class GetUserBDImp implements GetUserBD {
         List<NotificationLineBD> notificationLineBDs = new Select().from(NotificationLineBD.class).execute();
         return parseNotificationLines(notificationLineBDs);
     }
+
+    @Override
+    public void removeAllNotifications() {
+        new Delete().from(NotificationLineBD.class).execute();
+    }
 }

@@ -14,6 +14,11 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 public class ShowSnackBarImp implements ShowSnackBar {
     Activity activity;
+    View root;
+
+    public ShowSnackBarImp(View layout) {
+        root = layout;
+    }
 
     public ShowSnackBarImp(Activity activity) {
         this.activity = activity;
@@ -21,7 +26,11 @@ public class ShowSnackBarImp implements ShowSnackBar {
 
     @Override
     public void show(String msg, int color) {
-        final Snackbar snackbar = Snackbar.make(activity.getCurrentFocus(), msg, Snackbar.LENGTH_LONG);
+        final Snackbar snackbar;
+        if (activity != null)
+             snackbar = Snackbar.make(activity.getCurrentFocus(), msg, Snackbar.LENGTH_LONG);
+        else
+            snackbar = Snackbar.make(root, msg, Snackbar.LENGTH_LONG);
         snackbar.getView().setBackgroundColor(color);
         View view = snackbar.getView();
 

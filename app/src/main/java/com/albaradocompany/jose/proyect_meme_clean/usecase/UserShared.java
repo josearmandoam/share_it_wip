@@ -8,6 +8,10 @@ import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
  */
 
 public interface UserShared {
+    boolean isActivityOnBackground();
+
+    void saveActivityStatus(String status);
+
     boolean isLogged();
 
     void cleanUserLogged();

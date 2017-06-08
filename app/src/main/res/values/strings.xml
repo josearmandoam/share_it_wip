@@ -123,4 +123,14 @@
     <string name="write_any_message">Write any message</string>
     <string name="error_ocurred">An error ocurred</string>
     <string name="select_one_contact">Select one contact: </string>
+    <string name="empty_feed">You are not following anyone</string>
+    <string name="empty_notifications">Start a new conversation!</string>
+    <string name="empty_fee_search">Click here to search people!</string>
+    <string name="empty_photos">There is no photo added!</string>
+    <string name="empty_saved_photos">There is no photo saved!</string>
+    <string name="first_message">Hey! Be the first sending a message!</string>
+    <string name="first_comment">Hey! Be the first sending a comment!</string>
+    <string name="start_finding_people">Start finding people!</string>
+    <string name="not_user_found">Not user found with that username</string>
+    <string name="ok">Ok</string>
 </resources>

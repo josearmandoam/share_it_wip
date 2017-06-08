@@ -2,7 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +10,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -22,6 +23,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
@@ -62,8 +64,12 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     EditText comment;
     @BindView(R.id.comments_ibtn_send)
     ImageButton btn_send;
+    @BindView(R.id.comments_lyt_container)
+    RelativeLayout layout;
     @BindView(R.id.comments_pbr)
     ProgressBar progressBar;
+    @BindView(R.id.comments_tv_empty_comments)
+    TextView empty_comment;
 //    @BindView(R.id.comments_swipe_refresh)
 //    SwipeRefreshLayout swipeRefreshLayout;
 
@@ -91,6 +97,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
     GetUserBDImp getUserBDImp;
     @Inject
     UserSharedImp userSharedImp;
+    private DropCommentDialog dialog;
 
     @OnClick(R.id.comments_ibtn_send)
     public void onSendCommentClicked(View view) {
@@ -150,24 +157,32 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
         userBD = getUserBDImp.getUserBD(userSharedImp.getUserID());
 
         getDataBundle();
-        adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked, userSharedImp.getUserID());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-
+        if (comments.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            empty_comment.setVisibility(View.VISIBLE);
+        } else {
+            adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked, userSharedImp.getUserID());
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
+            empty_comment.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         presenter = new CommentPresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
 
-        showSnackBarImp = new ShowSnackBarImp(this);
+        showSnackBarImp = new ShowSnackBarImp(layout);
 
 //        initializeSwipeRefresh();
     }
 
     private void updateRecycler() {
-        adapter.clear();
-        adapter.setList(comments);
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            adapter.clear();
+            adapter.setList(comments);
+            adapter.notifyDataSetChanged();
+        }
     }
 
 //    private void initializeSwipeRefresh() {
@@ -236,17 +251,17 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     @Override
     public void onNoInternetAvailable() {
-        showSnackBarImp.show(comment_failed, Color.RED);
+        showSnackBarImp.show(comment_failed, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void shoError(Exception e) {
-        showSnackBarImp.show(e.getMessage(), Color.RED);
+        showSnackBarImp.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showFailure() {
-        showSnackBarImp.show(comment_failed, Color.RED);
+        showSnackBarImp.show(comment_failed, BuildConfig.COLOR_RED);
     }
 
     @Override
@@ -259,17 +274,18 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
 
     @Override
     public void showDialogDropComment(Comment comment) {
-        new DropCommentDialog(this, comment);
+        dialog = new DropCommentDialog(this, comment);
+        dialog.show(getFragmentManager(), DropCommentDialog.class.getName());
     }
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBarImp.show(error_update_comments, Color.RED);
+        showSnackBarImp.show(error_update_comments, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBarImp.show(e.getMessage(), Color.RED);
+        showSnackBarImp.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override

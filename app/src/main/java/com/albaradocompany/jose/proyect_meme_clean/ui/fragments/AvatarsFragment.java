@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
@@ -43,6 +44,8 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     ProgressBar pbr;
     @BindView(R.id.avatars_listAvatar)
     RecyclerView recyclerView;
+    @BindView(R.id.avatars_lyt_container)
+    FrameLayout layout;
     @BindString(R.string.noInternetAvailable)
     String noInternet;
     @BindString(R.string.error)
@@ -86,7 +89,7 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
         presenter = new AvatarsPresenter(interactor);
         presenter.setView(this);
         presenter.setNavigator(this);
-        showSnackBar = new ShowSnackBarImp(activity);
+        showSnackBar = new ShowSnackBarImp(layout);
 
     }
 
@@ -126,7 +129,8 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
 
     @Override
     public void showAvatarClicked(Avatar avatar) {
-        ConfirmAvatarDialog c = new ConfirmAvatarDialog(activity, avatar, action);
+        ConfirmAvatarDialog c = new ConfirmAvatarDialog(avatar, action);
+        c.show(getActivity().getFragmentManager(), ConfirmAvatarDialog.class.getName());
     }
 
     public UIComponent component() {

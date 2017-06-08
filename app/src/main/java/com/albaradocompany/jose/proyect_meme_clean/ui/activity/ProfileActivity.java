@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,13 +44,14 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.View, AbsProfilePresenter.Navigator {
 
+    private static final String PRIVATE = "private";
     private final int LOW_VISIVILITY = 50;
     private final int HIGHT_VISIVILITY = 255;
 
     @BindView(R.id.profile_btn_menu)
     ImageButton menu;
     @BindView(R.id.profile_btn_edit)
-    ImageButton edit;
+    FloatingActionButton edit;
     @BindView(R.id.profile_iv_photo)
     ImageView profile;
     @BindView(R.id.profile_iv_background)
@@ -80,6 +82,8 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     ImageButton email;
     @BindView(R.id.profile_ibtn_instagram)
     ImageButton instagram;
+    @BindView(R.id.profile_lyt_empty_photos)
+    RelativeLayout empty_photos;
     @BindDrawable(R.drawable.menu_exp)
     Drawable menuExp;
     @BindDrawable(R.drawable.menu)
@@ -108,10 +112,8 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     String msg_twitter;
     @BindString(R.string.open_email)
     String msg_email;
-    @BindString(R.string.go)
-    String go;
-    @BindString(R.string.send)
-    String send;
+    @BindString(R.string.ok)
+    String ok;
     @BindString(R.string.facebook_so)
     String title_facebook;
     @BindString(R.string.instagram_so)
@@ -322,7 +324,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
 
     @Override
     public void navigateToBack() {
-       this.finish();
+        this.finish();
     }
 
     public static void openSavedPictures(Context ctx) {
@@ -372,6 +374,14 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         recyclerPhotos.setHasFixedSize(true);
         adapter = new PhotosRecyclerAdapter(this, getUserBD.parsePicturesBDList(userphotos), onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
+        if (getUserBD.parsePicturesBDList(userphotos).isEmpty()) {
+            recyclerPhotos.setVisibility(View.GONE);
+            empty_photos.setVisibility(View.VISIBLE);
+        } else {
+            recyclerPhotos.setVisibility(View.VISIBLE);
+            empty_photos.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -388,13 +398,15 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_facebook)
                 .setTitle(title_facebook)
-                .setMessage(msg_facebook)
-                .setPositiveButton(go, new DialogInterface.OnClickListener() {
+                .setMessage("Your Facebook is public " + "\n" + " @" + userBD.social_facebook)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onFacebookDialogAccepted();
+//                        presenter.onFacebookDialogAccepted();
+                        alertDialog.dismiss();
                     }
-                })
+                }
+                )
                 .create();
         alertDialog.show();
     }
@@ -408,11 +420,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_whatsapp)
                 .setTitle(title_whatsapp_so)
-                .setMessage(msg_whatsapp)
-                .setPositiveButton(send, new DialogInterface.OnClickListener() {
+                .setMessage("Your WhatsApp is public " + "\n" + " " + userBD.social_whatsapp)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onWhatsappDialogAccepted();
+//                        presenter.onWhatsappDialogAccepted();
+                        alertDialog.dismiss();
                     }
                 })
                 .create();
@@ -428,11 +441,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_instagram)
                 .setTitle(title_instagram)
-                .setMessage(msg_instagram)
-                .setPositiveButton(go, new DialogInterface.OnClickListener() {
+                .setMessage("Your Instagram is public " + "\n" + " @" + userBD.social_instagram)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onInstagramDialogAccepted();
+//                        presenter.onInstagramDialogAccepted();
+                        alertDialog.dismiss();
                     }
                 })
                 .create();
@@ -448,11 +462,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_website)
                 .setTitle(title_website)
-                .setMessage(msg_website)
-                .setPositiveButton(go, new DialogInterface.OnClickListener() {
+                .setMessage("Your Website is public " + "\n" + " " + userBD.social_website)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onWebsiteDialogAccepted();
+//                        presenter.onWebsiteDialogAccepted();
+                        alertDialog.dismiss();
                     }
                 })
                 .create();
@@ -468,11 +483,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_twitter)
                 .setTitle(title_twitter_so)
-                .setMessage(msg_twitter)
-                .setPositiveButton(go, new DialogInterface.OnClickListener() {
+                .setMessage("Your Twitter is public " + "\n" + " @" + userBD.social_twitter)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onTwitterDialogAccepted();
+//                        presenter.onTwitterDialogAccepted();
+                        alertDialog.dismiss();
                     }
                 })
                 .create();
@@ -519,11 +535,12 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_email)
                 .setTitle(title_email_so)
-                .setMessage(msg_email)
-                .setPositiveButton(send, new DialogInterface.OnClickListener() {
+                .setMessage("Your Email is public " + "\n" + " " + userBD.social_email)
+                .setPositiveButton(ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onEmailDialogAccepted();
+//                        presenter.onEmailDialogAccepted();
+                        alertDialog.dismiss();
                     }
                 })
                 .create();
@@ -531,7 +548,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     }
 
     private void updatePrivacity() {
-        if (userBD.social_instagram.equals("private")) {
+        if (userBD.social_instagram.equals(PRIVATE)) {
             instagram.setEnabled(false);
             instagram.setAlpha(LOW_VISIVILITY);
             instagram.setBackgroundColor(android.R.color.transparent);
@@ -539,35 +556,35 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
             instagram.setEnabled(true);
             instagram.setAlpha(HIGHT_VISIVILITY);
         }
-        if (userBD.social_facebook.equals("private")) {
+        if (userBD.social_facebook.equals(PRIVATE)) {
             facebook.setEnabled(false);
             facebook.setAlpha(LOW_VISIVILITY);
         } else {
             facebook.setEnabled(true);
             facebook.setAlpha(HIGHT_VISIVILITY);
         }
-        if (userBD.social_twitter.equals("private")) {
+        if (userBD.social_twitter.equals(PRIVATE)) {
             twitter.setEnabled(false);
             twitter.setAlpha(LOW_VISIVILITY);
         } else {
             twitter.setEnabled(true);
             twitter.setAlpha(HIGHT_VISIVILITY);
         }
-        if (userBD.social_whatsapp.equals("private")) {
+        if (userBD.social_whatsapp.equals(PRIVATE)) {
             whatsapp.setEnabled(false);
             whatsapp.setAlpha(LOW_VISIVILITY);
         } else {
             whatsapp.setEnabled(true);
             whatsapp.setAlpha(HIGHT_VISIVILITY);
         }
-        if (userBD.social_website.equals("private")) {
+        if (userBD.social_website.equals(PRIVATE)) {
             website.setEnabled(false);
             website.setAlpha(LOW_VISIVILITY);
         } else {
             website.setEnabled(true);
             website.setAlpha(HIGHT_VISIVILITY);
         }
-        if (userBD.social_email.equals("private")) {
+        if (userBD.social_email.equals(PRIVATE)) {
             email.setEnabled(false);
             email.setAlpha(LOW_VISIVILITY);
         } else {

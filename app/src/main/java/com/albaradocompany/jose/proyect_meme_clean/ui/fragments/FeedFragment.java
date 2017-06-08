@@ -2,7 +2,6 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -14,11 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
@@ -48,6 +50,7 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -79,6 +82,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     RapidFloatingActionLayout rfaLayout;
     @BindView(R.id.feed_swiperefreshlayout)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.feed_empty_feed)
+    RelativeLayout empty_feed;
+    @BindView(R.id.feed_lyt_container)
+    FrameLayout layout;
+
 
     RapidFloatingActionHelper rfaHelper;
     AbsFeedPresenter presenter;
@@ -89,6 +97,12 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     private List<Post> posts;
     private LinearLayoutManager layoutManager;
     private Parcelable mListState;
+    private LikesDialog dialog;
+
+    @OnClick({R.id.empty_feed_tv_search, R.id.empty_feed_iv_search})
+    public void onSearchClicked(View view) {
+        presenter.onSearchClickedFAB();
+    }
 
     FeedRecyclerAdapter.Listener onClickListener = new FeedRecyclerAdapter.Listener() {
         @Override
@@ -152,6 +166,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     @Override
     public void onResume() {
         super.onResume();
+        presenter.resume();
     }
 
     private void initialize() {
@@ -197,21 +212,28 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showPosts(List<Post> listpost) {
-        if (posts.isEmpty()) {
-            initializeRecycler(listpost);
-            this.posts = listpost;
+        if (listpost.size() == 1) {
+            empty_feed.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         } else {
-            updatePosts(listpost);
+            if (posts.isEmpty()) {
+                initializeRecycler(listpost);
+                this.posts = listpost;
+            } else {
+                updatePosts(listpost);
+            }
+            empty_feed.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -236,7 +258,8 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void showLikesDialog(List<Like> likes) {
-        new LikesDialog(getContext(), likes);
+        dialog = new LikesDialog(likes);
+        dialog.show(getActivity().getFragmentManager(), LikesDialog.class.getName());
     }
 
     @Override
@@ -290,22 +313,30 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void updatePosts(List<Post> listpost) {
-        if (RecyclerHelper.hasNewPosts(listpost, posts)) {
-            adapter.setNewPosts(RecyclerHelper.getNewPosts(listpost, posts));
+        if (listpost.size() == 1) {
+            empty_feed.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         } else {
-            for (int i = 0; i < listpost.size(); i++) {
-                posts.get(i).setCommentList(RecyclerHelper.hasPostNewComments(listpost.get(i).getCommentList(), posts.get(i).getCommentList()));
-                posts.get(i).setLikeList(RecyclerHelper.hasPostNewLikes(listpost.get(i).getLikeList(), posts.get(i).getLikeList()));
-                adapter.updateListAt(i, posts.get(i));
-                adapter.notifyItemChanged(i);
-            }
+            if (RecyclerHelper.hasNewPosts(listpost, posts)) {
+                adapter.setNewPosts(RecyclerHelper.getNewPosts(listpost, posts));
+            } else {
+                for (int i = 0; i < listpost.size(); i++) {
+                    posts.get(i).setCommentList(RecyclerHelper.hasPostNewComments(listpost.get(i).getCommentList(), posts.get(i).getCommentList()));
+                    posts.get(i).setLikeList(RecyclerHelper.hasPostNewLikes(listpost.get(i).getLikeList(), posts.get(i).getLikeList()));
+                    adapter.updateListAt(i, posts.get(i));
+                    adapter.notifyItemChanged(i);
+                }
 //            adapter.updatePosts(RecyclerHelper.updateLikesAndComments(listpost, posts));
+            }
+            empty_feed.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void showNoFeedAvailable() {
-
+        recyclerView.setVisibility(View.GONE);
+        empty_feed.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -486,17 +517,17 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     public void parentResume() {
 //        if (mListState != null) {
 //            layoutManager.onRestoreInstanceState(mListState);
-//        } else {
-            if (presenter != null)
-                presenter.resume();
+        if (presenter != null) {
+            presenter.resume();
+        }
 //        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        mListState = layoutManager.onSaveInstanceState();
-        outState.putParcelable(LIST_STATE_KEY, mListState);
-        super.onSaveInstanceState(outState);
+//        mListState = layoutManager.onSaveInstanceState();
+//        outState.putParcelable(LIST_STATE_KEY, mListState);
+//        super.onSaveInstanceState(outState);
     }
 
     @Override

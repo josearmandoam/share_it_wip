@@ -39,6 +39,10 @@ public abstract class AbsUserPresenter extends Presenter<AbsUserPresenter.View, 
 
     public abstract void onBackClicked();
 
+    public abstract void updateFollow(String userId, String xUserId, String xUserNameComplete, String profile, String action);
+
+    public abstract void onChatClicked(String userId, String xUserId, String xCompleteNAME, String userCompleteName);
+
     public interface View {
         void hideLoading();
 
@@ -89,6 +93,12 @@ public abstract class AbsUserPresenter extends Presenter<AbsUserPresenter.View, 
         void showEmailDialog();
 
         void showUser(User user);
+
+        void showNewFloatingButton();
+
+        void hideFloatinButton();
+
+        void showInitialFloatingButton();
     }
 
     public interface Navigator {
@@ -107,5 +117,7 @@ public abstract class AbsUserPresenter extends Presenter<AbsUserPresenter.View, 
         void navigateToPicture(Picture picture);
 
         void navigateToBack();
+
+        void openNotificationsPage(String userId, String xUserId, String xCompleteNAME, String userCompleteName);
     }
 }

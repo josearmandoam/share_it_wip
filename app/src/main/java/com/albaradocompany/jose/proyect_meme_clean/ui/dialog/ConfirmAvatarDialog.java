@@ -2,10 +2,13 @@ package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.annotation.StyleRes;
+import android.os.Bundle;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -30,7 +33,7 @@ import butterknife.OnClick;
  * Created by jose on 23/04/2017.
  */
 
-public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar.View, AbsConfirmAvatar.Navigator {
+public class ConfirmAvatarDialog extends DialogFragment implements AbsConfirmAvatar.View, AbsConfirmAvatar.Navigator {
     @BindView(R.id.confirm_avatar_accept)
     ImageButton accept;
     @BindView(R.id.confirm_avatar_image)
@@ -43,38 +46,38 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
 
     int action;
     private AlertDialog dialog;
-    private Activity activity;
     private Avatar avatar;
     private AbsConfirmAvatar presenter;
     @Inject
     UserSharedImp userSharedImp;
 
-    public ConfirmAvatarDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
-
-    public ConfirmAvatarDialog(Context context, @StyleRes int themeResId) {
-        super(context, themeResId);
-    }
-
-    public ConfirmAvatarDialog(Activity activity, Avatar avatar, int action) {
-        super(activity);
-        this.activity = activity;
+    public ConfirmAvatarDialog(Avatar avatar, int action) {
         this.avatar = avatar;
         this.action = action;
-        dialog = new AlertDialog.Builder(activity)
-                .setView(R.layout.dialog_confirm_avatar)
+    }
+
+    @Override
+    public void onResume() {
+        dialog.getWindow().setLayout(getWidth(), getWidth());
+        super.onResume();
+    }
+
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_confirm_avatar, null);
+        dialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
                 .create();
-        dialog.show();
-        dialog.getWindow().setLayout((int) (getWidth() / 1.5), (int) (getWidth() / 1.5));
+        ButterKnife.bind(this, view);
         initialize();
         loadAvatarImage();
         getComponent().inject(this);
-
+        return dialog;
     }
 
     private int getWidth() {
-        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -82,14 +85,13 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
     }
 
     private void initialize() {
-        ButterKnife.bind(this, dialog);
-        presenter = new ConfirmAvatarPresenter(activity);
+        presenter = new ConfirmAvatarPresenter(getActivity());
         presenter.setView(this);
         presenter.setNavigator(this);
     }
 
     public void loadAvatarImage() {
-        Picasso.with(activity)
+        Picasso.with(getActivity())
                 .load(avatar.getImagePath())
                 .into(avatarImage);
     }
@@ -100,19 +102,19 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
         switch (action) {
             case 0:
                 userSharedImp.saveUserAvatar(avatar);
-                activity.finish();
+                getActivity().finish();
                 break;
             case 1:
                 userSharedImp.saveProfileAvatar(avatar);
                 userSharedImp.saveProfileFTPSelected("true");
                 userSharedImp.saveProfileChanges("true");
-                activity.finish();
+                getActivity().finish();
                 break;
             case 2:
                 userSharedImp.saveBackgroundAvatar(avatar);
                 userSharedImp.saveBackgroundFTPSelected("true");
                 userSharedImp.saveBackgroundChanges("true");
-                activity.finish();
+                getActivity().finish();
                 break;
         }
 
@@ -120,6 +122,6 @@ public class ConfirmAvatarDialog extends AlertDialog implements AbsConfirmAvatar
 
     protected UIComponent getComponent() {
 
-        return ((AddPhotoActivty) activity).component();
+        return ((AddPhotoActivty) getActivity()).component();
     }
 }

@@ -1,10 +1,14 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateCommentApiImp;
@@ -26,7 +30,7 @@ import butterknife.OnClick;
  * Created by jose on 15/05/2017.
  */
 
-public class DropCommentDialog extends AlertDialog implements AbsDropCommentPresenter.Navigator, AbsDropCommentPresenter.View {
+public class DropCommentDialog extends DialogFragment implements AbsDropCommentPresenter.Navigator, AbsDropCommentPresenter.View {
     private static final String DELETE = "delete";
 
     Comment comment;
@@ -37,6 +41,8 @@ public class DropCommentDialog extends AlertDialog implements AbsDropCommentPres
 
     @BindView(R.id.drop_comment_pbr)
     ProgressBar progressBar;
+    @BindView(R.id.drop_comment_lyt_container)
+    RelativeLayout layout;
     @BindString(R.string.error_drop_comment)
     String error_drop_comment;
 
@@ -46,25 +52,27 @@ public class DropCommentDialog extends AlertDialog implements AbsDropCommentPres
     }
 
     public DropCommentDialog(Context context, Comment comment) {
-        super(context);
         this.context = context;
         this.comment = comment;
-        initialize();
     }
 
     private void initialize() {
-        dialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_drop_comment)
-                .create();
-        dialog.show();
-
         ButterKnife.bind(this, dialog);
 
         presenter = new DropCommentPresenter(getContext());
         presenter.setNavigator(this);
         presenter.setView(this);
 
-        showSnackBarImp = new ShowSnackBarImp(getOwnerActivity());
+        showSnackBarImp = new ShowSnackBarImp(layout);
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        dialog = new AlertDialog.Builder(context)
+                .setView(R.layout.dialog_drop_comment)
+                .create();
+        initialize();
+        return dialog;
     }
 
     public UpdateCommentInteractor getDELCommentInteractor() {

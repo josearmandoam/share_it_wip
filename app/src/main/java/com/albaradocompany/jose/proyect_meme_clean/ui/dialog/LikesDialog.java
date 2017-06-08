@@ -1,11 +1,16 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
@@ -31,10 +36,11 @@ import butterknife.OnClick;
  * Created by jose on 14/05/2017.
  */
 
-public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, AbsLikesPresenter.Navigator {
+public class LikesDialog extends DialogFragment implements AbsLikesPresenter.View, AbsLikesPresenter.Navigator {
     @BindView(R.id.likes_rv)
     RecyclerView recyclerView;
-    Context context;
+    @BindView(R.id.likes_tv_empty_likes)
+    TextView empty_likes;
 
     List<Like> listLikes;
     AlertDialog dialog;
@@ -60,33 +66,37 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
         }
     };
 
-    public LikesDialog(Context context, List<Like> likes) {
-        super(context);
-        this.context = context;
+    public LikesDialog(List<Like> likes) {
         this.listLikes = likes;
-
-        initialize();
     }
 
     private void initialize() {
-        initializeDialog();
-        ButterKnife.bind(this, dialog);
         getComponent().inject(this);
-        adapter = new LikesRecyclerAdapter(getContext(), listLikes, onUserClicked);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
-
-        presenter = new LikesPresenter(getContext());
+        if (listLikes.size() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            empty_likes.setVisibility(View.VISIBLE);
+        } else {
+            adapter = new LikesRecyclerAdapter(getActivity(), listLikes, onUserClicked);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setVisibility(View.VISIBLE);
+            empty_likes.setVisibility(View.GONE);
+        }
+        presenter = new LikesPresenter(getActivity());
         presenter.setView(this);
         presenter.setNavigator(this);
     }
 
-    private void initializeDialog() {
-        dialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_likes)
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_likes, null);
+        dialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
                 .create();
-        dialog.show();
+        ButterKnife.bind(this, view);
+        initialize();
+        return dialog;
     }
 
     @Override
@@ -98,9 +108,9 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
     public void navigateToUserDetail(Like like) {
         dialog.dismiss();
         if (like.getUserId().equals(userSharedImp.getUserID()))
-            openUserProfile(getContext());
+            openUserProfile(getActivity());
         else
-            openUserDetail(getContext(), like);
+            openUserDetail(getActivity(), like);
     }
 
     public static void openUserDetail(Context ctx, Like like) {
@@ -115,9 +125,9 @@ public class LikesDialog extends AlertDialog implements AbsLikesPresenter.View, 
     }
 
     protected UIComponent getComponent() {
-        if (context instanceof MainActivity)
-            return ((MainActivity) context).component();
+        if (getActivity() instanceof MainActivity)
+            return ((MainActivity) getActivity()).component();
         else
-            return ((PictureActivity) context).component();
+            return ((PictureActivity) getActivity()).component();
     }
 }

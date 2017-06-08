@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification_lyt_container"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <View
@@ -73,6 +74,18 @@
         android:layout_alignTop="@+id/notification_vw_message"
         android:layout_alignBottom="@+id/notification_vw_message"
         android:background="@drawable/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/notification_tv_empty_messages"
+        android:layout_below="@+id/notification_view"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/first_message"
+        android:background="@drawable/border_text_orange"
+        android:textSize="15sp"
+        android:padding="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>

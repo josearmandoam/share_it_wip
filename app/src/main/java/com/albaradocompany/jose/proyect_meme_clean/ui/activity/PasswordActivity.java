@@ -8,12 +8,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePasswordApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UserByEmailApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Login;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePasswordInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
@@ -60,6 +62,8 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     EditText password2;
     @BindView(R.id.password_tv_question)
     TextView question;
+    @BindView(R.id.password_lyt_container)
+    FrameLayout layout;
 
     @BindString(R.string.default_font)
     String default_font;
@@ -97,7 +101,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
         if (!email.getText().toString().isEmpty()) {
             presenter.onEmailSubmitClicked(interactor);
         } else {
-            showSnackBar.show(empty_email, Color.RED);
+            showSnackBar.show(empty_email, BuildConfig.COLOR_RED);
         }
     }
 
@@ -112,7 +116,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
             passwordInteractor = new UpdatePasswordInteractor(new UpdatePasswordApiImp(user.getIdUser(), password1.getText().toString()), new MainThreadImp(), new ThreadExecutor());
             presenter.onUpdateSubmitClicked(passwordInteractor);
         } else {
-            showSnackBar.show(error_passwords, Color.RED);
+            showSnackBar.show(error_passwords, BuildConfig.COLOR_RED);
         }
     }
 
@@ -140,7 +144,7 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
     }
 
     private void initialize() {
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
     }
 
     private void initializePresenter() {
@@ -162,12 +166,12 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override
@@ -211,33 +215,33 @@ public class PasswordActivity extends BaseActivty implements AbsPassword.View, A
 
     @Override
     public void showEmailSucces(Login login) {
-        showSnackBar.show(correct_email, Color.GREEN);
+        showSnackBar.show(correct_email, BuildConfig.COLOR_GREEN);
         this.user = login;
     }
 
     @Override
     public void showQuestionsSuccess() {
-        showSnackBar.show(correct_answers, Color.GREEN);
+        showSnackBar.show(correct_answers, BuildConfig.COLOR_GREEN);
     }
 
     @Override
     public void shoQuestionsFailure() {
-        showSnackBar.show(failed_answers, Color.RED);
+        showSnackBar.show(failed_answers, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showUpdateSuccess() {
-        showSnackBar.show(password_changed, Color.GREEN);
+        showSnackBar.show(password_changed, BuildConfig.COLOR_GREEN);
     }
 
     @Override
     public void showUpdateFailure() {
-        showSnackBar.show(password_not_changed, Color.RED);
+        showSnackBar.show(password_not_changed, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showEmailFailure() {
-        showSnackBar.show(failed_email, Color.RED);
+        showSnackBar.show(failed_email, BuildConfig.COLOR_RED);
     }
 
     @Override

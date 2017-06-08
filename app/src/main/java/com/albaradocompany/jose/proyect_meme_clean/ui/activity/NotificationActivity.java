@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
@@ -46,12 +47,17 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     RecyclerView recyclerView;
     @BindView(R.id.notification_tv_name)
     TextView tvName;
+    @BindView(R.id.notification_lyt_container)
+    RelativeLayout layout;
     @BindView(R.id.notification_et_message)
     EditText message;
     @BindView(R.id.notification_ibtn_send)
     ImageButton send;
     @BindView(R.id.notification_progressbar)
     ProgressBar progressBar;
+    @BindView(R.id.notification_tv_empty_messages)
+    TextView empty_notifications;
+
     @Inject
     GetUserBDImp db;
     private LinearLayoutManager linearLayoutManager;
@@ -119,28 +125,34 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
         presenter.initialize();
 
         presenter.initializeRecycler(db.getAllNotifications(userId), mUserId);
-        snackBar = new ShowSnackBarImp(this);
+        snackBar = new ShowSnackBarImp(layout);
     }
 
     @Override
     public void showNotifications(List<NotificationLine> notifications, String mUserId) {
-        if (adapter == null) {
-            adapter = new NotificationDialogRecyclerAdapter(this, notifications, mUserId);
-//            setNotificationList(notifications);
-            linearLayoutManager = new LinearLayoutManager(this);
-            linearLayoutManager.setStackFromEnd(true);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            db.updateNotificationsState(userId);
-            recyclerView.setAdapter(adapter);
+        if (notifications.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            empty_notifications.setVisibility(View.VISIBLE);
         } else {
-            adapter.clear();
-            adapter.addNewNotifications(notifications);
+            if (adapter == null) {
+                adapter = new NotificationDialogRecyclerAdapter(this, notifications, mUserId);
 //            setNotificationList(notifications);
-            recyclerView.scrollToPosition(notifications.size() - 1);
-            db.updateNotificationsState(userId);
-            adapter.notifyDataSetChanged();
+                linearLayoutManager = new LinearLayoutManager(this);
+                linearLayoutManager.setStackFromEnd(true);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                db.updateNotificationsState(userId);
+                recyclerView.setAdapter(adapter);
+            } else {
+                adapter.clear();
+                adapter.addNewNotifications(notifications);
+//            setNotificationList(notifications);
+                recyclerView.scrollToPosition(notifications.size() - 1);
+                db.updateNotificationsState(userId);
+                adapter.notifyDataSetChanged();
+            }
+            empty_notifications.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override

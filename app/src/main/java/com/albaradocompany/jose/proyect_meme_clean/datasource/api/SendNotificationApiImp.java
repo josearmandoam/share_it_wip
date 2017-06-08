@@ -21,14 +21,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SendNotificationApiImp implements SendNotification, Callback<SendNotificationApiResponse> {
 
-    String userId;
+    String to;
     String title;
     String message;
+    String time;
+    String sender;
 
-    public SendNotificationApiImp(String userId, String title, String message) {
-        this.userId = userId;
+    public SendNotificationApiImp(String to, String title, String message, String time, String sender) {
+        this.to = to;
         this.title = title;
         this.message = message;
+        this.time = time;
+        this.sender = sender;
     }
 
     SendNotification.Listener listener = new NullListener();
@@ -44,7 +48,7 @@ public class SendNotificationApiImp implements SendNotification, Callback<SendNo
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         SendNotificationService service = retrofit.create(SendNotificationService.class);
-        service.sendNotification(userId,message,title).enqueue(this);
+        service.sendNotification(to, message, title, time, sender).enqueue(this);
     }
 
     @Override

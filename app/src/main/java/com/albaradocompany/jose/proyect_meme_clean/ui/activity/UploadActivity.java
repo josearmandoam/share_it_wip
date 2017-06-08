@@ -86,7 +86,7 @@ public class UploadActivity extends BaseActivty implements AbsUploadPresenter.Vi
         layout.requestFocus();
 
         getExtras(getIntent());
-        showSnackBarImp = new ShowSnackBarImp(this);
+        showSnackBarImp = new ShowSnackBarImp(layout);
     }
 
     @Override

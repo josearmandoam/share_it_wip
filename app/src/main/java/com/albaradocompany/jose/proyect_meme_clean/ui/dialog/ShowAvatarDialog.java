@@ -1,11 +1,16 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -35,7 +40,7 @@ import butterknife.OnClick;
  * Created by jose on 23/04/2017.
  */
 
-public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View, AbsShowAvatar.Navigator {
+public class ShowAvatarDialog extends DialogFragment implements AbsShowAvatar.View, AbsShowAvatar.Navigator {
 
     private static final int ACTION_SIGNUP = 0;
     private static final int ACTION_EDIT_PROFILE = 1;
@@ -66,7 +71,6 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
 
     private int action;
     AlertDialog dialog;
-    Context context;
     AbsShowAvatar presenter;
     int numberActivity;
     @Inject
@@ -74,12 +78,9 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     @Inject
     GetUserBDImp getUserBDImp;
 
-    public ShowAvatarDialog(Context context) {
-        super(context);
-    }
 
     private int getWidth() {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -87,49 +88,46 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void initializePresenter() {
-        presenter = new ShowAvatarPresenter(context);
+        presenter = new ShowAvatarPresenter(getActivity());
         presenter.setView(this);
         presenter.setNavigator(this);
         presenter.initialize();
     }
 
-    private void initialize() {
-        ButterKnife.bind(this, dialog);
-    }
-
-    public ShowAvatarDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-    }
-
-    public ShowAvatarDialog(Context context, int numberActivity, int action) {
-        super(context);
-        this.context = context;
+    public ShowAvatarDialog(int numberActivity, int action) {
         this.numberActivity = numberActivity;
         this.action = action;
-        getComponent().inject(this);
-        dialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_show_avatar)
-                .create();
-        dialog.show();
-        initialize();
-        dialog.getWindow().setLayout(getWidth(), getWidth());
-        initializePresenter();
+
     }
 
-    public ShowAvatarDialog(Context context, int numberActivity) {
-        super(context);
-        this.context = context;
+    public ShowAvatarDialog(int numberActivity) {
         this.numberActivity = numberActivity;
         action = 0;
-        getComponent().inject(this);
+    }
 
-        dialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_show_avatar)
-                .create();
-        dialog.show();
-        initialize();
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
         dialog.getWindow().setLayout(getWidth(), getWidth());
+        super.onResume();
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_show_avatar, null);
+        dialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+//        dialog.getWindow().setLayout(getWidth(), getWidth());
+        getComponent().inject(this);
+        ButterKnife.bind(this, view);
         initializePresenter();
+        return dialog;
     }
 
     @Override
@@ -165,7 +163,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 image.setImageURI(EditProfileActivity.backgroundUriReceived);
             } else {
                 if (userSharedImp.isBackgroundFTPSelected()) {
-                    Picasso.with(context).load(userSharedImp.getBackgroundAvatar()).into(image);
+                    Picasso.with(getActivity()).load(userSharedImp.getBackgroundAvatar()).into(image);
                 } else {
                     userSharedImp.showUserPhoto(image, userSharedImp.getPicturesDir() + "/"
                                     + getUserBDImp.getUserBD(userSharedImp.getUserID()).userId + "_background",
@@ -183,7 +181,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
                 image.setImageURI(EditProfileActivity.profileUriReceived);
             } else {
                 if (userSharedImp.isProfileFTPSelected()) {
-                    Picasso.with(context).load(userSharedImp.getProfileAvatar()).into(image);
+                    Picasso.with(getActivity()).load(userSharedImp.getProfileAvatar()).into(image);
                 } else {
                     userSharedImp.showUserPhoto(image, userSharedImp.getPicturesDir() + "/"
                                     + getUserBDImp.getUserBD(userSharedImp.getUserID()).userId + "_profile",
@@ -202,7 +200,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     }
 
     private void checkImageFromFTP() {
-        Picasso.with(context)
+        Picasso.with(getActivity())
                 .load(userSharedImp.getUserAvatar())
                 .error(defaultImageUser)
                 .into(image);
@@ -280,7 +278,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         EditProfileActivity.backgroundBitmapReceived = null;
         userSharedImp.saveBackgroundFTPSelected("false");
         dialog.dismiss();
-        ((EditProfileActivity) context).onResume();
+        ((EditProfileActivity) getActivity()).onResume();
     }
 
     private void deleteProfileEditProfile() {
@@ -290,7 +288,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         EditProfileActivity.profileUriReceived = null;
         EditProfileActivity.profileBitmapReceived = null;
         userSharedImp.saveProfileFTPSelected("false");
-        ((EditProfileActivity) context).onResume();
+        ((EditProfileActivity) getActivity()).onResume();
     }
 
     private void deleteProfileSignup() {
@@ -300,13 +298,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
         dialog.dismiss();
         switch (numberActivity) {
             case 1:
-                ((SignupOneActivity) context).onResume();
+                ((SignupOneActivity) getActivity()).onResume();
                 break;
             case 2:
-                ((SignupTwoActivity) context).onResume();
+                ((SignupTwoActivity) getActivity()).onResume();
                 break;
             case 3:
-                ((SignupThreeActivity) context).onResume();
+                ((SignupThreeActivity) getActivity()).onResume();
                 break;
             default:
                 break;
@@ -325,7 +323,7 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
 
     @Override
     public void navigateToEdit() {
-        openAddPhoto(context);
+        openAddPhoto(getActivity());
         dialog.dismiss();
     }
 
@@ -338,13 +336,13 @@ public class ShowAvatarDialog extends AlertDialog implements AbsShowAvatar.View,
     protected UIComponent getComponent() {
         switch (numberActivity) {
             case ACTIVITY_SIGNONE:
-                return ((SignupOneActivity) context).component();
+                return ((SignupOneActivity) getActivity()).component();
             case ACTIVIVY_SIGNTWO:
-                return ((SignupTwoActivity) context).component();
+                return ((SignupTwoActivity) getActivity()).component();
             case ACTIVITY_SIGNTHREE:
-                return ((SignupThreeActivity) context).component();
+                return ((SignupThreeActivity) getActivity()).component();
             case ACTIVITY_EDITPROFILE:
-                return ((EditProfileActivity) context).component();
+                return ((EditProfileActivity) getActivity()).component();
             default:
                 return null;
         }

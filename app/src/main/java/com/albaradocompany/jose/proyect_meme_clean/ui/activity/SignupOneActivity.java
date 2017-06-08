@@ -23,6 +23,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UserByEmailInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
@@ -102,6 +103,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     private ShowSnackBar showSnackBar;
     public static Uri uriReceived;
     public static Bitmap bitmapReceived;
+    private ShowAvatarDialog dialog;
 
     @OnClick(R.id.signup_button_back)
     public void onBackpressed(View view) {
@@ -145,7 +147,7 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
     }
 
     private void initialize() {
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
     }
 
     private void initializePresenter() {
@@ -216,7 +218,8 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void showImage() {
-        new ShowAvatarDialog(this, 1);
+        dialog = new ShowAvatarDialog(1);
+        dialog.show(getFragmentManager(), ShowAvatarDialog.class.getName());
     }
 
     @Override
@@ -233,17 +236,17 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), BuildConfig.COLOR_RED);
     }
 
     @Override
     public void showEmailRegistredAlready() {
-        showSnackBar.show(emailRegistred, Color.RED);
+        showSnackBar.show(emailRegistred, BuildConfig.COLOR_RED);
     }
 
     private void showDialogDate() {
@@ -280,23 +283,23 @@ public class SignupOneActivity extends BaseActivty implements AbsSignupOne.Navig
 
     private boolean checkFields() {
         if (name.getText().toString().isEmpty()) {
-            showSnackBar.show(nameErrorMessage, Color.RED);
+            showSnackBar.show(nameErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         if (lastName.getText().toString().isEmpty()) {
-            showSnackBar.show(lastNameErrorMessage, Color.RED);
+            showSnackBar.show(lastNameErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         if (email.getText().toString().isEmpty()) {
-            showSnackBar.show(emailErrorMessage, Color.RED);
+            showSnackBar.show(emailErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         if (!userSharedImp.isPhotoTaken()) {
-            showSnackBar.show(photoErrorMessage, Color.RED);
+            showSnackBar.show(photoErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         if (!userSharedImp.isDateBirthDayTaken()) {
-            showSnackBar.show(dateErrorMessage, Color.RED);
+            showSnackBar.show(dateErrorMessage, BuildConfig.COLOR_RED);
             return false;
         }
         return true;

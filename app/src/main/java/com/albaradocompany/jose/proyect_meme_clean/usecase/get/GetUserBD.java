@@ -69,4 +69,6 @@ public interface GetUserBD {
     void updateNotificationsState(String userId);
 
     List<NotificationLine> getAllNotifications();
+
+    void removeAllNotifications();
 }

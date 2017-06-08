@@ -10,7 +10,6 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateLikesApiImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateSavedPictureApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
@@ -24,7 +23,6 @@ import com.albaradocompany.jose.proyect_meme_clean.interactor.FeedInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.LikesInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.PicturesByIdInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateLikesInteractor;
-import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateSavedPictureInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.MainActivity;
@@ -34,12 +32,8 @@ import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetFeed;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetLikes;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.get.GetPicturesById;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateLike;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateSavedPicture;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -129,17 +123,21 @@ public class FeedPresenter extends AbsFeedPresenter {
         feedInteractor.getFeed(new GetFeed.Listener() {
             @Override
             public void onNoInternetAvailable() {
+                view.hideLoading();
+                view.showFloatingButton();
                 view.showNoInternetAvailable();
             }
 
             @Override
             public void onError(Exception e) {
+                view.hideLoading();
+                view.showFloatingButton();
                 view.showError(e);
             }
 
             @Override
             public void onFeedReceived(List<Feed> feeds) {
-                if (feeds.size()==0){
+                if (feeds.size() == 1 && feeds.get(0).getUserId().equals(userId)) {
                     view.hideLoading();
                     view.showFloatingButton();
                     view.showNoFeedAvailable();

@@ -18,6 +18,7 @@ import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ShowAvatarDialog;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.SignupTwoPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsSignupTwo;
@@ -107,7 +108,7 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
     }
 
     private void intialize() {
-        showSnackBar = new ShowSnackBarImp(this);
+        showSnackBar = new ShowSnackBarImp(layout);
         uriReceived = null;
         bitmapReceived = null;
 
@@ -155,7 +156,8 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
     @Override
     public void showImage() {
-        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(this, 2);
+        ShowAvatarDialog showAvatarDialog = new ShowAvatarDialog(2);
+        showAvatarDialog.show(getFragmentManager(), ShowAvatarDialog.class.getName());
     }
 
     @Override
@@ -185,19 +187,19 @@ public class SignupTwoActivity extends BaseActivty implements AbsSignupTwo.View,
 
     private boolean checkFields() {
         if (username.getText().toString().isEmpty()) {
-            showSnackBar.show(userError, Color.RED);
+            showSnackBar.show(userError, BuildConfig.COLOR_RED);
             return false;
         }
         if (password.getText().toString().isEmpty()) {
-            showSnackBar.show(passwordError, Color.RED);
+            showSnackBar.show(passwordError, BuildConfig.COLOR_RED);
             return false;
         }
         if (password2.getText().toString().isEmpty()) {
-            showSnackBar.show(passwordErrorS, Color.RED);
+            showSnackBar.show(passwordErrorS, BuildConfig.COLOR_RED);
             return false;
         }
         if (!password.getText().toString().equals(password2.getText().toString())) {
-            showSnackBar.show(passwordMatchError, Color.RED);
+            showSnackBar.show(passwordMatchError, BuildConfig.COLOR_RED);
             return false;
         }
         return true;

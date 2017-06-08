@@ -69,4 +69,5 @@ public final class BuildConfig {
     public static final String REGISTRATIO_USERNAME = "username";
     public static final String USER_TOKEN ="USER_TOKEN" ;
     public static final int COLOR_GRAY = 0xffBFBFBF;
+    public static final String STATUS = "status";
 }

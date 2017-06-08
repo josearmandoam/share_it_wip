@@ -14,6 +14,7 @@ import retrofit2.http.POST;
 public interface SendNotificationService {
     @FormUrlEncoded
     @POST("sendNotification2.php")
-    Call<SendNotificationApiResponse> sendNotification(@Field("userId") String userId, @Field("message") String message,
-                                                       @Field("title") String title);
+    Call<SendNotificationApiResponse> sendNotification(@Field("to") String to, @Field("message") String message,
+                                                       @Field("title") String title, @Field("time") String time,
+                                                       @Field("sender") String sender);
 }

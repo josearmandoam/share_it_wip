@@ -1,10 +1,13 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Point;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Switch;
@@ -26,7 +29,7 @@ import butterknife.OnClick;
  * Created by jose on 11/05/2017.
  */
 
-public class SocialSettingsDialog extends AlertDialog implements AbsSocialSettingsPresenter.Navigator, AbsSocialSettingsPresenter.View {
+public class SocialSettingsDialog extends DialogFragment implements AbsSocialSettingsPresenter.Navigator, AbsSocialSettingsPresenter.View {
 
     private AlertDialog dialog;
     AbsSocialSettingsPresenter presenter;
@@ -53,31 +56,29 @@ public class SocialSettingsDialog extends AlertDialog implements AbsSocialSettin
     Context activity;
 
     public SocialSettingsDialog(Context activity) {
-        super(activity);
         this.activity = activity;
-        initialize(activity);
+        getComponent().inject(this);
 //        dialog.getWindow().setLayout((int) (getWidth() / 1.5), (int) (getWidth() / 1.5));
     }
 
-    private void initialize(Context context) {
-        getComponent().inject(this);
-        initializeDialog(context);
-        ButterKnife.bind(this, dialog);
-        initializePresenter();
-    }
-
     private void initializePresenter() {
-        presenter = new SocialSettingsPresenter(getContext());
+        presenter = new SocialSettingsPresenter(getActivity());
         presenter.setView(this);
         presenter.setNavigator(this);
         presenter.updateSwitchs();
     }
 
-    private void initializeDialog(Context context) {
-        dialog = new Builder(context)
-                .setView(R.layout.dialog_social_settings)
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        setRetainInstance(true);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_social_settings, null);
+        dialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
                 .create();
-        dialog.show();
+        ButterKnife.bind(this, view);
+        initializePresenter();
+        updateSwitchs();
+        return dialog;
     }
 
     private int getWidth() {
@@ -156,17 +157,6 @@ public class SocialSettingsDialog extends AlertDialog implements AbsSocialSettin
 
     protected UIComponent getComponent() {
         return ((EditProfileActivity) activity).component();
-    }
-
-    @Override
-    public void setOnDismissListener(@Nullable OnDismissListener listener) {
-        super.setOnDismissListener(listener);
-    }
-
-    @Override
-    public void setOnShowListener(@Nullable OnShowListener listener) {
-        super.setOnShowListener(listener);
-        updateSwitchs();
     }
 
     private void saveSwitchChanges() {

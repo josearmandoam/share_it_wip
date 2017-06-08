@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
@@ -43,6 +43,8 @@ import static com.miguelcatalan.materialsearchview.MaterialSearchView.REQUEST_VO
 
 public class SearchActivity extends BaseActivty implements MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener, AbsSearchPresenter.View, AbsSearchPresenter.Navigator {
     private static final String USERID = "userId";
+    private static final int USER_PAGE = 1;
+    private static final String USERNAME = "username";
     @BindView(R.id.search_mSearch_view)
     MaterialSearchView searchView;
     @BindView(R.id.search_toolbar)
@@ -53,6 +55,10 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
     ProgressBar progressBar;
     @BindView(R.id.search_lyt_container)
     RelativeLayout container;
+    @BindView(R.id.search_lyt_initial)
+    RelativeLayout initial_layout;
+    @BindView(R.id.search_tv_empty_results)
+    TextView empty_results;
 
     @Inject
     GetUserBDImp getUserBDImp;
@@ -60,6 +66,7 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
     AbsSearchPresenter presenter;
     private UIComponent component;
     UserBD userBD;
+    private String query;
     SearchRecyclerAdapter adapter;
     ShowSnackBarImp showSnackBarImp;
     private SearchRecyclerAdapter.onRowClickListener onSearchRowListener = new SearchRecyclerAdapter.onRowClickListener() {
@@ -94,9 +101,11 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     private void initialize() {
         component().inject(this);
+        recyclerView.setVisibility(View.GONE);
+        initial_layout.setVisibility(View.VISIBLE);
 
         userBD = getUserBDImp.getUsers().get(0);
-        showSnackBarImp = new ShowSnackBarImp(this);
+        showSnackBarImp = new ShowSnackBarImp(container);
 
         presenter = new SearchPresenter(this);
         presenter.setView(this);
@@ -110,9 +119,9 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
     private void configureSearchView() {
         if (isVoiceAvailable())
             searchView.setVoiceSearch(true);
-        searchView.setBackground(getDrawable(R.drawable.roundedbutton_bluenocorner));
-        searchView.setBackIcon(getDrawable(R.drawable.back));
-        searchView.setCloseIcon(getDrawable(R.drawable.close_dark));
+        searchView.setBackground(getDrawable(R.drawable.roundedbutton_bluenocorner2));
+        searchView.setBackIcon(getDrawable(R.drawable.close_dark));
+        searchView.setCloseIcon(getDrawable(R.drawable.delete));
         searchView.setOnQueryTextListener(this);
         searchView.setOnSearchViewListener(this);
     }
@@ -137,12 +146,12 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
     @Override
     public boolean onQueryTextSubmit(String query) {
         presenter.onSubmitClicked(query, userBD.userId);
+        this.query = query;
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Toast.makeText(SearchActivity.this, "QUERY CHANGED", Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -158,6 +167,17 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        presenter.onSubmitClicked(query, userBD.userId);
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
@@ -205,14 +225,23 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     @Override
     public void updateRecycler(String userId, List<User> users, List<Feed> feeds) {
-        if (adapter != null) {
-            adapter.clear();
-            adapter.updateData(users, feeds);
-            adapter.notifyDataSetChanged();
+        if (users.isEmpty()) {
+            initial_layout.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+            empty_results.setVisibility(View.VISIBLE);
         } else {
-            adapter = new SearchRecyclerAdapter(this, userId, users, feeds, onSearchRowListener);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(adapter);
+            if (adapter != null) {
+                adapter.clear();
+                adapter.updateData(users, feeds);
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter = new SearchRecyclerAdapter(this, userId, users, feeds, onSearchRowListener);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(adapter);
+            }
+            initial_layout.setVisibility(View.GONE);
+            empty_results.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -258,19 +287,19 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     @Override
     public void navigateToUserDetail(String xUserId) {
-        openUserDetail(this, xUserId);
+        openUserDetail(xUserId);
     }
 
     @Override
     public void navigateToBack() {
-        onBackPressed();
+        finish();
     }
 
-    public static void openUserDetail(Context ctx, String userId) {
-        Intent intent = new Intent(ctx, UserActivity.class);
+    public void openUserDetail(String userId) {
+        Intent intent = new Intent(this, UserActivity.class);
         intent.putExtra(USERID, userId);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ctx.startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
@@ -282,4 +311,5 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
         }
         return true;
     }
+
 }

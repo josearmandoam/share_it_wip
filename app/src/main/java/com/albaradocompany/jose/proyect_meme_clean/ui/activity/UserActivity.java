@@ -1,5 +1,6 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.activity;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,10 +8,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,7 +22,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.GetUserApiImp;
+import com.albaradocompany.jose.proyect_meme_clean.global.App;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.ActivityHelper;
@@ -33,19 +44,27 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class UserActivity extends BaseActivty implements AbsUserPresenter.View, AbsUserPresenter.Navigator {
+    private static final String PRIVATE = "private";
+    private static final String INSERT = "insert";
+    private static final String DELETE = "delete";
+    private static final String USERNAME = "username";
     private final int LOW_VISIVILITY = 50;
     private final int HIGHT_VISIVILITY = 255;
+    private static final String COMPLETENAME = "completeName";
+    private static final String M_USER_ID = "mUserId"; // user account id
+    private static final String USER_ID = "userId";//notification line user id
+    private static final String NAME = "notifcationLineName";
 
     @BindView(R.id.user_btn_menu)
     ImageButton menu;
-    @BindView(R.id.user_btn_edit)
-    ImageButton edit;
     @BindView(R.id.user_iv_background)
     ImageView background;
     @BindView(R.id.user_iv_photo)
@@ -125,7 +144,29 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
     String title_twitter_so;
     @BindString(R.string.noInternetAvailable)
     String noInternet;
+    @BindView(R.id.user_btn_follow)
+    FloatingActionButton fabFollow;
+    @BindView(R.id.user_lyt_empty_photos)
+    RelativeLayout empty_photos;
+    private UIComponent component;
+    private boolean state = false;
 
+    @OnClick(R.id.user_btn_follow)
+    public void onFollowClicked(View view) {
+        if (!state) {
+            presenter.updateFollow(mUser.userId, user.getUserId(), user.getName() + " " + user.getLastname(), user.getProfile(), INSERT);
+            showSnackBar.show("Now you are following " + user.getName() + " " + user.getLastname(), BuildConfig.COLOR_GREEN);
+            state = true;
+        } else {
+            presenter.updateFollow(mUser.userId, user.getUserId(), user.getName() + " " + user.getLastname(), user.getProfile(), DELETE);
+            state = false;
+        }
+    }
+
+    @OnClick(R.id.user_btn_chat)
+    public void onChatClicked(View view) {
+        presenter.onChatClicked(mUser.userId, user.getUserId(), user.getName() + " " + user.getLastname(), mUser.user_name + " " + mUser.user_lastname);
+    }
 
     @OnClick(R.id.user_ibtn_facebook)
     public void onFacebookClicked(View view) {
@@ -163,10 +204,13 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
     }
 
     AbsUserPresenter presenter;
-    ShowSnackBarImp showSnackBarImp;
+    ShowSnackBarImp showSnackBar;
     PhotosRecyclerAdapter adapter;
     private AlertDialog alertDialog;
-    User user;
+    User user;//user activity
+    UserBD mUser; //user owner
+    @Inject
+    GetUserBDImp bd;
 
     PhotosRecyclerAdapter.Listener listener = new PhotosRecyclerAdapter.Listener() {
         @Override
@@ -183,13 +227,15 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
     }
 
     private void initialize() {
+        component().inject(this);
+        mUser = bd.getUsers().get(0);
 
-        showSnackBarImp = new ShowSnackBarImp(this);
-
-        presenter = new UserPresenter(this, getUserId(), getUserInteractor());
+        presenter = new UserPresenter(this, getUserId(), getUserInteractor(), mUser.userId);
         presenter.setView(this);
         presenter.setNavigator(this);
         presenter.initialize();
+
+        showSnackBar = new ShowSnackBarImp(layout);
     }
 
     @Override
@@ -231,12 +277,12 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBarImp.show(noInternet, Color.RED);
+        showSnackBar.show(noInternet, Color.RED);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBarImp.show(e.getMessage(), Color.RED);
+        showSnackBar.show(e.getMessage(), Color.RED);
     }
 
     @Override
@@ -253,7 +299,14 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showPictures(List<Picture> pictures) {
-        updateRecycler(pictures);
+        if (pictures.isEmpty()) {
+            recyclerPhotos.setVisibility(View.GONE);
+            empty_photos.setVisibility(View.VISIBLE);
+        } else {
+            updateRecycler(pictures);
+            empty_photos.setVisibility(View.GONE);
+            recyclerPhotos.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateRecycler(List<Picture> pictures) {
@@ -292,7 +345,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showWhatsapp(String socialWhatsapp) {
-        if (!socialWhatsapp.equals("private")) {
+        if (!socialWhatsapp.equals(PRIVATE)) {
             whatsapp.setAlpha(HIGHT_VISIVILITY);
             whatsapp.setEnabled(true);
         } else {
@@ -303,7 +356,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showInstagram(String socialInstagram) {
-        if (!socialInstagram.equals("private")) {
+        if (!socialInstagram.equals(PRIVATE)) {
             instagram.setEnabled(true);
             instagram.setAlpha(HIGHT_VISIVILITY);
         } else {
@@ -314,7 +367,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showFacebook(String socialFacebook) {
-        if (!socialFacebook.equals("private")) {
+        if (!socialFacebook.equals(PRIVATE)) {
             facebook.setEnabled(true);
             facebook.setAlpha(HIGHT_VISIVILITY);
         } else {
@@ -325,7 +378,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showWebsite(String socialWebsite) {
-        if (!socialWebsite.equals("private")) {
+        if (!socialWebsite.equals(PRIVATE)) {
             website.setEnabled(true);
             website.setAlpha(HIGHT_VISIVILITY);
         } else {
@@ -336,7 +389,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showTwitter(String socialTwitter) {
-        if (!socialTwitter.equals("private")) {
+        if (!socialTwitter.equals(PRIVATE)) {
             twitter.setEnabled(true);
             twitter.setAlpha(HIGHT_VISIVILITY);
         } else {
@@ -347,7 +400,7 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
 
     @Override
     public void showEmail(String socialEmail) {
-        if (!socialEmail.equals("private")) {
+        if (!socialEmail.equals(PRIVATE)) {
             email.setEnabled(true);
             email.setAlpha(HIGHT_VISIVILITY);
         } else {
@@ -466,6 +519,22 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
         this.user = user;
     }
 
+    @Override
+    public void showNewFloatingButton() {
+        showButtonFollow();
+        state = true;
+    }
+
+    @Override
+    public void hideFloatinButton() {
+        hideButtonFollow();
+    }
+
+    @Override
+    public void showInitialFloatingButton() {
+        showOldButtonUnFollow();
+    }
+
     private void emailDialog() {
         alertDialog = new AlertDialog.Builder(this)
                 .setIcon(ic_email)
@@ -521,11 +590,163 @@ public class UserActivity extends BaseActivty implements AbsUserPresenter.View, 
         onBackPressed();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    public void openNotificationsPage(String userId, String xUserId, String xCompleteNAME, String userCompleteName) {
+        openNotificationsActivity(xCompleteNAME, userId, userCompleteName, xUserId);
+    }
+
     public void openPictureDetail(Context ctx, Picture picture) {
         Intent intent = new Intent(ctx, PictureActivity.class);
         intent.putExtra("imageId", picture.getImageId());
         intent.putExtra("image", picture);
         intent.putExtra("user", user);
         ctx.startActivity(intent);
+    }
+
+    private void openNotificationsActivity(String name, String mUserId, String mCompleteName, String userId) {
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.putExtra(NAME, name);
+//        intent.putExtra(LIST, (Serializable) list);
+        intent.putExtra(M_USER_ID, mUserId);
+        intent.putExtra(COMPLETENAME, mCompleteName);
+        intent.putExtra(USER_ID, userId);
+        startActivity(intent);
+    }
+
+    public UIComponent component() {
+        if (component == null) {
+            component = DaggerUIComponent.builder()
+                    .rootComponent(((App) getApplication()).getComponent())
+                    .uIModule(new UIModule(getApplicationContext()))
+                    .mainModule(((App) getApplication()).getMainModule())
+                    .build();
+        }
+        return component;
+    }
+
+    private void hideButtonFollow() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            final Interpolator interpolador = AnimationUtils.loadInterpolator(this,
+                    android.R.interpolator.fast_out_slow_in);
+            fabFollow.animate()
+                    .scaleX(1)
+                    .scaleY(1)
+                    .setInterpolator(interpolador)
+                    .setDuration(300)
+                    .setStartDelay(0)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            fabFollow.animate()
+                                    .scaleY(0)
+                                    .scaleX(0)
+                                    .setInterpolator(interpolador)
+                                    .setDuration(300)
+                                    .start();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+        }
+    }
+
+    private void showButtonFollow() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            final Interpolator interpolador = AnimationUtils.loadInterpolator(this,
+                    android.R.interpolator.fast_out_slow_in);
+            fabFollow.setBackgroundColor(BuildConfig.COLOR_WHITE);
+            fabFollow.setImageDrawable(getDrawable(R.drawable.heart_fill));
+            fabFollow.animate()
+                    .scaleX(0)
+                    .scaleY(0)
+                    .setInterpolator(interpolador)
+                    .setDuration(300)
+                    .setStartDelay(0)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            fabFollow.animate()
+                                    .scaleY(1)
+                                    .scaleX(1)
+                                    .setInterpolator(interpolador)
+                                    .setDuration(300)
+                                    .start();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+        }
+    }
+
+    private void showOldButtonUnFollow() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            final Interpolator interpolador = AnimationUtils.loadInterpolator(this,
+                    android.R.interpolator.fast_out_slow_in);
+            fabFollow.setBackgroundColor(BuildConfig.COLOR_WHITE);
+            fabFollow.setImageDrawable(getDrawable(R.drawable.follow));
+            fabFollow.animate()
+                    .scaleX(0)
+                    .scaleY(0)
+                    .setInterpolator(interpolador)
+                    .setDuration(300)
+                    .setStartDelay(0)
+                    .setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            fabFollow.animate()
+                                    .scaleY(1)
+                                    .scaleX(1)
+                                    .setInterpolator(interpolador)
+                                    .setDuration(300)
+                                    .start();
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+        }
     }
 }

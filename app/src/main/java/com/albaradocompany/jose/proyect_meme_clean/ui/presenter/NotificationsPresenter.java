@@ -154,7 +154,7 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
     }
 
     private SendNotificationInteractor getSendNotificationInteractor(String message, String mUserId, String mCompleteName, String userId) {
-        return new SendNotificationInteractor(new SendNotificationApiImp(userId, "Nuevo mensaje de: "+mCompleteName + "-" + mUserId, message), new MainThreadImp(), new ThreadExecutor());
+        return new SendNotificationInteractor(new SendNotificationApiImp(userId, mCompleteName, message, DateUtil.getCurrentTimeFormated(), mUserId), new MainThreadImp(), new ThreadExecutor());
     }
 
     protected UIComponent getComponent() {

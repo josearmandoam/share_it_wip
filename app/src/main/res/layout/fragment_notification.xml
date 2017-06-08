@@ -18,4 +18,26 @@
         app:backgroundTint="@color/testSecundary"
         app:fabSize="normal"
         android:src="@mipmap/new_chat"/>
+    <RelativeLayout
+        android:id="@+id/notification_empty_notification"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/notification_iv_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:src="@mipmap/team"
+            android:layout_width="wrap_content"
+            android:layout_above="@+id/notification_tv_title"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/notification_tv_title"
+            android:text="@string/empty_notifications"
+            android:padding="16dp"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </FrameLayout>

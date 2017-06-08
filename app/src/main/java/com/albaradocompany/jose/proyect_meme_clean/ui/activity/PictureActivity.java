@@ -27,7 +27,6 @@ import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
-import com.albaradocompany.jose.proyect_meme_clean.global.model.User;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.DateUtil;
 import com.albaradocompany.jose.proyect_meme_clean.global.util.RecyclerHelper;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.CommentsInteractor;
@@ -80,6 +79,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     TextView comments;
     @BindView(R.id.picture_lyt_photo)
     RelativeLayout layoutPhoto;
+    @BindView(R.id.picture_lyt_container)
+    RelativeLayout layout;
     @BindView(R.id.picture_pbr)
     ProgressBar progressBar;
     @BindView(R.id.picture_detail_ibtn_save)
@@ -118,6 +119,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @Inject
     UserSharedImp userSharedImp;
     Picture picture;
+    private LikesDialog dialog;
 
     @OnClick(R.id.picture_detail_ibtn_comments)
     public void onCommentClicked(View view) {
@@ -166,7 +168,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
         userBD = getUserBD.getUserBD(userSharedImp.getUserID());
 
-        showSnackBarImp = new ShowSnackBarImp(this);
+        showSnackBarImp = new ShowSnackBarImp(layout);
         presenter = new PicturePresenter(this);
         presenter.setView(this);
         presenter.setNavigator(this);
@@ -302,7 +304,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
 
     @Override
     public void showLikesDialog() {
-        new LikesDialog(this, listLikes);
+        dialog = new LikesDialog(listLikes);
+        dialog.show(getFragmentManager(), LikesDialog.class.getName());
     }
 
     @Override
