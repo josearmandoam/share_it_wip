@@ -106,6 +106,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
 
     public void updateListAt(int position, Post post) {
         posts.get(position).setCommentList(post.getCommentList());
+        posts.get(position).setLikeList(post.getLikeList());
     }
 
     public void setNewPosts(List<Post> newPosts) {

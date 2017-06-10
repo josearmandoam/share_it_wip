@@ -60,6 +60,13 @@ public class FcmMessageService extends FirebaseMessagingService {
         String lineId = "line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime();
         String profile = BuildConfig.BASE_URL_DEFAULT + sender + "_profile";
 
+
+        int iconResId = getIconResId();
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), iconResId);
+        NotificationCompat.WearableExtender wearableExtender =
+                new NotificationCompat.WearableExtender()
+                        .setBackground(bmp);
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(TITLE, title);
         intent.putExtra(LINEID, lineId);
@@ -72,14 +79,15 @@ public class FcmMessageService extends FirebaseMessagingService {
 //        bd.insertNotificationLine(lineId, userId, profile, body, title, time, NOT_SEEN, bd.getUsers().get(0).userId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        Notification.Builder notificationBuilder = new Notification.Builder(this)
-                .setSmallIcon(getNotificationIcon())
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(iconResId)
                 .setContentTitle(title)
-                .setStyle(new Notification.BigTextStyle().bigText(title))
                 .setAutoCancel(true)
                 .setContentText(message)
 //                .setSubText(subtitle)
+                .extend(wearableExtender)
                 .setContentIntent(pendingIntent)
+                .setLights(Color.RED, 3000, 3000)
                 .setSound(alarmSound);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            notificationBuilder.setColor(getApplicationContext().getResources().getColor(R.color.red));

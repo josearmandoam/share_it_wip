@@ -251,12 +251,12 @@ public class FeedPresenter extends AbsFeedPresenter {
 
                 @Override
                 public void onNoInternetAvailable() {
-                    view.showNoInternetAvailable();
+//                    view.showNoInternetAvailable();
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    view.showError(e);
+//                    view.showError(e);
                 }
 
                 @Override
@@ -283,12 +283,12 @@ public class FeedPresenter extends AbsFeedPresenter {
             interactorComments.getComments(new GetComments.Listener() {
                 @Override
                 public void onNoInternetAvailable() {
-                    view.showNoInternetAvailable();
+//                    view.showNoInternetAvailable();
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    view.showError(e);
+//                    view.showError(e);
                 }
 
                 @Override
@@ -300,12 +300,12 @@ public class FeedPresenter extends AbsFeedPresenter {
             interactorLikes.getLikes(new GetLikes.Listener() {
                 @Override
                 public void onNoInternetAvailable() {
-                    view.showNoInternetAvailable();
+//                    view.showNoInternetAvailable();
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    view.showError(e);
+//                    view.showError(e);
                 }
 
                 @Override

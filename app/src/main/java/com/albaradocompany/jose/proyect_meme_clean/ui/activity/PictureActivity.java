@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -80,7 +81,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     @BindView(R.id.picture_lyt_photo)
     RelativeLayout layoutPhoto;
     @BindView(R.id.picture_lyt_container)
-    RelativeLayout layout;
+    FrameLayout layout;
     @BindView(R.id.picture_pbr)
     ProgressBar progressBar;
     @BindView(R.id.picture_detail_ibtn_save)

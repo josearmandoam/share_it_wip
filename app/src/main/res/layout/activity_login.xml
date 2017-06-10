@@ -73,6 +73,8 @@
         android:textColor="@color/text_color"
         android:fontFamily="@string/default_font"
         android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_alignEnd="@+id/login_b_signin"
@@ -86,21 +88,21 @@
         android:fontFamily="@string/default_font"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/login_fPassword"
-        android:layout_marginLeft="40sp"
-        android:layout_marginBottom="@dimen/default_margin_x2"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/login_fPassword"
         android:textSize="@dimen/text_size"
-        android:layout_marginBottom="@dimen/default_margin_x2"
         android:textColor="@color/text_color"
         android:text="@string/password"
         android:fontFamily="@string/default_font"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="24dp"
         android:layout_alignStart="@+id/login_password" />
 
     <View
@@ -111,7 +113,7 @@
         android:layout_above="@id/login_username"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <View
         android:id="@+id/login_separator2"
         android:layout_width="@dimen/default_with"
         android:layout_height="0.4dp"
@@ -119,7 +121,7 @@
         android:layout_above="@id/login_password"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
+    <View
         android:id="@+id/login_separator3"
         android:layout_width="@dimen/default_with"
         android:layout_height="0.4dp"
