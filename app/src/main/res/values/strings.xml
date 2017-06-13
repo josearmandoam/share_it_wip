@@ -133,4 +133,5 @@
     <string name="start_finding_people">Start finding people!</string>
     <string name="not_user_found">Not user found with that username</string>
     <string name="ok">Ok</string>
+    <string name="empty_descrpition">Please introduce any description</string>
 </resources>

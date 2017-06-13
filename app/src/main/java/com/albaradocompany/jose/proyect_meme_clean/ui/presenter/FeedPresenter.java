@@ -8,7 +8,6 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.api.CommentsApiImp
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.FeedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.LikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesByIdApiImp;
-import com.albaradocompany.jose.proyect_meme_clean.datasource.api.PicturesSavedApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdateLikesApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
@@ -74,38 +73,41 @@ public class FeedPresenter extends AbsFeedPresenter {
         userBD = getUserBDImp.getUsers().get(0);
 //        checkForUserSavedPictures();
     }
-
-    public void checkForUserSavedPictures() {
-        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesSavedApiImp(userBD.userId), new MainThreadImp(), new ThreadExecutor());
-        getPicturesById.getPictures(new GetPicturesById.Listener() {
-            @Override
-            public void onNoInternetAvailable() {
-                view.showNoInternetAvailable();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e);
-            }
-
-            @Override
-            public void onPicturesReceived(List<Picture> pictures) {
-                for (Picture picture : pictures) {
-                    getUserBDImp.insertUserSavedPicture(picture);
-                }
-//                userSharedImp.saveUserID(userBD.userId);
-            }
-        });
-    }
+//
+//    public void checkForUserSavedPictures() {
+//        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesSavedApiImp(userBD.userId), new MainThreadImp(), new ThreadExecutor());
+//        getPicturesById.getPictures(new GetPicturesById.Listener() {
+//            @Override
+//            public void onNoInternetAvailable() {
+//                view.showNoInternetAvailable();
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                view.showError(e);
+//            }
+//
+//            @Override
+//            public void onPicturesReceived(List<Picture> pictures) {
+//                for (Picture picture : pictures) {
+//                    getUserBDImp.insertUserSavedPicture(picture);
+//                }
+////                userSharedImp.saveUserID(userBD.userId);
+//            }
+//        });
+//    }
 
     @Override
     public void resume() {
-        if (posts != null) {
-            view.updatePosts(posts);
-            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
-        } else {
-            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
-        }
+//        if (posts != null) {
+//            view.updatePosts(posts);
+//            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
+//        } else {
+//            getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
+//        }
+//
+        getFeed(new FeedInteractor(new FeedApiImp(userId), new MainThreadImp(), new ThreadExecutor()));
+
     }
 
     @Override
@@ -137,14 +139,31 @@ public class FeedPresenter extends AbsFeedPresenter {
 
             @Override
             public void onFeedReceived(List<Feed> feeds) {
-                if (feeds.size() == 1 && feeds.get(0).getUserId().equals(userId)) {
-                    view.hideLoading();
+                view.hideLoading();
+                view.hideRefreshLoading();
+                if (createPosts(feeds).size() == 0) {
                     view.showFloatingButton();
                     view.showNoFeedAvailable();
+                } else {
+                    view.showPosts(ListUtil.orderList(createPosts(feeds)));
+                    view.showFloatingButton();
                 }
-                getPicturesOfFeed(feeds);
+//                getPicturesOfFeed(feeds);
             }
         });
+    }
+
+    private List<Post> createPosts(List<Feed> feeds) {
+        List<Post> list = new ArrayList<Post>();
+        for (int i = 0; i < feeds.size(); i++) {
+            for (int j = 0; j < feeds.get(i).getPictures().size(); j++) {
+                list.add(new Post(feeds.get(i).getFeedId(), feeds.get(i).getUserId(),
+                        feeds.get(i).getxUserId(), feeds.get(i).getxProfile(), feeds.get(i).getxUsername(),
+                        feeds.get(i).getPictures().get(j), feeds.get(i).getPictures().get(j).getLikes(),
+                        feeds.get(i).getPictures().get(j).getComments()));
+            }
+        }
+        return list;
     }
 
     @Override

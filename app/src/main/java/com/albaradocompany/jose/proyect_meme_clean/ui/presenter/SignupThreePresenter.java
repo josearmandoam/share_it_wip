@@ -131,7 +131,7 @@ public class SignupThreePresenter extends AbsSignupThree {
         });
     }
 
-    private void savePhotoFTP() {
+    private void savePhotoFTP(final String name, final String absolutePath) {
         new Thread(new Runnable() {
             public void run() {
                 FTPClient ftpClient = null;
@@ -141,15 +141,11 @@ public class SignupThreePresenter extends AbsSignupThree {
                     if (ftpClient.login(BuildConfig.USERNAME, BuildConfig.PASSWORD)) {
                         ftpClient.enterLocalPassiveMode(); // important!
                         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-                        String photoname = userSharedImp.getUser().getIdUser() + "_profile";
-                        FileInputStream in = new FileInputStream(userSharedImp.getProfile());
-                        boolean result = ftpClient.storeFile(photoname, in);
-                        boolean ok = ftpClient.sendSiteCommand("chmod 777 " + BuildConfig.BASE_URL_DEFAULT + photoname);
+                        FileInputStream in = new FileInputStream(absolutePath);
+                        boolean result = ftpClient.storeFile(name, in);
                         in.close();
                         if (result)
                             Log.v("upload result", "succeeded");
-                        if (ok)
-                            Toast.makeText(context, "SE HA CAMBIADO LOS PERMISOS", Toast.LENGTH_SHORT).show();
                         ftpClient.logout();
                         ftpClient.disconnect();
                         updatePermissions();
@@ -234,7 +230,7 @@ public class SignupThreePresenter extends AbsSignupThree {
                     }
                 }
                 userSharedImp.saveProfile(mypath.getAbsolutePath());
-                savePhotoFTP();
+                savePhotoFTP(name, mypath.getAbsolutePath());
                 Looper.prepare();
                 notificateFinish();
                 ((SignupThreeActivity) context).runOnUiThread(new Runnable() {
@@ -293,7 +289,7 @@ public class SignupThreePresenter extends AbsSignupThree {
 
     public UpdateFeedInteractor getUpdateFeedInteractor(Login login) {
         return new UpdateFeedInteractor(new UpdateFeedApiImp(login.getIdUser(), login.getIdUser(),
-                login.getIdUser()+"_profile", "feed" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(),
+                BuildConfig.BASE_URL_DEFAULT + login.getIdUser() + "_profile", "feed" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(),
                 login.getNombre() + " " + login.getApellidos(), INSERT), new MainThreadImp(), new ThreadExecutor());
     }
 }

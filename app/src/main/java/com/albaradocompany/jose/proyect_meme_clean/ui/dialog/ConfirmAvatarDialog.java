@@ -81,7 +81,7 @@ public class ConfirmAvatarDialog extends DialogFragment implements AbsConfirmAva
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        return size.x;
+        return (int) (size.x / 1.5);
     }
 
     private void initialize() {

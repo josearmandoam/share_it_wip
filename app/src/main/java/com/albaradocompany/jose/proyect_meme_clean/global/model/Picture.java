@@ -1,6 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jose on 05/05/2017.
@@ -13,15 +15,19 @@ public class Picture implements Serializable {
     String date;
     String imageId;
     String time;
+    List<Like> likes;
+    List<Comment> comments;
 
     public Picture(String userId, String imagePath, String description, String date, String imageId,
-                   String time) {
+                   String time, List<Like> likes, List<Comment> comments) {
         this.userId = userId;
         this.imagePath = imagePath;
         this.description = description;
         this.date = date;
         this.imageId = imageId;
         this.time = time;
+        this.likes = likes;
+        this.comments = comments;
     }
 
     public Picture() {
@@ -31,6 +37,8 @@ public class Picture implements Serializable {
         date = "";
         imageId = "";
         time = "";
+        likes = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
     public String getUserId() {
@@ -81,4 +89,19 @@ public class Picture implements Serializable {
         this.time = time;
     }
 
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }

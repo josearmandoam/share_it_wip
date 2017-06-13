@@ -70,6 +70,7 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
 
     @OnClick(R.id.notification_ibtn_send)
     public void onSendMessageClicked(View view) {
+        List<NotificationLine> lines = db.getAllNotifications(userId);
         if (!message.getText().toString().isEmpty())
             if (db.getAllNotifications(userId).size() > 0)
                 presenter.onSendMessageClicked(message.getText().toString(), mUserId, mCompleteName, userId);
@@ -143,7 +144,7 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
                 db.updateNotificationsState(userId);
                 recyclerView.setAdapter(adapter);
             } else {
-                adapter.clear();
+//                adapter.clear();
                 adapter.addNewNotifications(notifications);
 //            setNotificationList(notifications);
                 recyclerView.scrollToPosition(notifications.size() - 1);

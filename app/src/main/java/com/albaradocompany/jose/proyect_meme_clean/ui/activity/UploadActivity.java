@@ -64,7 +64,10 @@ public class UploadActivity extends BaseActivty implements AbsUploadPresenter.Vi
 
     @OnClick(R.id.upload_ibtn_check)
     public void onCheckClicked(View view) {
-        presenter.onCheckClicked(((BitmapDrawable) image.getDrawable()).getBitmap(), userSharedImp.getUserID(), description.getText().toString());
+        if (!description.getText().toString().isEmpty())
+            presenter.onCheckClicked(((BitmapDrawable) image.getDrawable()).getBitmap(), userSharedImp.getUserID(), description.getText().toString());
+        else
+            showSnackBarImp.show(getString(R.string.empty_descrpition), BuildConfig.COLOR_RED);
     }
 
     AbsUploadPresenter presenter;

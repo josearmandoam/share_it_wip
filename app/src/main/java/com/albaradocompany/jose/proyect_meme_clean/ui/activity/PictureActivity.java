@@ -113,7 +113,6 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     GetComments commentsInteractor;
     ShowSnackBarImp showSnackBarImp;
     UIComponent component;
-    String imageId;
     UserBD userBD;
     @Inject
     GetUserBDImp getUserBD;
@@ -204,8 +203,8 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
             picture = (Picture) bundle.get(IMAGE);
             presenter.initializeData(picture.getUserId(), picture, getLikesInteractor(picture.getImageId()), getCommentsInteractor(picture.getImageId()));
             presenter.initialize();
-            presenter.getPictureLikes(getLikesInteractor(picture.getImageId()), picture.getImageId());
-            presenter.getPictureComments(getCommentsInteractor(picture.getImageId()), picture.getImageId());
+//            presenter.getPictureLikes(getLikesInteractor(picture.getImageId()), picture.getImageId());
+//            presenter.getPictureComments(getCommentsInteractor(picture.getImageId()), picture.getImageId());
         }
     }
 
@@ -374,7 +373,7 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     public void openCommentsActivity() {
         Intent intent = new Intent(this, CommentsActivity.class);
         intent.putExtra(COMMENTS, (Serializable) listComments);
-        intent.putExtra(IMAGE_ID, imageId);
+        intent.putExtra(IMAGE_ID, picture.getImageId());
         startActivity(intent);
     }
 
@@ -395,24 +394,24 @@ public class PictureActivity extends BaseActivty implements AbsPicturePresenter.
     }
 
     public UpdateLikesInteractor getUpdateDELLikeInteractor() {
-        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
+        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, picture.getImageId(),
                 userBD.user_name, userBD.user_lastname, userBD.user_profile, userSharedImp.createLikeID(), DELETE), new MainThreadImp(), new ThreadExecutor());
     }
 
     public UpdateLikesInteractor getUpdateINSLikeInteractor() {
-        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, imageId,
+        return new UpdateLikesInteractor(new UpdateLikesApiImp(userBD.userId, picture.getImageId(),
                 userBD.user_name, userBD.user_lastname, userBD.user_profile, userSharedImp.createLikeID(), INSERT), new MainThreadImp(), new ThreadExecutor());
     }
 
-    public UpdateSavedPictureInteractor getUpdateDELSavedPictureInteractor() {
-        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, null,
-                null, null, imageId, null, DELETE),
-                new MainThreadImp(), new ThreadExecutor());
-    }
-
-    public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
-        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
-                picture.getDescription(), DateUtil.getCurrentDateFormated(), imageId, DateUtil.getCurrentTimeFormated(), INSERT),
-                new MainThreadImp(), new ThreadExecutor());
-    }
+//    public UpdateSavedPictureInteractor getUpdateDELSavedPictureInteractor() {
+//        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, null,
+//                null, null, imageId, null, DELETE),
+//                new MainThreadImp(), new ThreadExecutor());
+//    }
+//
+//    public UpdateSavedPictureInteractor getUpdateINSSavePictureInteractor() {
+//        return new UpdateSavedPictureInteractor(new UpdateSavedPictureApiImp(userBD.userId, picture.getImagePath(),
+//                picture.getDescription(), DateUtil.getCurrentDateFormated(), imageId, DateUtil.getCurrentTimeFormated(), INSERT),
+//                new MainThreadImp(), new ThreadExecutor());
+//    }
 }

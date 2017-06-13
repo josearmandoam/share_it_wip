@@ -161,12 +161,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
             recyclerView.setVisibility(View.GONE);
             empty_comment.setVisibility(View.VISIBLE);
         } else {
-            adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked, userSharedImp.getUserID());
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(adapter);
-            empty_comment.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            initializeRecycler();
         }
         presenter = new CommentPresenter(this);
         presenter.setView(this);
@@ -175,6 +170,15 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
         showSnackBarImp = new ShowSnackBarImp(layout);
 
 //        initializeSwipeRefresh();
+    }
+
+    private void initializeRecycler() {
+        adapter = new CommentsRecyclerAdapter(this, comments, onCommentClicked, userSharedImp.getUserID());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+        empty_comment.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     private void updateRecycler() {
@@ -269,7 +273,10 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
         comment.setText("");
         comment.setEnabled(true);
         comments.add(commentOnCache);
-        adapter.notifyDataSetChanged();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+        else
+            initializeRecycler();
     }
 
     @Override

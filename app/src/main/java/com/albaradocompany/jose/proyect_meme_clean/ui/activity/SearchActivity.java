@@ -113,7 +113,6 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
         presenter.initialize();
 
         configureSearchView();
-
     }
 
     private void configureSearchView() {
@@ -145,8 +144,14 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        presenter.onSubmitClicked(query, userBD.userId);
-        this.query = query;
+        if (!query.isEmpty()) {
+            presenter.onSubmitClicked(query, userBD.userId);
+            this.query = query;
+        } else {
+            initial_layout.setVisibility(View.VISIBLE);
+            empty_results.setVisibility(View.GONE);
+
+        }
         return false;
     }
 
@@ -171,13 +176,19 @@ public class SearchActivity extends BaseActivty implements MaterialSearchView.On
 
     @Override
     protected void onResume() {
-        presenter.onSubmitClicked(query, userBD.userId);
+        if (query != null && !query.isEmpty()) {
+            presenter.onSubmitClicked(query, userBD.userId);
+        } else {
+            initial_layout.setVisibility(View.VISIBLE);
+            empty_results.setVisibility(View.GONE);
+
+        }
         super.onResume();
     }
 
     @Override
     public void onBackPressed() {
-        finish();
+        this.finish();
     }
 
     @Override

@@ -19,7 +19,7 @@
                 android:id="@+id/picture_detail_iv_photo"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:src="@drawable/fo3" />
+                 />
 
             <View
                 android:id="@+id/picture_detail_vw_social"
@@ -52,7 +52,6 @@
                 android:layout_toRightOf="@+id/picture_detail_ibtn_like"
                 android:layout_alignTop="@+id/picture_detail_vw_social"
                 android:layout_alignBottom="@+id/picture_detail_vw_social"
-                android:text="255"
                 android:padding="8dp"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size"
@@ -77,7 +76,6 @@
                 android:layout_toRightOf="@+id/picture_detail_ibtn_comments"
                 android:layout_alignTop="@+id/picture_detail_vw_social"
                 android:layout_alignBottom="@+id/picture_detail_vw_social"
-                android:text="255"
                 android:padding="8dp"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size"
@@ -105,7 +103,6 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/picture_detail_iv_user_profile"
                 android:layout_width="50dp"
-                android:src="@drawable/face"
                 android:layout_alignTop="@+id/picture_detail_vw_user_info"
                 android:layout_alignBottom="@+id/picture_detail_vw_user_info"
                 android:scaleType="centerCrop"
@@ -118,7 +115,6 @@
                 android:layout_alignTop="@+id/picture_detail_vw_user_info"
                 android:layout_alignBottom="@+id/picture_detail_vw_user_info"
                 android:layout_toRightOf="@id/picture_detail_iv_user_profile"
-                android:text="JOAN MANUEL SERRAT"
                 android:gravity="center"
                 android:padding="4dp"
                 android:textSize="@dimen/text_size"
@@ -132,7 +128,6 @@
                 android:layout_alignTop="@+id/picture_detail_vw_user_info"
                 android:layout_alignBottom="@+id/picture_detail_vw_user_info"
                 android:layout_alignParentEnd="true"
-                android:text="14H"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textStyle="bold"
@@ -144,7 +139,6 @@
                 android:layout_below="@+id/picture_detail_vw_user_info"
                 android:fontFamily="@string/default_font"
                 android:padding="16dp"
-                android:text="@string/text_large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

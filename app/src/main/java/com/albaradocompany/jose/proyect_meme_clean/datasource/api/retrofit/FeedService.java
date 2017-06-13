@@ -13,6 +13,9 @@ import retrofit2.http.POST;
 
 public interface FeedService {
     @FormUrlEncoded
-    @POST("requestFeed.php")
+    @POST("requestFeed2.php")
     Call<FeedApiResponse> getFeed(@Field("userId") String userId);
+//    @FormUrlEncoded
+//    @POST("requestFeed.php")
+//    Call<FeedApiResponse> getFeed(@Field("userId") String userId);
 }

@@ -77,7 +77,7 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
             public void onSuccess() {
                 view.hideLoading();
                 db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), mUserId, BuildConfig.BASE_URL_DEFAULT + mUserId + "_profile", message, mCompleteName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
-                view.showNotifications(db.getAllNotifications(userId), userId);
+                view.showNotifications(db.getAllNotifications(userId), mUserId);
                 view.cleanMessage();
             }
 
@@ -115,7 +115,7 @@ public class NotificationsPresenter extends AbsNotificationPresenter {
             public void onSuccess() {
                 view.hideLoading();
                 db.insertNotificationLine("line" + DateUtil.getCurrentDate() + DateUtil.getCurrentTime(), userId, BuildConfig.BASE_URL_DEFAULT + userId + "_profile", message, notifcationLineName, DateUtil.getCurrentTimeFormated(), SEEN, userId);
-                view.showNotifications(db.getAllNotifications(userId), userId);
+                view.showNotifications(db.getAllNotifications(userId), mUserId);
                 view.cleanMessage();
             }
 

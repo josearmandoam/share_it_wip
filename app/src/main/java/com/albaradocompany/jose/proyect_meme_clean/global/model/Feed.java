@@ -1,5 +1,8 @@
 package com.albaradocompany.jose.proyect_meme_clean.global.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jose on 20/05/2017.
  */
@@ -11,6 +14,7 @@ public class Feed {
     String xProfile;
     String xUsername;
     String state;
+    List<Picture> pictures;
 
     public Feed() {
         feedId = "";
@@ -19,15 +23,18 @@ public class Feed {
         xProfile = "";
         xUsername = "";
         state = "";
+        pictures = new ArrayList<>();
     }
 
-    public Feed(String feedId, String userId, String xUserId, String xProfile, String xUsername, String state) {
+    public Feed(String feedId, String userId, String xUserId, String xProfile, String xUsername,
+                String state, List<Picture> pictures) {
         this.feedId = feedId;
         this.userId = userId;
         this.xUserId = xUserId;
         this.xProfile = xProfile;
         this.xUsername = xUsername;
         this.state = state;
+        this.pictures = pictures;
     }
 
     public String getFeedId() {
@@ -76,5 +83,13 @@ public class Feed {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public List<Picture> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Picture> pictures) {
+        this.pictures = pictures;
     }
 }

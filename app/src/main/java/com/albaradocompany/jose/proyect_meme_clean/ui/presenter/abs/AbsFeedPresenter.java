@@ -1,6 +1,7 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.Feed;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Post;
@@ -70,6 +71,8 @@ public abstract class AbsFeedPresenter extends Presenter<AbsFeedPresenter.View, 
         void updatePosts(List<Post> posts);
 
         void showNoFeedAvailable();
+
+        void hideRefreshLoading();
     }
 
     public interface Navigator {

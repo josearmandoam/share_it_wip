@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.UserBD;
@@ -165,8 +164,8 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void onResume() {
-        super.onResume();
         presenter.resume();
+        super.onResume();
     }
 
     private void initialize() {
@@ -185,7 +184,6 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
             @Override
             public void onRefresh() {
                 parentResume();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -264,45 +262,45 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void showSaveSuccess() {
-        Toast.makeText(getContext(), "Photo saved", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo saved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showSaveFailure() {
-        Toast.makeText(getContext(), "Photo not saved", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo not saved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showUnSaveSuccess() {
-        Toast.makeText(getContext(), "Photo unsaved", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo unsaved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showUnSaveFailure() {
-        Toast.makeText(getContext(), "Photo not unsaved", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo not unsaved", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showLikeSuccess() {
-        Toast.makeText(getContext(), "Photo liked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo liked", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void showLikedFailure() {
-        Toast.makeText(getContext(), "Photo not liked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo not liked", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void showUnLikeSuccess() {
-        Toast.makeText(getContext(), "Photo unliked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo unliked", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void showUnLikeFailure() {
-        Toast.makeText(getContext(), "Photo not unliked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "Photo not unliked", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -337,6 +335,11 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
     public void showNoFeedAvailable() {
         recyclerView.setVisibility(View.GONE);
         empty_feed.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideRefreshLoading() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

@@ -581,19 +581,20 @@ public class UserSharedImp implements UserShared, SignupShared {
         c.setBackgrundPath(sharedPreferences.getString(BuildConfig.USER_BACKGROUND, ""));
         c.setFechaNacimiento(sharedPreferences.getString(BuildConfig.USER_DATE_BIRTHDAY, ""));
         c.setIdUser(sharedPreferences.getString(BuildConfig.USER_ID, ""));
-        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
-            sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
-            if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
-                sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
-                c.setAvatarPath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
-            } else {
-                sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
-//                c.setBlob(sharedPreferences.getString(BuildConfig.USER_PHOTO,""));
-                c.setAvatarPath(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
-
-                //photo from camera or gallery
-            }
-        }
+        c.setImagePath(BuildConfig.BASE_URL_DEFAULT + c.getIdUser() + "_profile");
+//        if (sharedPreferences.getString(BuildConfig.IS_SELECTED_PHOTO, "false").equals("true")) {
+//            sharedPreferences = context.getSharedPreferences(ConfirmAvatarDialog.class.getName(), Context.MODE_PRIVATE);
+//            if (sharedPreferences.getString(BuildConfig.IS_SELECTED_AVATAR, "false").equals("true")) {
+//                sharedPreferences = context.getSharedPreferences(SignupOneActivity.class.getName(), Context.MODE_PRIVATE);
+//                c.setAvatarPath(sharedPreferences.getString(BuildConfig.USER_AVATAR, ""));
+//            } else {
+//                sharedPreferences = context.getSharedPreferences(AddPhotoActivty.class.getName(), Context.MODE_PRIVATE);
+////                c.setBlob(sharedPreferences.getString(BuildConfig.USER_PHOTO,""));
+//                c.setAvatarPath(sharedPreferences.getString(BuildConfig.USER_PHOTO, ""));
+//
+//                //photo from camera or gallery
+//            }
+//        }
         sharedPreferences = context.getSharedPreferences(SignupTwoActivity.class.getName(), Context.MODE_PRIVATE);
         c.setUsername(sharedPreferences.getString(BuildConfig.USER_USERNAME, ""));
         c.setPassword(sharedPreferences.getString(BuildConfig.USER_PASSWORD, ""));

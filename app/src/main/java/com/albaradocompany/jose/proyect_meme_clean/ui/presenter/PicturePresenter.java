@@ -7,6 +7,7 @@ import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.User
 import com.albaradocompany.jose.proyect_meme_clean.datasource.api.GetUserApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
+import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Comment;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Like;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
@@ -50,11 +51,12 @@ public class PicturePresenter extends AbsPicturePresenter {
     public void initialize() {
         getComponent().inject(this);
         userBD = getUserBDImp.getUsers().get(0);
-        view.showLoading();
         view.showPicture(picture.getImagePath());
         view.showDescription(picture.getDescription());
         view.showTime(picture.getDate(), picture.getTime());
         view.showSaved(picture.getImageId());
+        view.showLikes(picture.getLikes());
+        view.showComments(picture.getComments());
     }
 
     @Override
