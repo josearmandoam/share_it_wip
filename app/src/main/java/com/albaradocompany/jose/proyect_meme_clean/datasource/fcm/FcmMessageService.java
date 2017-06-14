@@ -163,7 +163,7 @@ public class FcmMessageService extends FirebaseMessagingService {
 
     protected int getIconResId() {
         boolean lollipopOrHigher = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-        return lollipopOrHigher ? R.mipmap.ic_envelope : R.mipmap.ic_envelope;
+        return lollipopOrHigher ? R.mipmap.ic_envelope2 : R.mipmap.ic_envelope;
     }
 
     static void updateMyActivity(Context context, String title, String lineId, String userId, String body, String time) {

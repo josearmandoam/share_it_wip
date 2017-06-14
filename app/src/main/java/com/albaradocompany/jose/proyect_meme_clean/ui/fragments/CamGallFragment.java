@@ -1,6 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -64,10 +63,8 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
 
     private UIComponent component;
     AbsCamGalPresenter presenter;
-    Activity activity;
 
-    public CamGallFragment(Activity activity, int action) {
-        this.activity = activity;
+    public CamGallFragment( int action) {
         this.action = action;
     }
 
@@ -165,7 +162,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         EditProfileActivity.backgroundUriReceived = data.getData();
         userSharedImp.photoStateTaken("true");
         userSharedImp.saveBackgroundChanges("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void updateEditProfileFromGallery(Intent data) {
@@ -173,7 +170,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         EditProfileActivity.profileUriReceived = data.getData();
         userSharedImp.photoStateTaken("true");
         userSharedImp.saveProfileChanges("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void updateProfileSignupFromGallery(Intent data) {
@@ -182,7 +179,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         SignupTwoActivity.uriReceived = data.getData();
         SignupThreeActivity.uriReceived = data.getData();
         userSharedImp.photoStateTaken("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void cleanBitmapReceived() {
@@ -223,7 +220,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         userSharedImp.photoStateTaken("true");
         userSharedImp.saveBackgroundFTPSelected("false");
         userSharedImp.saveBackgroundChanges("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void updateEditProfileFromCamera(Intent data) {
@@ -233,7 +230,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         userSharedImp.photoStateTaken("true");
         userSharedImp.saveProfileFTPSelected("false");
         userSharedImp.saveProfileChanges("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void updateSignupFromCamera(Intent data) {
@@ -243,7 +240,7 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
         SignupTwoActivity.bitmapReceived = (Bitmap) extras.get("data");
         SignupThreeActivity.bitmapReceived = (Bitmap) extras.get("data");
         userSharedImp.photoStateTaken("true");
-        activity.finish();
+        getActivity().finish();
     }
 
     private void cleanUriReceived() {
@@ -263,9 +260,9 @@ public class CamGallFragment extends Fragment implements AbsCamGalPresenter.View
     public UIComponent component() {
         if (component == null) {
             component = DaggerUIComponent.builder()
-                    .rootComponent(((App) activity.getApplication()).getComponent())
-                    .uIModule(new UIModule(activity.getApplicationContext()))
-                    .mainModule(((App) activity.getApplication()).getMainModule())
+                    .rootComponent(((App) getActivity().getApplication()).getComponent())
+                    .uIModule(new UIModule(getActivity().getApplicationContext()))
+                    .mainModule(((App) getActivity().getApplication()).getMainModule())
                     .build();
         }
         return component;

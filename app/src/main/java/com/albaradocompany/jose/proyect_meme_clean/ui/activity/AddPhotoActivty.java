@@ -55,8 +55,8 @@ public class AddPhotoActivty extends BaseActivty implements TabLayout.OnTabSelec
     private void intialize() {
         getBundles();
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new CamGallFragment(this, action));
-        fragments.add(new AvatarsFragment(this, action));
+        fragments.add(new CamGallFragment( action));
+        fragments.add(new AvatarsFragment(action));
         viewPager.setAdapter(new AddPhotoViewPagerAdapter(getSupportFragmentManager(), fragments));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);

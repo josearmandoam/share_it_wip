@@ -1,7 +1,5 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.fragments;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
@@ -25,7 +23,6 @@ import com.albaradocompany.jose.proyect_meme_clean.ui.dialog.ConfirmAvatarDialog
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.AvatarsPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsAvatarsPresenter;
 import com.albaradocompany.jose.proyect_meme_clean.ui.view.ShowSnackBarImp;
-import com.albaradocompany.jose.proyect_meme_clean.usecase.ShowSnackBar;
 
 import java.util.List;
 
@@ -44,24 +41,22 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     ProgressBar pbr;
     @BindView(R.id.avatars_listAvatar)
     RecyclerView recyclerView;
-    @BindView(R.id.avatars_lyt_container)
-    FrameLayout layout;
     @BindString(R.string.noInternetAvailable)
     String noInternet;
     @BindString(R.string.error)
     String error;
+    @BindView(R.id.avatars_tv_empty_avatars)
+    TextView empty_avatars;
     @Inject
     AvatarInteractor interactor;
 
     AvatarsRecyclerAdapter adapter;
-    ShowSnackBar showSnackBar;
-    Activity activity;
+    ShowSnackBarImp showSnackBar;
     UIComponent component;
     AbsAvatarsPresenter presenter;
     int action;
 
-    public AvatarsFragment(Activity activity, int action) {
-        this.activity = activity;
+    public AvatarsFragment(int action) {
         this.action = action;
     }
 
@@ -79,8 +74,8 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     }
 
     private void initializeRecycler(List<Avatar> list) {
-        recyclerView.setLayoutManager(new GridLayoutManager(activity.getApplicationContext(), 3));
-        adapter = new AvatarsRecyclerAdapter(activity.getApplicationContext(), list, onAvatarClicked);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), 3));
+        adapter = new AvatarsRecyclerAdapter(getActivity().getApplicationContext(), list, onAvatarClicked);
         recyclerView.setAdapter(adapter);
     }
 
@@ -89,7 +84,6 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
         presenter = new AvatarsPresenter(interactor);
         presenter.setView(this);
         presenter.setNavigator(this);
-        showSnackBar = new ShowSnackBarImp(layout);
 
     }
 
@@ -105,11 +99,13 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     @Override
     public void showLoading() {
         pbr.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
         pbr.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -119,12 +115,14 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
 
     @Override
     public void showNoInternetAvailable() {
-        showSnackBar.show(noInternet, Color.RED);
+        recyclerView.setVisibility(View.GONE);
+        empty_avatars.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showError(Exception e) {
-        showSnackBar.show(error, Color.RED);
+        recyclerView.setVisibility(View.GONE);
+        empty_avatars.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -136,9 +134,9 @@ public class AvatarsFragment extends Fragment implements AbsAvatarsPresenter.Nav
     public UIComponent component() {
         if (component == null) {
             component = DaggerUIComponent.builder()
-                    .rootComponent(((App) activity.getApplication()).getComponent())
-                    .uIModule(new UIModule(activity.getApplicationContext()))
-                    .mainModule(((App) activity.getApplication()).getMainModule())
+                    .rootComponent(((App) getActivity().getApplication()).getComponent())
+                    .uIModule(new UIModule(getActivity().getApplicationContext()))
+                    .mainModule(((App) getActivity().getApplication()).getMainModule())
                     .build();
         }
         return component;
