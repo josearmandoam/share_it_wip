@@ -109,7 +109,7 @@
                     android:text="@string/loading"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="@dimen/text_size"
-                    android:textStyle="italic" />
+                    />
 
                 <View
                     android:id="@+id/profile_vw_sep3"

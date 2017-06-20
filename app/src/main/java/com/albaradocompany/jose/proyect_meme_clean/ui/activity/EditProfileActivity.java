@@ -412,7 +412,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
                 if (userSharedImp.isProfileFTPSelected()) {
                     interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                             name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                            userName.getText().toString(), userSharedImp.getProfile(), userBD.user_background,
+                            userName.getText().toString(), BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_profile", userBD.user_background,
                             description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
                             new MainThreadImp(), new ThreadExecutor());
 
@@ -428,7 +428,7 @@ public class EditProfileActivity extends BaseActivty implements AbsEditProfilePr
                     if (userSharedImp.isBackgroundFTPSelected()) {
                         interactor = new UpdateUserInteractor(new UpdateUserApiImp(userSharedImp.getUserID(),
                                 name.getText().toString(), lastName.getText().toString(), email.getText().toString(),
-                                userName.getText().toString(), userBD.user_profile, userSharedImp.getBackground(),
+                                userName.getText().toString(), userBD.user_profile, BuildConfig.BASE_URL_DEFAULT + userSharedImp.getUserID() + "_background",
                                 description.getText().toString(), getSocialWebsite(), getSocialWhatsapp(), getSocialEmail(), getSocialInstagram(), getSocialFacebook(), getSocialTwitter()),
                                 new MainThreadImp(), new ThreadExecutor());
 

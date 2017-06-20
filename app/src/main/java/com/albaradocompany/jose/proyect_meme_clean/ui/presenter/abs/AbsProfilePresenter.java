@@ -1,8 +1,9 @@
 package com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs;
 
-import com.albaradocompany.jose.proyect_meme_clean.datasource.activeandroid.PicturesBD;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.Picture;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.Presenter;
+
+import java.util.List;
 
 /**
  * Created by jose on 04/05/2017.
@@ -60,7 +61,7 @@ public abstract class AbsProfilePresenter extends Presenter<AbsProfilePresenter.
 
         void showDescription();
 
-        void showPhotos();
+        void showPhotos(List<Picture> pictures);
 
         void checkSocialPrivacity();
 

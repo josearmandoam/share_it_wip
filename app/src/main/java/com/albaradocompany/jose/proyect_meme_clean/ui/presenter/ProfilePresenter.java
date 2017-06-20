@@ -46,10 +46,9 @@ public class ProfilePresenter extends AbsProfilePresenter {
         view.showBackground();
         view.showProfile();
         view.showUsername();
+        updatePictures();
         view.showDescription();
-        view.showPhotos();
         view.checkSocialPrivacity();
-        view.hideLoading();
 
 
     }
@@ -158,7 +157,7 @@ public class ProfilePresenter extends AbsProfilePresenter {
 
     @Override
     public void updatePictures() {
-        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesByIdApiImp(userSharedImp.getUserID()),
+        PicturesByIdInteractor getPicturesById = new PicturesByIdInteractor(new PicturesByIdApiImp(getUserBDImp.getUsers().get(0).userId),
                 new MainThreadImp(), new ThreadExecutor());
         getPicturesById.getPictures(new GetPicturesById.Listener() {
             @Override
@@ -178,6 +177,8 @@ public class ProfilePresenter extends AbsProfilePresenter {
                 for (Picture picture : pictures) {
                     getUserBDImp.insertUserPicture(picture);
                 }
+                view.showPhotos(pictures);
+                view.hideLoading();
             }
         });
     }

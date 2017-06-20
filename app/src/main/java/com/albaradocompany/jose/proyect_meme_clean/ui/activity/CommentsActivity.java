@@ -148,7 +148,7 @@ public class CommentsActivity extends BaseActivty implements AbsCommentPresenter
                 intent.putExtra(POSITION, position);
                 setResult(RESULT_OK, intent);
             }
-        super.onBackPressed();
+        this.finish();
     }
 
     private void initialize() {

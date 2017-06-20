@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.albaradocompany.jose.proyect_meme_clean.R;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.activeBD.GetUserBDImp;
+import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
@@ -43,6 +44,8 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     private static final String USER_ID = "userId";//notification line user id
     private static final String NAME = "notifcationLineName";
     private static final String COMPLETENAME = "completeName";
+    private static final String ACTIVITY_OPEN = "false";
+    private static final String ACTIVITY_DESTROYED = "true";
     @BindView(R.id.notification_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.notification_tv_name)
@@ -60,6 +63,9 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
 
     @Inject
     GetUserBDImp db;
+    @Inject
+    UserSharedImp userSharedImp;
+
     private LinearLayoutManager linearLayoutManager;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -112,6 +118,7 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     }
 
     private void initialize() {
+        userSharedImp.saveActivityStatus(ACTIVITY_OPEN);
         if (getArguments() != null) {
             mUserId = getArguments().getString(M_USER_ID);
             userId = getArguments().getString(USER_ID);
@@ -210,6 +217,7 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
 
     @Override
     protected void onResume() {
+        userSharedImp.saveActivityStatus(ACTIVITY_OPEN);
         showNotifications(db.getAllNotifications(userId), userId);
         registerReceiver(mMessageReceiver, new IntentFilter("broadcast"));
         super.onResume();
@@ -219,5 +227,6 @@ public class NotificationActivity extends BaseActivty implements AbsNotification
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mMessageReceiver);
+        userSharedImp.saveActivityStatus(ACTIVITY_DESTROYED);
     }
 }

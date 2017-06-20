@@ -6,7 +6,6 @@
     android:layout_height="wrap_content">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/search_row_iv_profle"
-        android:src="@drawable/face"
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <TextView
@@ -14,7 +13,6 @@
         android:layout_toRightOf="@+id/search_row_iv_profle"
         android:paddingLeft="16dp"
         android:padding="8dp"
-        android:text="Jose Armando"
         android:textStyle="bold"
         android:textSize="@dimen/text_size"
         android:fontFamily="@string/default_font"
@@ -25,8 +23,6 @@
         android:layout_below="@+id/search_row_tv_name"
         android:layout_toRightOf="@+id/search_row_iv_profle"
         android:paddingLeft="16dp"
-        android:text="usename"
-        android:textStyle="italic"
         android:fontFamily="@string/default_font"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -35,7 +31,6 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/roundedbutton_blue"
         android:layout_marginTop="4dp"
-        android:text="Follow"
         android:fontFamily="@string/default_font"
         android:textStyle="bold"
         android:textSize="12sp"
@@ -50,11 +45,4 @@
         android:background="@color/testThird"
         android:layout_width="wrap_content"
         android:layout_height="1dp"/>
-    <ProgressBar
-        android:id="@+id/search_row_pbr"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 </RelativeLayout>

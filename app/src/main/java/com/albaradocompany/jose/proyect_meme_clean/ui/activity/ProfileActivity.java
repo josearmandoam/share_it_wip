@@ -259,6 +259,7 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     public void onResume() {
         super.onResume();
         userBD = getUserBD.getUserBD(userSharedImp.getUserID());
+        intializeRepository();
         presenter.resume();
     }
 
@@ -369,10 +370,10 @@ public class ProfileActivity extends BaseActivty implements AbsProfilePresenter.
     }
 
     @Override
-    public void showPhotos() {
+    public void showPhotos(List<Picture> pictures) {
         recyclerPhotos.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerPhotos.setHasFixedSize(true);
-        adapter = new PhotosRecyclerAdapter(this, getUserBD.parsePicturesBDList(userphotos), onPictureClicked);
+        adapter = new PhotosRecyclerAdapter(this, pictures, onPictureClicked);
         recyclerPhotos.setAdapter(adapter);
         if (getUserBD.parsePicturesBDList(userphotos).isEmpty()) {
             recyclerPhotos.setVisibility(View.GONE);

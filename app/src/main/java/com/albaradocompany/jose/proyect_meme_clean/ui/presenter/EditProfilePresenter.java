@@ -5,15 +5,20 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.albaradocompany.jose.proyect_meme_clean.datasource.api.UpdatePermissionsApiImp;
 import com.albaradocompany.jose.proyect_meme_clean.datasource.sharedpreferences.UserSharedImp;
 import com.albaradocompany.jose.proyect_meme_clean.global.App;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.DaggerUIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIComponent;
 import com.albaradocompany.jose.proyect_meme_clean.global.di.UIModule;
 import com.albaradocompany.jose.proyect_meme_clean.global.model.BuildConfig;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdatePermissionsInteractor;
 import com.albaradocompany.jose.proyect_meme_clean.interactor.UpdateUserInteractor;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.MainThreadImp;
+import com.albaradocompany.jose.proyect_meme_clean.interactor.imp.ThreadExecutor;
 import com.albaradocompany.jose.proyect_meme_clean.ui.activity.EditProfileActivity;
 import com.albaradocompany.jose.proyect_meme_clean.ui.presenter.abs.AbsEditProfilePresenter;
+import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdatePermissions;
 import com.albaradocompany.jose.proyect_meme_clean.usecase.update.UpdateUser;
 
 import org.apache.commons.net.ftp.FTP;
@@ -144,6 +149,7 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         }
                         ftpClient.logout();
                         ftpClient.disconnect();
+                        updatePermissions();
                     }
                 } catch (Exception e) {
                     Log.v("count", "error");
@@ -157,7 +163,28 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
             }
         }).start();
     }
+    private void updatePermissions() {
+        UpdatePermissionsInteractor interactor = getUpdatePermissionsInteractor();
+        interactor.updatePermissions(new UpdatePermissions.Listener() {
+            @Override
+            public void onNoInternetAvailable() {
 
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+
+            }
+        });
+    }
+    public UpdatePermissionsInteractor getUpdatePermissionsInteractor() {
+        return new UpdatePermissionsInteractor(new UpdatePermissionsApiImp(), new MainThreadImp(), new ThreadExecutor());
+    }
     private void uploadProfile() {
         new Thread(new Runnable() {
             public void run() {
@@ -180,6 +207,7 @@ public class EditProfilePresenter extends AbsEditProfilePresenter {
                         }
                         ftpClient.logout();
                         ftpClient.disconnect();
+                        updatePermissions();
                     }
                 } catch (Exception e) {
                     Log.v("count", "error");

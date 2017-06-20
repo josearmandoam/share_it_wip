@@ -112,7 +112,7 @@ public class FeedRecyclerAdapter extends RecyclerView.Adapter<FeedRecyclerAdapte
     public void setNewPosts(List<Post> newPosts) {
         for (Post post : newPosts) {
             posts.add(post);
-            posts = ListUtil.orderList(posts);
+            posts = ListUtil.orderPosts(posts);
             notifyDataSetChanged();
         }
     }

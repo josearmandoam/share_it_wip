@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -57,9 +58,8 @@ public class DropCommentDialog extends DialogFragment implements AbsDropCommentP
     }
 
     private void initialize() {
-        ButterKnife.bind(this, dialog);
 
-        presenter = new DropCommentPresenter(getContext());
+        presenter = new DropCommentPresenter(getActivity());
         presenter.setNavigator(this);
         presenter.setView(this);
 
@@ -68,9 +68,11 @@ public class DropCommentDialog extends DialogFragment implements AbsDropCommentP
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_drop_comment, null);
         dialog = new AlertDialog.Builder(context)
-                .setView(R.layout.dialog_drop_comment)
+                .setView(view)
                 .create();
+        ButterKnife.bind(this, view);
         initialize();
         return dialog;
     }

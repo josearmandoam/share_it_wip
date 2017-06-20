@@ -44,6 +44,7 @@ import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloating
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindString;
@@ -220,7 +221,7 @@ public class FeedFragment extends Fragment implements AbsFeedPresenter.View, Abs
 
     @Override
     public void showPosts(List<Post> listpost) {
-        if (listpost.size() == 1) {
+        if (listpost.size() == 0) {
             empty_feed.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         } else {

@@ -145,7 +145,7 @@ public class FeedPresenter extends AbsFeedPresenter {
                     view.showFloatingButton();
                     view.showNoFeedAvailable();
                 } else {
-                    view.showPosts(ListUtil.orderList(createPosts(feeds)));
+                    view.showPosts(ListUtil.orderPosts(createPosts(feeds)));
                     view.showFloatingButton();
                 }
 //                getPicturesOfFeed(feeds);
@@ -334,14 +334,14 @@ public class FeedPresenter extends AbsFeedPresenter {
                         if (post.getPicture().getImageId().equals(list.get(list.size() - 1).getPicture().getImageId()))
                             if (posts != null) {
                                 if (list.size() != posts.size()) {
-                                    view.showPosts(ListUtil.orderList(list));
+                                    view.showPosts(ListUtil.orderPosts(list));
                                     posts = list;
                                 } else {
-                                    view.updatePosts(ListUtil.orderList(list));
+                                    view.updatePosts(ListUtil.orderPosts(list));
                                 }
                             } else {
                                 posts = list;
-                                view.showPosts(ListUtil.orderList(list));
+                                view.showPosts(ListUtil.orderPosts(list));
                                 view.hideLoading();
                                 view.showFloatingButton();
                             }
